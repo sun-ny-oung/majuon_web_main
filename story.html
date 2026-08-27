@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마주온 — 스토리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, a, button {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M18.49%2C9.99%20L22.01%2C13.51%20L22.01%2C18.49%20L18.49%2C22.01%20L13.51%2C22.01%20L9.99%2C18.49%20L9.99%2C13.51%20L13.51%2C9.99%20Z%22%20fill%3D%22rgba%2823%2C19%2C16%2C0.06%29%22%20stroke%3D%22%23171310%22%20stroke-width%3D%221.3%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E") 16 16, auto;
+  }
+  #customCursor {
+    position: fixed; top: 0; left: 0; width: 43px; height: 43px;
+    pointer-events: none; z-index: 9999;
+    mix-blend-mode: difference;
+    transform: translate(-9999px, -9999px);
+    will-change: transform;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    background: #ffffff;
+    font-family: "Noto Serif KR", "Batang", "바탕", serif;
+    color: #171310;
+  }
+
+  /* ---------- 상단 바 (항상 고정 노출, 서브페이지용 단순 버전) ---------- */
+  .site-header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(23,19,16,0.08);
+  }
+  .site-header-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+  }
+  .site-logo { display: flex; align-items: center; }
+  .site-logo img { height: 40px; width: auto; display: block; }
+  .site-nav { display: flex; align-items: center; gap: 10px; }
+  .site-nav a, .site-nav .dot { color: #171310; text-decoration: none; }
+  .site-nav a { font-size: 13px; letter-spacing: 0.08em; }
+  .site-nav .dot { font-size: 10px; }
+  .site-nav a.current { color: rgba(23,19,16,0.4); }
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 30px; height: 30px; background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .hamburger span { width: 100%; height: 1px; display: block; background: #171310; }
+  .mobile-nav {
+    display: none; flex-direction: column;
+    max-width: 1160px; margin: 0 auto;
+    padding: 0 28px 16px;
+  }
+  .mobile-nav a {
+    padding: 13px 0; color: rgba(23,19,16,0.6); text-decoration: none;
+    font-size: 13px; letter-spacing: 0.1em;
+    border-top: 1px solid rgba(23,19,16,0.08);
+  }
+  .mobile-nav.open { display: flex; }
+  @media (max-width: 720px) {
+    .site-nav { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  /* ---------- 스토리 본문: 에세이형 단일 컬럼 ---------- */
+  main {
+    max-width: 640px; margin: 0 auto;
+    padding: 180px 24px 140px;
+  }
+  .story-eyebrow {
+    font-size: 12px; letter-spacing: 0.2em; color: rgba(23,19,16,0.4);
+    margin: 0 0 18px;
+  }
+  .story-title {
+    font-size: clamp(26px, 4vw, 38px); font-weight: 500; line-height: 1.6;
+    letter-spacing: -0.01em; margin: 0 0 54px;
+  }
+  .story-body p {
+    font-size: 16px; line-height: 2.1; font-weight: 300;
+    color: rgba(23,19,16,0.82);
+    letter-spacing: 0.01em;
+    margin: 0 0 32px;
+  }
+  .story-divider {
+    width: 36px; height: 1px; background: rgba(23,19,16,0.25);
+    margin: 56px 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="customCursor">
+  <svg width="43" height="43" viewBox="0 0 48 48">
+    <path d="M29.74,10.14 L37.86,18.26 L37.86,29.74 L29.74,37.86 L18.26,37.86 L10.14,29.74 L10.14,18.26 L18.26,10.14 Z" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><img src="가로로고.svg" alt="마주온"></a>
+    <nav class="site-nav">
+      <a href="story.html" class="current">스토리</a>
+      <span class="dot">·</span>
+      <a href="menu.html">메뉴</a>
+      <span class="dot">·</span>
+      <a href="store.html">스토어</a>
+      <span class="dot">·</span>
+      <a href="#">디지털 다도실</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="story.html">스토리</a>
+    <a href="menu.html">메뉴</a>
+    <a href="store.html">스토어</a>
+    <a href="#">디지털 다도실</a>
+  </nav>
+</header>
+
+<main>
+  <p class="story-eyebrow">STORY</p>
+  <h1 class="story-title">마시는 종류만 달라졌을 뿐,<br>즐기던 풍류는 마주해옵니다</h1>
+
+  <div class="story-body">
+    <p>(가안) 옛사람들은 차와 술로 하루의 여백을 채웠습니다. 마음을 다스리기 위해 우려낸 차 한 잔, 벗들과 여유롭게 나누는 술 한 잔. 지금은 그것들을 커피로 바꿔 종류만 다를 뿐, 여유롭게 즐기는 풍류 한 잔은 그대롭니다.</p>
+    <p>(가안) 마주온은 그 여백을 오늘의 방식으로 다시 짓는 곳입니다. 빠르게 내려 마시는 한 잔이 아니라, 잔을 마주하고 앉는 시간 자체를 대접하고 싶었습니다.</p>
+    <div class="story-divider"></div>
+    <p>(가안) 이름 '마주온'은 마주 앉아 나누는 시간과, 그 시간이 조용히 다가온다는 의미를 함께 담았습니다. — 이 문단들은 실제 브랜드 스토리로 교체될 자리입니다. 지금은 레이아웃 확인용 자리표시 텍스트예요.</p>
+    <p>(가안) 원두를 고르는 기준, 다도실에서의 경험, 마주온이 지켜가는 작은 원칙들 — 이 섹션들이 이어질 수 있습니다.</p>
+  </div>
+</main>
+
+<script>
+const customCursor = document.getElementById('customCursor');
+window.addEventListener('mousemove', (e) => {
+  customCursor.style.transform = `translate(${e.clientX - 21.5}px, ${e.clientY - 21.5}px)`;
+});
+window.addEventListener('mouseleave', () => { customCursor.style.opacity = '0'; });
+window.addEventListener('mouseenter', () => { customCursor.style.opacity = '1'; });
+
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+hamburgerBtn.addEventListener('click', () => {
+  const isOpen = mobileNav.classList.toggle('open');
+  hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+});
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+  });
+});
+</script>
+</body>
+</html>

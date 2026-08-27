@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마주온 — 메뉴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, a, button {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M18.49%2C9.99%20L22.01%2C13.51%20L22.01%2C18.49%20L18.49%2C22.01%20L13.51%2C22.01%20L9.99%2C18.49%20L9.99%2C13.51%20L13.51%2C9.99%20Z%22%20fill%3D%22rgba%2823%2C19%2C16%2C0.06%29%22%20stroke%3D%22%23171310%22%20stroke-width%3D%221.3%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E") 16 16, auto;
+  }
+  #customCursor {
+    position: fixed; top: 0; left: 0; width: 43px; height: 43px;
+    pointer-events: none; z-index: 9999;
+    mix-blend-mode: difference;
+    transform: translate(-9999px, -9999px);
+    will-change: transform;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    background: #ffffff;
+    font-family: "Noto Serif KR", "Batang", "바탕", serif;
+    color: #171310;
+  }
+
+  .site-header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(23,19,16,0.08);
+  }
+  .site-header-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+  }
+  .site-logo { display: flex; align-items: center; }
+  .site-logo img { height: 40px; width: auto; display: block; }
+  .site-nav { display: flex; align-items: center; gap: 10px; }
+  .site-nav a, .site-nav .dot { color: #171310; text-decoration: none; }
+  .site-nav a { font-size: 13px; letter-spacing: 0.08em; }
+  .site-nav .dot { font-size: 10px; }
+  .site-nav a.current { color: rgba(23,19,16,0.4); }
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 30px; height: 30px; background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .hamburger span { width: 100%; height: 1px; display: block; background: #171310; }
+  .mobile-nav {
+    display: none; flex-direction: column;
+    max-width: 1160px; margin: 0 auto;
+    padding: 0 28px 16px;
+  }
+  .mobile-nav a {
+    padding: 13px 0; color: rgba(23,19,16,0.6); text-decoration: none;
+    font-size: 13px; letter-spacing: 0.1em;
+    border-top: 1px solid rgba(23,19,16,0.08);
+  }
+  .mobile-nav.open { display: flex; }
+  @media (max-width: 720px) {
+    .site-nav { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  main {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 160px 20px 100px;
+  }
+  .menu-wrap { width: 100%; max-width: 640px; }
+  .menu-heading {
+    text-align: center; font-size: 13px; letter-spacing: 0.2em;
+    color: rgba(23,19,16,0.45); margin: 0 0 70px;
+  }
+  .menu-category { margin-bottom: 56px; }
+  .menu-category:last-child { margin-bottom: 0; }
+  .menu-category h3 {
+    font-family: "Noto Serif KR", "Batang", "바탕", serif;
+    font-weight: 400; font-size: 15px; letter-spacing: 0.14em;
+    color: rgba(23,19,16,0.55);
+    margin: 0 0 22px;
+  }
+  .menu-row {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(23,19,16,0.1);
+    cursor: default;
+  }
+  .menu-row:last-child { border-bottom: none; }
+  .menu-name {
+    font-family: "Noto Serif KR", "Batang", "바탕", serif;
+    font-size: clamp(17px, 2vw, 21px); letter-spacing: -0.01em;
+    color: #171310; flex-shrink: 0;
+  }
+  .menu-leader {
+    flex: 1; border-bottom: 1px dotted rgba(23,19,16,0.3);
+    margin-bottom: 5px;
+  }
+  .menu-price {
+    font-size: 15px; letter-spacing: 0.02em;
+    color: rgba(23,19,16,0.7); flex-shrink: 0;
+  }
+  .menu-desc {
+    flex-basis: 100%;
+    font-size: 12.5px; color: rgba(23,19,16,0.45);
+    letter-spacing: 0.02em;
+    max-height: 0; opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
+    margin-top: 0;
+  }
+  .menu-row:hover .menu-desc {
+    max-height: 30px; opacity: 1; margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div id="customCursor">
+  <svg width="43" height="43" viewBox="0 0 48 48">
+    <path d="M29.74,10.14 L37.86,18.26 L37.86,29.74 L29.74,37.86 L18.26,37.86 L10.14,29.74 L10.14,18.26 L18.26,10.14 Z" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><img src="가로로고.svg" alt="마주온"></a>
+    <nav class="site-nav">
+      <a href="story.html">스토리</a>
+      <span class="dot">·</span>
+      <a href="menu.html" class="current">메뉴</a>
+      <span class="dot">·</span>
+      <a href="store.html">스토어</a>
+      <span class="dot">·</span>
+      <a href="#">디지털 다도실</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="story.html">스토리</a>
+    <a href="menu.html">메뉴</a>
+    <a href="store.html">스토어</a>
+    <a href="#">디지털 다도실</a>
+  </nav>
+</header>
+
+<main>
+  <div class="menu-wrap">
+    <h2 class="menu-heading">MENU</h2>
+
+    <div class="menu-category">
+      <h3>핸드드립 시그니처</h3>
+      <div class="menu-row">
+        <span class="menu-name">화담</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">6,500</span>
+        <span class="menu-desc">은은하게 오래 우린 첫 잔</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-name">청류</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">6,500</span>
+        <span class="menu-desc">맑고 산뜻한 결의 한 잔</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-name">풍연</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">7,000</span>
+        <span class="menu-desc">깊고 진한 마무리 한 잔</span>
+      </div>
+    </div>
+
+    <div class="menu-category">
+      <h3>에스프레소</h3>
+      <div class="menu-row">
+        <span class="menu-name">에스프레소</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">4,500</span>
+        <span class="menu-desc">진하게 내린 한 모금</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-name">아메리카노</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">4,500</span>
+        <span class="menu-desc">물에 은은하게 풀어낸 여유</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-name">카페라떼</span>
+        <span class="menu-leader"></span>
+        <span class="menu-price">5,500</span>
+        <span class="menu-desc">부드럽게 감싸는 우유의 온기</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const customCursor = document.getElementById('customCursor');
+window.addEventListener('mousemove', (e) => {
+  customCursor.style.transform = `translate(${e.clientX - 21.5}px, ${e.clientY - 21.5}px)`;
+});
+window.addEventListener('mouseleave', () => { customCursor.style.opacity = '0'; });
+window.addEventListener('mouseenter', () => { customCursor.style.opacity = '1'; });
+
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+hamburgerBtn.addEventListener('click', () => {
+  const isOpen = mobileNav.classList.toggle('open');
+  hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+});
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+  });
+});
+</script>
+</body>
+</html>
