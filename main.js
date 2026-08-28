@@ -46,6 +46,14 @@ function updateScrollEffect() {
 window.addEventListener('scroll', () => {
   if (!ticking) { requestAnimationFrame(updateScrollEffect); ticking = true; }
 }, { passive: true });
+// 스냅이 마지막에 자리 잡는 순간, 스크롤 이벤트가 정확한 최종 위치에서 한 번 더 안 걸리는
+// 경우가 있어서(특히 모바일 사파리), 스크롤이 완전히 멈추면 한 번 더 확실하게 재계산함
+window.addEventListener('scrollend', updateScrollEffect, { passive: true });
+let scrollStillTimer = null;
+window.addEventListener('scroll', () => {
+  clearTimeout(scrollStillTimer);
+  scrollStillTimer = setTimeout(updateScrollEffect, 150); // scrollend 미지원 브라우저 대비
+}, { passive: true });
 updateScrollEffect();
 
 // ---------- 모바일 햄버거 메뉴 ----------
