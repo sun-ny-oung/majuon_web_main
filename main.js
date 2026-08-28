@@ -149,7 +149,9 @@ if (!gl) { document.body.innerHTML = '<p style="padding:40px">이 브라우저�
 gl.getExtension('EXT_color_buffer_float');
 gl.getExtension('EXT_color_buffer_half_float');
 
-const SIM_RESOLUTION = 512;
+// 모바일/저성능 기기에서는 시뮬레이션 해상도를 낮춰서 프레임드랍을 줄임
+const IS_MOBILE = matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+const SIM_RESOLUTION = IS_MOBILE ? 288 : 512;
 const DAMPING = 0.992;
 const AUTO_DROP_INTERVAL = 5.1; // 자동 방울 간격 (기존의 3배)
 const AUTO_DROP_STRENGTH = 0.35;
@@ -539,7 +541,7 @@ function seedFoamWithLogo() {
   blit(foam.write.fbo);
 }
 function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  const dpr = Math.min(window.devicePixelRatio || 1, IS_MOBILE ? 1 : 1.5);
   const w = Math.round(canvas.clientWidth * dpr);
   const h = Math.round(canvas.clientHeight * dpr);
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; return true; }
