@@ -35,7 +35,9 @@ function updateScrollEffect() {
   const inQuote = quoteRect.top <= 1 && quoteRect.bottom > 1;
   siteHeader.classList.toggle('on-dark', inQuote);
   // 왼쪽 아래에서 검은 원이 커지며 화면을 덮는 리빌 (진행률 0→1이 그대로 원의 크기가 됨)
-  revealCircle.style.transform = `translate(50%, -50%) scale(${progress})`;
+  const circleClip = `circle(${progress * 99}vmax at 100% 0%)`;
+  revealCircle.style.webkitClipPath = circleClip;
+  revealCircle.style.clipPath = circleClip;
   // 원이 거의 다 자란 뒤에만, 이 페이지가 유도하려는 다음 행동(스토리/디지털 다도실)을 드러냄
   quoteCta.classList.toggle('visible', progress > 0.88);
 
