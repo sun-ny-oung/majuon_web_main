@@ -585,6 +585,7 @@ function foamSplat(x, y, radius, strength) {
 
 let lastPointer = null;
 canvas.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
   const rect = canvas.getBoundingClientRect();
   const x = (e.clientX - rect.left) / rect.width;
   const y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -592,6 +593,7 @@ canvas.addEventListener('pointerdown', (e) => {
   foamSplat(x, y, FOAM_CLICK_RADIUS, -FOAM_CLICK_STRENGTH);
 });
 canvas.addEventListener('pointermove', (e) => {
+  e.preventDefault();
   const rect = canvas.getBoundingClientRect();
   const x = (e.clientX - rect.left) / rect.width;
   const y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -604,8 +606,12 @@ canvas.addEventListener('pointermove', (e) => {
     }
   }
   lastPointer = { x, y };
-});
+}, { passive: false });
 canvas.addEventListener('pointerleave', () => { lastPointer = null; });
+// 일부 인앱 브라우저(카카오톡 등)는 touch-action CSS를 제대로 안 지키는 경우가 있어서,
+// 터치 스크롤 자체를 캔버스 위에서는 JS로 한 번 더 확실히 막아줌
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
+canvas.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
 
 let lastTime = performance.now();
 let autoDropTimer = 0;
