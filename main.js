@@ -8,14 +8,19 @@ window.addEventListener('mouseenter', () => { customCursor.style.opacity = '1'; 
 
 // ---------- 스크롤에 따라 자연스럽게 사라지는 히어로 (확대 없이 페이드만, 스크롤 스냅으로 다음 섹션까지 자동 이동) ----------
 const hero = document.getElementById('hero');
+
+// 히어로가 실제로 화면에 보이는지 추적 (스크롤로 벗어나면 무거운 캔버스 시뮬레이션을 멈추기 위함)
+let heroVisible = true;
+const heroVisibilityObserver = new IntersectionObserver((entries) => {
+  heroVisible = entries[0].isIntersecting;
+}, { threshold: 0 });
+heroVisibilityObserver.observe(hero);
 const siteHeader = document.getElementById('siteHeader');
 const revealCircle = document.getElementById('revealCircle');
 const quoteSection = document.getElementById('quote');
+const quoteCta = document.getElementById('quoteCta');
 
 let ticking = false;
-let lastCircleProgress = 0;
-let lastCircleTime = performance.now();
-let blurStopTimer = null;
 
 function updateScrollEffect() {
   const rect = hero.getBoundingClientRect();
@@ -31,18 +36,8 @@ function updateScrollEffect() {
   siteHeader.classList.toggle('on-dark', inQuote);
   // 왼쪽 아래에서 검은 원이 커지며 화면을 덮는 리빌 (진행률 0→1이 그대로 원의 크기가 됨)
   revealCircle.style.transform = `translate(50%, -50%) scale(${progress})`;
-
-  // 커지는 속도(단위 시간당 진행률 변화량)에 비례해 살짝 블러를 줘서, 뚝뚝 끊기지 않고
-  // 자연스럽게 "커지는 중"이라는 모션 블러 느낌을 냄. 스크롤이 멈추면 다시 선명해짐
-  const now = performance.now();
-  const dt = Math.max(now - lastCircleTime, 1);
-  const velocity = Math.abs(progress - lastCircleProgress) / dt;
-  lastCircleProgress = progress;
-  lastCircleTime = now;
-  const blurAmount = Math.min(velocity * 5000, 12);
-  revealCircle.style.filter = `blur(${blurAmount}px)`;
-  clearTimeout(blurStopTimer);
-  blurStopTimer = setTimeout(() => { revealCircle.style.filter = 'blur(0px)'; }, 120);
+  // 원이 거의 다 자란 뒤에만, 이 페이지가 유도하려는 다음 행동(스토리/디지털 다도실)을 드러냄
+  quoteCta.classList.toggle('visible', progress > 0.88);
 
   ticking = false;
 }
@@ -644,20 +639,26 @@ function render() {
   blit(null);
 }
 function frame() {
-  const now = performance.now();
-  const dt = Math.min((now - lastTime) / 1000, 0.033);
-  lastTime = now;
-  autoDropTimer += dt;
-  if (autoDropTimer > AUTO_DROP_INTERVAL) {
-    autoDropTimer = 0;
-    const x = 0.5 + (Math.random() - 0.5) * 0.5;
-    const y = 0.5 + (Math.random() - 0.5) * 0.5;
-    splat(x, y, 0.003, -AUTO_DROP_STRENGTH);
-    foamSplat(x, y, FOAM_DROP_RADIUS, -FOAM_DROP_STRENGTH);
+  // 히어로가 화면에 안 보일 때는 무거운 시뮬레이션(파동/크레마/렌더)을 완전히 멈춰서,
+  // 다른 섹션(문구 페이지의 원 애니메이션 등)과 프레임을 두고 경쟁하지 않게 함
+  if (heroVisible) {
+    const now = performance.now();
+    const dt = Math.min((now - lastTime) / 1000, 0.033);
+    lastTime = now;
+    autoDropTimer += dt;
+    if (autoDropTimer > AUTO_DROP_INTERVAL) {
+      autoDropTimer = 0;
+      const x = 0.5 + (Math.random() - 0.5) * 0.5;
+      const y = 0.5 + (Math.random() - 0.5) * 0.5;
+      splat(x, y, 0.003, -AUTO_DROP_STRENGTH);
+      foamSplat(x, y, FOAM_DROP_RADIUS, -FOAM_DROP_STRENGTH);
+    }
+    step();
+    foamStep(dt);
+    render();
+  } else {
+    lastTime = performance.now(); // 다시 보일 때 dt가 확 튀지 않도록 갱신만 해둠
   }
-  step();
-  foamStep(dt);
-  render();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

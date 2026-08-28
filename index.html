@@ -91,8 +91,8 @@
   }
 
   #quote {
-    height: 100vh; display: flex; align-items: center; justify-content: flex-end;
-    padding: 60px 12% 60px 20px;
+    height: 100vh; display: flex; align-items: flex-start; justify-content: flex-end;
+    padding: 64px 12% 60px 20px;
     background: #ffffff;
     position: relative;
     overflow: hidden;
@@ -106,9 +106,7 @@
     background: #0e0d0c;
     border-radius: 50%;
     transform: translate(50%, -50%) scale(0);
-    filter: blur(0px);
-    transition: filter 0.18s ease-out;
-    z-index: 1; will-change: transform, filter;
+    z-index: 1; will-change: transform;
   }
 
   .quote-block {
@@ -118,7 +116,7 @@
     display: flex;
     gap: 34px;
     height: 100%;
-    max-height: calc(100vh - 120px);
+    max-height: calc(100vh - 160px);
   }
   .quote-block p {
     font-family: "Noto Serif KR", "Batang", "바탕", serif;
@@ -133,6 +131,87 @@
     font-weight: 400;
     color: #ffffff;
   }
+
+  /* 원이 다 차오른 뒤에만 나타나는, 이 페이지의 의도적인 다음 행동 제안 (모던한 산세리프로 대비) */
+  .quote-cta {
+    position: absolute; right: 12%; bottom: 9%; z-index: 3;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 18px;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+  }
+  .quote-cta.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .quote-cta-eyebrow {
+    font-family: -apple-system, "Noto Sans KR", sans-serif;
+    font-size: 10px; letter-spacing: 0.22em;
+    color: rgba(242,236,224,0.5);
+    margin-bottom: -4px;
+  }
+  .quote-cta a {
+    position: relative;
+    display: inline-block;
+    font-family: -apple-system, "Noto Sans KR", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    padding-bottom: 8px;
+  }
+  .cta-label-wrap { position: relative; display: inline-block; }
+  .cta-label {
+    display: block;
+    color: #f2ece0;
+    transition: color 0.3s ease;
+  }
+  .quote-cta a:hover .cta-label { color: #ffffff; }
+  .cta-label-fill {
+    position: absolute; top: 0; left: 0; white-space: nowrap;
+    background: linear-gradient(135deg, #2fadcf, #d1bada, #a2c3e7, #f9d2dc, #bcbcd7, #94bfe6, #a691be);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .quote-cta a:hover .cta-label-fill { clip-path: inset(0 0% 0 0); }
+  .cta-track {
+    position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+    background: rgba(242,236,224,0.55);
+    overflow: hidden;
+  }
+  .cta-track::after {
+    content: ""; position: absolute; top: 0; left: -40%;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+    animation: ctaShimmer 3.2s ease-in-out infinite;
+  }
+  @keyframes ctaShimmer {
+    0%   { left: -40%; }
+    55%  { left: 100%; }
+    100% { left: 100%; }
+  }
+  .cta-ink {
+    position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+    background: linear-gradient(90deg, #2fadcf, #a2c3e7, #f9d2dc, #bcbcd7, #a691be);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .quote-cta a:hover .cta-ink { transform: scaleX(1); }
+  .cta-octagon {
+    position: absolute; bottom: -6px; left: -6px;
+    width: 12px; height: 12px;
+    opacity: 0;
+    transition: left 0.5s cubic-bezier(.4,0,.2,1), opacity 0.2s ease;
+  }
+  .cta-octagon svg { width: 100%; height: 100%; display: block; }
+  .cta-octagon-fill {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .quote-cta a:hover .cta-octagon {
+    opacity: 1;
+    left: calc(100% - 6px);
+  }
+  .quote-cta a:hover .cta-octagon-fill { opacity: 1; }
 
   /* ---------- 상단 바 (배경 없이 로고+내비만, 배경색과 상관없이 보이도록 blend) ---------- */
   .site-header {
@@ -158,7 +237,7 @@
   }
   .site-nav a {
     text-decoration: none;
-    font-size: 13px; letter-spacing: 0.08em;
+    font-size: 15px; letter-spacing: 0.06em;
   }
   .site-nav .dot { font-size: 10px; }
   .hamburger {
@@ -179,7 +258,7 @@
   }
   .mobile-nav a {
     padding: 13px 0; color: rgba(23,19,16,0.6); text-decoration: none;
-    font-size: 13px; letter-spacing: 0.1em;
+    font-size: 15px; letter-spacing: 0.08em;
     border-top: 1px solid rgba(23,19,16,0.08);
   }
   .mobile-nav.open { display: flex; }
@@ -187,6 +266,16 @@
   @media (max-width: 720px) {
     .site-nav { display: none; }
     .hamburger { display: flex; }
+  }
+
+  /* 아주 좁은 화면에서만 문구가 넘치지 않도록 살짝 더 줄임 (정렬 자체는 이제 항상 동일) */
+  @media (max-width: 480px) {
+    .quote-block p { font-size: 12px; line-height: 1.55; letter-spacing: 0.06em; }
+  }
+  /* 모바일(햄버거 드롭다운이 뜨는 폭)에서만 위쪽 여백을 더 넉넉히 둬서, 드롭다운이 열려도
+     문구가 겹치지 않게 함 — 정렬 방식은 안 바뀌고 여백 수치만 다름 */
+  @media (max-width: 720px) {
+    #quote { padding-top: 100px; }
   }
 </style>
 </head>
@@ -246,6 +335,59 @@
   <div class="quote-block">
     <p><span class="quote-mark">『</span>마시는 종류만 달라졌을 뿐,</p>
     <p>즐기던 풍류는 마주해옵니다<span class="quote-mark">』</span></p>
+  </div>
+  <div class="quote-cta" id="quoteCta">
+    <span class="quote-cta-eyebrow">NEXT</span>
+    <a href="story.html">
+      <span class="cta-label-wrap">
+        <span class="cta-label">이야기가 궁금하다면 — 스토리</span>
+        <span class="cta-label cta-label-fill">이야기가 궁금하다면 — 스토리</span>
+      </span>
+      <span class="cta-track"></span>
+      <span class="cta-ink"></span>
+      <span class="cta-octagon">
+        <svg viewBox="0 0 32 32">
+          <defs>
+            <linearGradient id="ctaGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2fadcf"/>
+              <stop offset="20%" stop-color="#d1bada"/>
+              <stop offset="40%" stop-color="#a2c3e7"/>
+              <stop offset="55%" stop-color="#f9d2dc"/>
+              <stop offset="70%" stop-color="#bcbcd7"/>
+              <stop offset="85%" stop-color="#94bfe6"/>
+              <stop offset="100%" stop-color="#a691be"/>
+            </linearGradient>
+          </defs>
+          <path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"/>
+          <path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad1)"/>
+        </svg>
+      </span>
+    </a>
+    <a href="#">
+      <span class="cta-label-wrap">
+        <span class="cta-label">자리에 앉아보고 싶다면 — 디지털 다도실</span>
+        <span class="cta-label cta-label-fill">자리에 앉아보고 싶다면 — 디지털 다도실</span>
+      </span>
+      <span class="cta-track"></span>
+      <span class="cta-ink"></span>
+      <span class="cta-octagon">
+        <svg viewBox="0 0 32 32">
+          <defs>
+            <linearGradient id="ctaGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2fadcf"/>
+              <stop offset="20%" stop-color="#d1bada"/>
+              <stop offset="40%" stop-color="#a2c3e7"/>
+              <stop offset="55%" stop-color="#f9d2dc"/>
+              <stop offset="70%" stop-color="#bcbcd7"/>
+              <stop offset="85%" stop-color="#94bfe6"/>
+              <stop offset="100%" stop-color="#a691be"/>
+            </linearGradient>
+          </defs>
+          <path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"/>
+          <path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad2)"/>
+        </svg>
+      </span>
+    </a>
   </div>
 </section>
 
