@@ -20,6 +20,10 @@
     transform: translate(-9999px, -9999px);
     will-change: transform;
   }
+  @media (pointer: coarse) {
+    #customCursor { display: none !important; }
+    html, body, a, button, .frame { cursor: auto; }
+  }
   html, body {
     margin: 0; padding: 0;
     background: #ffffff;
@@ -27,9 +31,8 @@
     color: #171310;
     height: 100%;
   }
-  html {
-    scroll-snap-type: y mandatory;
-  }
+  html { scroll-snap-type: y mandatory; }
+  body { scroll-snap-type: y mandatory; } /* 일부 iOS 사파리는 html이 아니라 body 기준으로만 스냅을 인식함 */
 
   /* ---------- 히어로: 스크롤하면 자연스럽게 사라지는 섹션 (핀 고정 없음) ---------- */
   #hero {
@@ -270,11 +273,12 @@
     /* 모바일에서만 스냅을 완화 — 일부 브라우저가 스크롤 위치를 확 건너뛰면서
        원 리빌 애니메이션이 튀는 문제를 줄이기 위함. 데스크탑은 원래의 mandatory 유지 */
     html { scroll-snap-type: y proximity; }
+    body { scroll-snap-type: y proximity; }
   }
 
   /* 아주 좁은 화면에서만 문구가 넘치지 않도록 살짝 더 줄임 (정렬 자체는 이제 항상 동일) */
   @media (max-width: 480px) {
-    .quote-block p { font-size: 12px; line-height: 1.55; letter-spacing: 0.06em; }
+    .quote-block p { font-size: 10px; line-height: 1.45; letter-spacing: 0.04em; }
   }
   /* 모바일(햄버거 드롭다운이 뜨는 폭)에서만 위쪽 여백을 더 넉넉히 둬서, 드롭다운이 열려도
      문구가 겹치지 않게 함 — 정렬 방식은 안 바뀌고 여백 수치만 다름 */
