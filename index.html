@@ -258,12 +258,14 @@
   .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
   .mobile-nav {
+    position: absolute; top: 100%; left: 0; right: 0;
     display: flex; flex-direction: column;
     max-width: 1160px; margin: 0 auto;
     padding: 0 28px 16px;
     background: #ffffff;
-    max-height: 0; overflow: hidden; opacity: 0;
-    transition: max-height 0.45s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-10px);
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
   }
   .mobile-nav a {
     padding: 13px 0; color: rgba(23,19,16,0.6); text-decoration: none;
@@ -273,7 +275,7 @@
     transition: opacity 0.35s ease, transform 0.35s ease;
   }
   .mobile-nav.open {
-    max-height: 400px; opacity: 1;
+    opacity: 1; pointer-events: auto; transform: translateY(0);
   }
   .mobile-nav.open a { opacity: 1; transform: translateY(0); }
   .mobile-nav.open a:nth-child(1) { transition-delay: 0.05s; }
@@ -286,8 +288,8 @@
     .hamburger { display: flex; }
     /* 모바일에서만 스냅을 완화 — 일부 브라우저가 스크롤 위치를 확 건너뛰면서
        원 리빌 애니메이션이 튀는 문제를 줄이기 위함. 데스크탑은 원래의 mandatory 유지 */
-    html { scroll-snap-type: y proximity; }
-    body { scroll-snap-type: y proximity; }
+    html { scroll-snap-type: none; }
+    body { scroll-snap-type: none; }
   }
 
   /* 아주 좁은 화면에서만 문구가 넘치지 않도록 살짝 더 줄임 (정렬 자체는 이제 항상 동일) */

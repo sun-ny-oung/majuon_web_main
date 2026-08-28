@@ -61,11 +61,14 @@
   .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
   .mobile-nav {
+    position: absolute; top: 100%; left: 0; right: 0;
     display: flex; flex-direction: column;
     max-width: 1160px; margin: 0 auto;
     padding: 0 28px 16px;
-    max-height: 0; overflow: hidden; opacity: 0;
-    transition: max-height 0.45s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+    background: #ffffff;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-10px);
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
   }
   .mobile-nav a {
     padding: 13px 0; color: rgba(23,19,16,0.6); text-decoration: none;
@@ -74,7 +77,7 @@
     opacity: 0; transform: translateY(-8px);
     transition: opacity 0.35s ease, transform 0.35s ease;
   }
-  .mobile-nav.open { max-height: 400px; opacity: 1; }
+  .mobile-nav.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
   .mobile-nav.open a { opacity: 1; transform: translateY(0); }
   .mobile-nav.open a:nth-child(1) { transition-delay: 0.05s; }
   .mobile-nav.open a:nth-child(2) { transition-delay: 0.1s; }
