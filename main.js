@@ -39,7 +39,7 @@ function updateScrollEffect() {
   revealCircle.style.webkitClipPath = circleClip;
   revealCircle.style.clipPath = circleClip;
   // 원이 거의 다 자란 뒤에만, 이 페이지가 유도하려는 다음 행동(스토리/디지털 다도실)을 드러냄
-  quoteCta.classList.toggle('visible', progress > 0.88);
+  quoteCta.classList.toggle('visible', progress > 0.65);
 
   ticking = false;
 }
