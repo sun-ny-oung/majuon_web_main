@@ -138,7 +138,7 @@
 
   /* 원이 다 차오른 뒤에만 나타나는, 이 페이지의 의도적인 다음 행동 제안 (모던한 산세리프로 대비) */
   .quote-cta {
-    position: absolute; right: 12%; bottom: 17%; z-index: 3;
+    position: absolute; right: 12%; bottom: 8%; z-index: 3;
     display: flex; flex-direction: column; align-items: flex-end; gap: 18px;
     opacity: 0; transform: translateY(10px);
     transition: opacity 0.6s ease, transform 0.6s ease;
@@ -295,6 +295,7 @@
   /* 아주 좁은 화면에서만 문구가 넘치지 않도록 살짝 더 줄임 (정렬 자체는 이제 항상 동일) */
   @media (max-width: 480px) {
     .quote-block p { font-size: 10px; line-height: 1.45; letter-spacing: 0.04em; }
+    .quote-cta { bottom: 17%; } /* 모바일에서만 크레센트 곡선을 피하려고 더 위로 */
   }
   /* 모바일(햄버거 드롭다운이 뜨는 폭)에서만 위쪽 여백을 더 넉넉히 둬서, 드롭다운이 열려도
      문구가 겹치지 않게 함 — 정렬 방식은 안 바뀌고 여백 수치만 다름 */
