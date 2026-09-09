@@ -680,3 +680,41 @@ function frame() {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+// ---------- 사계 병풍 ----------
+const byeongpungSection = document.getElementById('byeongpung');
+const byeongpungScreen = document.getElementById('byeongpungScreen');
+
+if (byeongpungSection && byeongpungScreen) {
+  let foldTimer = null;
+
+  const revealByeongpung = () => {
+    clearTimeout(foldTimer);
+    // 항상 평면 + 숨김 상태에서 시작해 진입 모션을 재생한다.
+    byeongpungScreen.classList.remove('is-folded');
+    byeongpungScreen.classList.add('is-visible');
+
+    // 화담·풍연 → 0.1초 뒤 청류·설한이 모두 올라온 다음,
+    // 별도의 transform transition으로 네 폭이 함께 천천히 접힌다.
+    foldTimer = window.setTimeout(() => {
+      byeongpungScreen.classList.add('is-folded');
+    }, 1250);
+  };
+
+  const resetByeongpung = () => {
+    clearTimeout(foldTimer);
+    byeongpungScreen.classList.remove('is-folded');
+    byeongpungScreen.classList.remove('is-visible');
+  };
+
+  const bpObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.30) {
+        revealByeongpung();
+      } else if (!entry.isIntersecting || entry.intersectionRatio < 0.10) {
+        resetByeongpung();
+      }
+    });
+  }, { threshold: [0.08, 0.10, 0.30, 0.55] });
+
+  bpObserver.observe(byeongpungSection);
+}
