@@ -130,28 +130,59 @@
   }
   /* 스크롤하면 왼쪽 아래에서 검은 원이 커지며 화면을 덮는 리빌 */
   .reveal-circle {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    background: #0e0d0c;
-    -webkit-clip-path: circle(0vmax at 100% 0%);
-    clip-path: circle(0vmax at 100% 0%);
-    z-index: 1; will-change: clip-path;
+    position:absolute; inset:0; width:100%; height:100%;
+    background:#0e0d0c;
+    -webkit-clip-path:circle(0vmax at 100% 0%);
+    clip-path:circle(0vmax at 100% 0%);
+    z-index:1;
+    will-change:clip-path;
+    transform:translateZ(0);
   }
+  .quote-haze {
+    position:absolute; inset:0; z-index:2; pointer-events:none;
+    opacity:0;
+    transition:opacity .65s cubic-bezier(.22,.72,.18,1);
+    overflow:hidden;
+  }
+  .quote-haze::before {
+    content:"";
+    position:absolute;
+    width:86vw; height:86vw;
+    left:-21vw; top:3vh;
+    border-radius:50%;
+    background:radial-gradient(circle,
+      rgba(var(--haze-rgb),.15) 0%,
+      rgba(var(--haze-rgb),.085) 24%,
+      rgba(var(--haze-rgb),.035) 42%,
+      rgba(var(--haze-rgb),0) 70%);
+    filter:blur(42px);
+    transform:scale(.90);
+    transition:transform .9s cubic-bezier(.16,.78,.18,1);
+  }
+  .quote-haze::after {
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(105deg, rgba(var(--haze-rgb),.045), transparent 38%);
+    opacity:.8;
+  }
+  .quote-haze.visible { opacity:1; }
+  .quote-haze.visible::before { transform:scale(1); }
 
   .quote-block {
-    position: relative; z-index: 2;
+    position: absolute; right: 10.5%; top: 42.5%; z-index: 4;
+    transform: translateY(-50%);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     display: flex;
     gap: 34px;
-    height: 100%;
-    max-height: calc(100vh - 160px);
-    max-height: calc(100svh - 160px);
+    height: auto;
+    max-height: none;
   }
   .quote-block p {
     font-family: "Noto Serif KR", "Batang", "바탕", serif;
     font-weight: 300;
-    font-size: clamp(15px, 1.8vw, 21px);
-    line-height: 1.75;
+    font-size: clamp(15px, 1.78vw, 21px);
+    line-height: 1.8;
     letter-spacing: 0.12em;
     color: #ffffff;
     margin: 0;
@@ -163,7 +194,7 @@
 
   /* 원이 다 차오른 뒤에만 나타나는, 이 페이지의 의도적인 다음 행동 제안 (모던한 산세리프로 대비) */
   .quote-cta {
-    position: absolute; right: 12%; bottom: 8%; z-index: 3;
+    position: absolute; right: 12%; bottom: 9%; z-index: 5;
     display: flex; flex-direction: column; align-items: flex-end; gap: 18px;
     opacity: 0; transform: translateY(10px);
     transition: opacity 0.6s ease, transform 0.6s ease;
@@ -368,13 +399,13 @@
     font-size: 13px; line-height: 1.82; letter-spacing: -.012em; color: rgba(23,19,16,.56);
   }
   .bp-copy-line { white-space: nowrap; }
-  .bp-stage { perspective: 2200px; perspective-origin: 50% 44%; transform-style: preserve-3d; }
+  .bp-stage { perspective: 1550px; perspective-origin: 50% 44%; transform-style: preserve-3d; position:relative; margin-top: 12px; }
   .bp-screen {
     display: flex; width: 100%; min-height: min(68vh, 740px);
     transform-style: preserve-3d;
   }
   .bp-panel {
-    --ry: 0deg; --pos-x: 50%; --pos-y: 50%; --enter-delay: 0ms;
+    --ry: 0deg; --pos-x: 50%; --pos-y: 50%; --enter-delay: 0ms; --img-scale:1.035; --img-hover-scale:1.095; --img-origin:50% 50%;
     position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; color: #fff; text-decoration: none;
     border-top: 1px solid rgba(23,19,16,.16); border-bottom: 1px solid rgba(23,19,16,.16);
     opacity: 0;
@@ -397,13 +428,13 @@
   .bp-panel:nth-child(1), .bp-panel:nth-child(3) { --enter-delay: 0ms; }
   .bp-panel:nth-child(2), .bp-panel:nth-child(4) { --enter-delay: 100ms; }
   .bp-panel { transform-origin: center center; backface-visibility: hidden; }
-  .bp-screen.is-folded .bp-panel:nth-child(1) { --ry: 11deg; --fold-scale: 1.022; }
-  .bp-screen.is-folded .bp-panel:nth-child(2) { --ry: -11deg; --fold-scale: 1.022; }
-  .bp-screen.is-folded .bp-panel:nth-child(3) { --ry: 11deg; --fold-scale: 1.022; }
-  .bp-screen.is-folded .bp-panel:nth-child(4) { --ry: -11deg; --fold-scale: 1.022; }
+  .bp-screen.is-folded .bp-panel:nth-child(1) { --ry: 18deg; --fold-scale: 1.055; }
+  .bp-screen.is-folded .bp-panel:nth-child(2) { --ry: -18deg; --fold-scale: 1.055; }
+  .bp-screen.is-folded .bp-panel:nth-child(3) { --ry: 18deg; --fold-scale: 1.055; }
+  .bp-screen.is-folded .bp-panel:nth-child(4) { --ry: -18deg; --fold-scale: 1.055; }
   .bp-image {
     position: absolute; inset: 0; background-position: var(--pos-x) var(--pos-y); background-size: cover;
-    transform: scale(1.035); transition: transform .9s cubic-bezier(.2,.75,.18,1); z-index: -3;
+    transform: scale(var(--img-scale)); transform-origin:var(--img-origin); transition: transform .9s cubic-bezier(.2,.75,.18,1); z-index: -3;
   }
   .bp-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, rgba(10,9,8,.01) 0%, rgba(10,9,8,.045) 48%, rgba(10,9,8,.5) 100%); transition: background .5s ease; }
   .bp-panel::before, .bp-panel::after { content:""; position:absolute; top:0; bottom:0; width:20px; z-index:-1; pointer-events:none; }
@@ -415,9 +446,9 @@
     line-height: 1; font-weight: 500; letter-spacing: -.035em; color: rgba(255,255,255,.96);
     text-shadow: 0 2px 12px rgba(0,0,0,.18);
   }
-  .bp-panel:hover { flex: 1.24 1 0; filter: saturate(1.03) contrast(1.02); z-index: 8; }
-  .bp-panel:hover .bp-image { transform: scale(1.075); }
-  .bp-panel:hover .bp-shade { background: linear-gradient(180deg, rgba(10,9,8,0) 0%, rgba(10,9,8,.03) 45%, rgba(10,9,8,.43) 100%); }
+  .bp-panel:hover, .bp-panel:focus-visible, .bp-panel.is-hovered { flex: 1.28 1 0; filter: saturate(1.03) contrast(1.02); z-index: 8; }
+  .bp-panel:hover .bp-image, .bp-panel:focus-visible .bp-image, .bp-panel.is-hovered .bp-image { transform: scale(var(--img-hover-scale)); }
+  .bp-panel:hover .bp-shade, .bp-panel:focus-visible .bp-shade, .bp-panel.is-hovered .bp-shade { background: linear-gradient(180deg, rgba(10,9,8,0) 0%, rgba(10,9,8,.03) 45%, rgba(10,9,8,.43) 100%); }
   @media (max-width: 900px) {
     #byeongpung { padding: 92px 20px 100px; }
     .bp-head { margin-bottom: 28px; }
@@ -433,6 +464,230 @@
   @media (max-width: 480px) {
     .bp-screen { grid-template-columns:1fr; }
     .bp-panel, .bp-screen.is-folded .bp-panel { min-height:58vh; }
+  }
+
+
+  /* ---------- 2장: 기존 여백과 세로 카피는 유지하고, 제품 정체성만 조용히 보강 ---------- */
+  .quote-block { display:block; gap:0; }
+  .quote-block p { white-space:nowrap; }
+
+  .quote-brand {
+    position:absolute; left:9.2%; top:52%; z-index:5;
+    width:min(650px, 48vw);
+    transform:translateY(-50%) translateY(14px);
+    color:#f2ece0;
+    opacity:0; transform:translateY(12px);
+    transition:opacity .7s ease, transform .8s cubic-bezier(.22,.72,.18,1);
+    pointer-events:none;
+  }
+  .quote-brand.visible { opacity:1; transform:translateY(-50%); pointer-events:auto; }
+  .quote-brand-kicker {
+    margin:0 0 15px;
+    font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+    font-size:10px; letter-spacing:.20em; color:rgba(242,236,224,.48);
+  }
+  .quote-brand-copy {
+    margin:0; max-width:530px;
+    font-family:"Noto Serif KR","Batang","바탕",serif;
+    font-size:clamp(15px,1.15vw,17px); line-height:1.95; font-weight:400; letter-spacing:.01em;
+    color:rgba(242,236,224,.82);
+  }
+  .quote-brand-product {
+    margin:20px 0 20px;
+    font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+    font-size:12px; line-height:1.7; letter-spacing:.035em; font-weight:400;
+    color:#f2ece0;
+  }
+  .quote-blends {
+    width:100%; display:grid; grid-template-columns:repeat(4,1fr);
+    border-top:1px solid rgba(242,236,224,.18);
+    border-bottom:1px solid rgba(242,236,224,.18);
+  }
+  .quote-blends a {
+    position:relative; display:flex; align-items:baseline; gap:10px;
+    padding:15px 12px 16px 0; text-decoration:none; color:#f2ece0;
+    overflow:hidden;
+  }
+  .quote-blends a + a { padding-left:14px; border-left:1px solid rgba(242,236,224,.12); }
+  .quote-blends a::after {
+    content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+    transform:scaleX(0); transform-origin:left; transition:transform .48s cubic-bezier(.4,0,.2,1);
+    background:linear-gradient(90deg,#2fadcf,#d1bada,#a2c3e7,#f9d2dc,#bcbcd7,#94bfe6,#a691be);
+  }
+  .quote-blends a::before {
+    content:""; position:absolute; inset:0; opacity:0; transition:opacity .42s ease;
+    background:linear-gradient(90deg, rgba(var(--row-rgb,255,255,255),.085), rgba(var(--row-rgb,255,255,255),0));
+  }
+  .quote-blends a:hover::before, .quote-blends a:focus-visible::before, .quote-blends a.is-active::before { opacity:1; }
+  .quote-blends a:hover::after, .quote-blends a:focus-visible::after, .quote-blends a.is-active::after { transform:scaleX(1); }
+  .quote-blends small {
+    font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+    font-size:9px; letter-spacing:.12em; color:rgba(242,236,224,.38);
+    transition:color .3s ease;
+  }
+  .quote-blends span {
+    font-family:"Noto Serif KR","Batang","바탕",serif;
+    font-size:19px; letter-spacing:.06em; color:rgba(242,236,224,.90);
+    transition:color .3s ease, transform .35s ease;
+  }
+  .quote-blends a:hover small, .quote-blends a:focus-visible small, .quote-blends a.is-active small { color:rgba(242,236,224,.78); }
+  .quote-blends a:hover span, .quote-blends a:focus-visible span, .quote-blends a.is-active span { color:#fff; transform:translateY(-1px); }
+
+  /* ---------- 3장: 원본 병풍 구조를 그대로 살리되 실제 제품 정보의 밀도만 보강 ---------- */
+  #byeongpung { padding:88px 32px 76px; }
+  .bp-head { margin-bottom:30px; }
+  .bp-heading-group { max-width:760px; }
+  .bp-title { font-family:"Noto Serif KR","Batang","바탕",serif; font-weight:500; font-size:clamp(25px,2.35vw,33px); letter-spacing:-.02em; }
+  .bp-copy { margin-top:12px; font-size:12px; line-height:1.85; color:rgba(23,19,16,.54); }
+  .bp-screen { min-height:0; height:min(62vh,590px); }
+  .bp-panel-inner { padding:19px 20px 22px; }
+  .bp-meta { display:flex; flex-direction:column; align-items:flex-start; }
+  .bp-season {
+    margin-bottom:8px; font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+    font-size:9px; letter-spacing:.17em; color:rgba(255,255,255,.72);
+    text-shadow:0 2px 10px rgba(0,0,0,.18);
+  }
+  .bp-note {
+    margin:10px 0 0; font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+    font-size:10px; letter-spacing:.02em; line-height:1.5; color:rgba(255,255,255,.82);
+    opacity:0; transform:translateY(6px);
+    transition:opacity .38s ease, transform .45s cubic-bezier(.22,.72,.18,1);
+    text-shadow:0 2px 10px rgba(0,0,0,.22);
+  }
+  .bp-panel:hover .bp-note, .bp-panel:focus-visible .bp-note, .bp-panel.is-hovered .bp-note { opacity:1; transform:translateY(0); }
+  .bp-panel:hover, .bp-panel:focus-visible, .bp-panel.is-hovered { flex:1.28 1 0; }
+
+  @media (max-width: 980px) {
+    .quote-brand { left:7%; width:52vw; }
+  }
+  @media (max-width: 720px) {
+    .quote-brand { position:absolute; left:26px; right:26px; top:auto; bottom:25%; width:auto; transform:translateY(12px); }
+    .quote-block { right:22px; top:44%; transform:translateY(-50%); }
+    .quote-brand-copy { font-size:12px; line-height:1.78; }
+    .quote-brand-product { margin:12px 0 14px; font-size:10px; }
+    .quote-blends span { font-size:14px; }
+    .quote-blends small { display:none; }
+    .quote-blends a { padding:10px 5px; justify-content:center; }
+    .quote-blends a + a { padding-left:5px; }
+    .quote-cta { bottom:7%; }
+    .quote-haze::before { width:120vw; height:120vw; left:-40vw; top:28vh; }
+    #byeongpung { padding:86px 20px 72px; }
+    .bp-screen { height:auto; }
+    .bp-note { opacity:1; transform:none; }
+  }
+
+
+  /* ===== v10: desktop 병풍 유지 / mobile만 가로 스크롤 ===== */
+  .bp-mobile-hint { display:none; }
+
+  /* 3페이지의 제목+설명+병풍 전체를 함께 살짝 아래로 */
+  @media (min-width: 721px) {
+    #byeongpung { padding: 132px 32px 76px; }
+    .bp-stage { margin-top: 12px; overflow: visible; scroll-snap-type: none; }
+    .bp-screen { width:100%; display:flex; gap:0; padding:0; }
+    .bp-panel {
+      flex:1 1 0; width:auto; min-width:0; scroll-snap-align:none;
+    }
+    .bp-panel + .bp-panel { margin-left:-1px; }
+  }
+
+  @media (max-width: 720px) {
+    /* 모바일 고정 상단 바 — 이미지/콘텐츠와 직접 겹치지 않게 */
+    .site-header {
+      opacity:1 !important; transform:none !important; pointer-events:auto !important;
+      background:rgba(244,241,233,.92);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(23,19,16,.08);
+    }
+    .site-header.on-dark {
+      background:rgba(14,13,12,.90);
+      border-bottom-color:rgba(255,255,255,.08);
+    }
+    .site-header-inner { padding:11px 18px; }
+    .site-logo img { height:36px; }
+    .site-nav { display:none; }
+    .hamburger { display:flex; width:28px; height:28px; }
+    .mobile-nav { padding:0 18px 14px; background:transparent; }
+    .mobile-nav a { color:rgba(23,19,16,.72); }
+    .site-header.on-dark .mobile-nav a {
+      color:rgba(255,255,255,.82);
+      border-top-color:rgba(255,255,255,.10);
+    }
+
+    /* 헤더 높이만큼 첫 페이지/섹션 상단 호흡 확보 */
+    #hero main { padding-top:84px; }
+    #quote { padding-top:82px; }
+
+    /* 2페이지: 왼쪽 소개와 오른쪽 세로 카피의 칼럼을 강제로 분리 */
+    .quote-block {
+      right:20px; top:37%; transform:translateY(-50%);
+    }
+    .quote-block p {
+      font-size:11px; line-height:1.5; letter-spacing:.045em;
+    }
+    .quote-brand {
+      left:22px; right:112px; top:53%; bottom:auto; width:auto;
+      transform:translateY(12px);
+    }
+    .quote-brand.visible { transform:translateY(-50%); }
+    .quote-brand-kicker { font-size:9px; margin-bottom:10px; }
+    .quote-brand-copy { max-width:none; font-size:12px; line-height:1.78; }
+    .quote-brand-product { margin:12px 0 12px; font-size:9px; line-height:1.6; }
+    .quote-blends { grid-template-columns:repeat(2,1fr); }
+    .quote-blends a { padding:9px 6px; justify-content:flex-start; }
+    .quote-blends a + a { padding-left:8px; }
+    .quote-blends a:nth-child(3) { border-left:0; border-top:1px solid rgba(242,236,224,.12); }
+    .quote-blends a:nth-child(4) { border-top:1px solid rgba(242,236,224,.12); }
+    .quote-blends span { font-size:13px; }
+    .quote-blends small { display:inline; font-size:8px; }
+    .quote-cta { right:22px; bottom:6%; }
+    .quote-cta a { font-size:13px; }
+    .quote-cta-eyebrow { font-size:9px; }
+
+    /* 3페이지는 모바일에서만 가로 스크롤 카드로 전환 */
+    #byeongpung { padding:112px 20px 76px; overflow:hidden; }
+    .bp-head { margin-bottom:22px; }
+    .bp-title { font-size:26px; }
+    .bp-copy { font-size:11px; line-height:1.72; }
+    .bp-mobile-hint {
+      display:block; margin:12px 0 0;
+      font-size:9px; letter-spacing:.08em; color:rgba(23,19,16,.42);
+    }
+    .bp-stage {
+      perspective:none; transform-style:flat;
+      margin:20px -20px 0; padding:0 20px 16px;
+      overflow-x:auto; overflow-y:hidden;
+      scroll-snap-type:x mandatory; scroll-padding-left:20px;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      touch-action:pan-x pan-y;
+    }
+    .bp-stage::-webkit-scrollbar { display:none; }
+    .bp-screen {
+      display:flex; width:max-content; height:auto; min-height:0;
+      gap:12px; padding:0 20px 0 0; transform-style:flat;
+    }
+    .bp-panel,
+    .bp-screen.is-folded .bp-panel {
+      flex:0 0 78vw; width:78vw; min-width:78vw;
+      min-height:56vh; margin-left:0;
+      transform:none !important; translate:0 0;
+      scroll-snap-align:center; border:1px solid rgba(23,19,16,.13);
+      opacity:1;
+    }
+    .bp-panel:hover,
+    .bp-panel:focus-visible,
+    .bp-panel.is-hovered { transform:none !important; flex:0 0 78vw; }
+    .bp-panel + .bp-panel { margin-left:0; }
+    .bp-note { opacity:1; transform:none; }
+  }
+
+  @media (max-width: 390px) {
+    .quote-brand { right:104px; }
+    .quote-brand-copy { font-size:11px; }
+    .quote-block { right:16px; }
+    .bp-panel,
+    .bp-screen.is-folded .bp-panel { flex-basis:82vw; width:82vw; min-width:82vw; }
   }
 
 </style>
@@ -471,7 +726,7 @@
 
 <section id="hero">
   <div class="hero-editorial" aria-hidden="true">
-    <div class="hero-culture-note">風流 · KOREAN COFFEE CULTURE · 2026</div>
+    <div class="hero-culture-note">풍류 · 마주온 커피 · 2026</div>
   </div>
   <main>
     <div class="art-wrap">
@@ -493,16 +748,31 @@
 
 <section id="quote">
   <div class="reveal-circle" id="revealCircle"></div>
+  <div class="quote-haze" data-tone="spring" style="--haze-rgb:216,164,161"></div>
+  <div class="quote-haze" data-tone="summer" style="--haze-rgb:134,185,180"></div>
+  <div class="quote-haze" data-tone="autumn" style="--haze-rgb:180,154,108"></div>
+  <div class="quote-haze" data-tone="winter" style="--haze-rgb:150,168,184"></div>
   <div class="quote-block">
-    <p><span class="quote-mark">『</span>마시는 종류만 달라졌을 뿐</p>
-    <p>즐기던 풍류는 마주해옵니다<span class="quote-mark">』</span></p>
+    <p><span class="quote-mark">『</span>마시는 것은 달라졌지만, 즐기는 마음은 이어집니다<span class="quote-mark">』</span></p>
+  </div>
+
+  <div class="quote-brand" id="quoteBrand" aria-label="마주온 커피 소개">
+    <p class="quote-brand-kicker">마주온의 커피</p>
+    <p class="quote-brand-copy">옛 선조들이 차와 술을 곁에 두고 풍류를 즐겼듯,<br>마주온은 오늘 그 자리에 커피를 놓습니다.</p>
+    <p class="quote-brand-product">한국의 사계와 풍류를 담은 네 가지 블렌드 커피.</p>
+    <div class="quote-blends" aria-label="마주온 사계 블렌드">
+      <a href="#byeongpung" data-tone="spring" style="--row-rgb:216,164,161"><small>봄</small><span>화담</span></a>
+      <a href="#byeongpung" data-tone="summer" style="--row-rgb:134,185,180"><small>여름</small><span>청류</span></a>
+      <a href="#byeongpung" data-tone="autumn" style="--row-rgb:180,154,108"><small>가을</small><span>풍연</span></a>
+      <a href="#byeongpung" data-tone="winter" style="--row-rgb:150,168,184"><small>겨울</small><span>설한</span></a>
+    </div>
   </div>
   <div class="quote-cta" id="quoteCta">
-    <span class="quote-cta-eyebrow">NEXT</span>
+    <span class="quote-cta-eyebrow">알아보기</span>
     <a href="story.html">
       <span class="cta-label-wrap">
-        <span class="cta-label">이야기가 궁금하다면 — 스토리</span>
-        <span class="cta-label cta-label-fill">이야기가 궁금하다면 — 스토리</span>
+        <span class="cta-label">마주온의 이야기 →</span>
+        <span class="cta-label cta-label-fill">마주온의 이야기 →</span>
       </span>
       <span class="cta-track"></span>
       <span class="cta-ink"></span>
@@ -526,8 +796,8 @@
     </a>
     <a href="#">
       <span class="cta-label-wrap">
-        <span class="cta-label">풍류를 경험하고 싶다면 — 디지털 다도실</span>
-        <span class="cta-label cta-label-fill">풍류를 경험하고 싶다면 — 디지털 다도실</span>
+        <span class="cta-label">디지털 다도실 →</span>
+        <span class="cta-label cta-label-fill">디지털 다도실 →</span>
       </span>
       <span class="cta-track"></span>
       <span class="cta-ink"></span>
@@ -557,8 +827,9 @@
   <div class="bp-wrap">
     <div class="bp-head">
       <div class="bp-heading-group">
-        <h2 class="bp-title">오늘 당신이 즐길 풍류</h2>
-        <p class="bp-copy"><span class="bp-copy-line">화담에서 설한까지, 사계절의 장면과 향을 한 폭씩 담았습니다.</span><br><span class="bp-copy-line">오늘의 기분에 맞는 풍류를 골라, 한 잔의 시간으로 천천히 마주해보세요.</span></p>
+        <h2 class="bp-title">오늘의 블렌드</h2>
+        <p class="bp-copy"><span class="bp-copy-line">화담에서 설한까지, 한국의 사계를 네 가지 블렌드로 풀었습니다.</span><br><span class="bp-copy-line">오늘의 기분에 맞는 한 잔을 골라보세요.</span></p>
+        <p class="bp-mobile-hint" aria-hidden="true">옆으로 넘겨보세요&nbsp;&nbsp;→</p>
       </div>
     </div>
 
@@ -568,28 +839,28 @@
           <div class="bp-image" style="background-image:url('images/hwadam.png')"></div>
           <div class="bp-shade"></div>
           <div class="bp-panel-inner">
-            <h3 class="bp-name">화담</h3>
+            <div class="bp-meta"><span class="bp-season">봄</span><h3 class="bp-name">화담</h3><p class="bp-note">화사한 과실과 꽃의 결</p></div>
           </div>
         </a>
-        <a class="bp-panel" href="store.html" aria-label="청류 블렌드" style="--pos-x: 39%; --pos-y: 42%;">
+        <a class="bp-panel" href="store.html" aria-label="청류 블렌드" style="--pos-x: 12%; --pos-y: 42%; --img-origin:30% 50%;">
           <div class="bp-image" style="background-image:url('images/cheongryu.png')"></div>
           <div class="bp-shade"></div>
           <div class="bp-panel-inner">
-            <h3 class="bp-name">청류</h3>
+            <div class="bp-meta"><span class="bp-season">여름</span><h3 class="bp-name">청류</h3><p class="bp-note">맑은 산미와 깨끗한 여운</p></div>
           </div>
         </a>
-        <a class="bp-panel" href="store.html" aria-label="풍연 블렌드" style="--pos-x: 72%; --pos-y: 46%;">
+        <a class="bp-panel" href="store.html" aria-label="풍연 블렌드" style="--pos-x: 78%; --pos-y: 44%; --img-scale:1.13; --img-hover-scale:1.19; --img-origin:72% 54%;">
           <div class="bp-image" style="background-image:url('images/pungyeon.png')"></div>
           <div class="bp-shade"></div>
           <div class="bp-panel-inner">
-            <h3 class="bp-name">풍연</h3>
+            <div class="bp-meta"><span class="bp-season">가을</span><h3 class="bp-name">풍연</h3><p class="bp-note">고소함 뒤에 남는 깊이</p></div>
           </div>
         </a>
         <a class="bp-panel" href="store.html" aria-label="설한 블렌드" style="--pos-x: 58%; --pos-y: 38%;">
           <div class="bp-image" style="background-image:url('images/seolhan.png')"></div>
           <div class="bp-shade"></div>
           <div class="bp-panel-inner">
-            <h3 class="bp-name">설한</h3>
+            <div class="bp-meta"><span class="bp-season">겨울</span><h3 class="bp-name">설한</h3><p class="bp-note">차분한 향과 긴 여운</p></div>
           </div>
         </a>
       </div>

@@ -19,43 +19,125 @@ const siteHeader = document.getElementById('siteHeader');
 const revealCircle = document.getElementById('revealCircle');
 const quoteSection = document.getElementById('quote');
 const quoteCta = document.getElementById('quoteCta');
+const quoteBrand = document.getElementById('quoteBrand');
+const byeongpungSection = document.getElementById('byeongpung');
+const byeongpungScreen = document.getElementById('byeongpungScreen');
+const byeongpungStage = byeongpungScreen ? byeongpungScreen.closest('.bp-stage') : null;
+
+function clearByeongpungHover() {
+  if (!byeongpungScreen) return;
+  byeongpungScreen.querySelectorAll('.bp-panel').forEach(panel => panel.classList.remove('is-hovered'));
+}
+if (byeongpungStage && byeongpungScreen) {
+  const panels = [...byeongpungScreen.querySelectorAll('.bp-panel')];
+  byeongpungStage.addEventListener('pointermove', (e) => {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+    const stageRect = byeongpungStage.getBoundingClientRect();
+    if (e.clientX < stageRect.left || e.clientX > stageRect.right || e.clientY < stageRect.top || e.clientY > stageRect.bottom) {
+      clearByeongpungHover();
+      return;
+    }
+    // 회전으로 생기는 시각적 틈까지 포함: 현재 보이는 네 폭의 중심 중 가장 가까운 폭을 활성화한다.
+    let target = null;
+    let best = Infinity;
+    panels.forEach((panel) => {
+      const r = panel.getBoundingClientRect();
+      const cx = (r.left + r.right) * 0.5;
+      const dist = Math.abs(e.clientX - cx);
+      if (dist < best) { best = dist; target = panel; }
+    });
+    panels.forEach(panel => panel.classList.toggle('is-hovered', panel === target));
+  }, { passive:true });
+  byeongpungStage.addEventListener('pointerleave', clearByeongpungHover);
+}
 
 let ticking = false;
 
-function updateScrollEffect() {
-  const rect = hero.getBoundingClientRect();
-  // 히어로 섹션이 뷰포트 위로 스크롤되어 나가는 만큼(자기 자신의 높이 기준)을 진행률로 사용
-  const progress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
-  hero.style.opacity = String(1 - progress);
-  // 히어로를 충분히 벗어나면(두 번째 섹션부터) 상단 바를 드러냄
-  siteHeader.classList.toggle('visible', progress > 0.6);
-  // 문구(원 리빌) 섹션이 실제로 화면을 채우고 있는 동안에만 헤더를 밝은 글씨로 전환
-  // (mix-blend-mode 자동 반전은 필터 걸린 큰 원 때문에 다른 섹션에서 깨지므로, 직접 판단해서 전환)
-  const quoteRect = quoteSection.getBoundingClientRect();
-  const inQuote = quoteRect.top <= 1 && quoteRect.bottom > 1;
-  siteHeader.classList.toggle('on-dark', inQuote);
-  // 왼쪽 아래에서 검은 원이 커지며 화면을 덮는 리빌 (진행률 0→1이 그대로 원의 크기가 됨)
-  const circleClip = `circle(${progress * 99}vmax at 100% 0%)`;
+const quoteBlendLinks = [...document.querySelectorAll('.quote-blends a')];
+const quoteHazes = [...document.querySelectorAll('.quote-haze')];
+const clamp = (v, min = 0, max = 1) => Math.min(Math.max(v, min), max);
+const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+function setQuoteTone(tone) {
+  quoteHazes.forEach((haze) => haze.classList.toggle('visible', haze.dataset.tone === tone));
+  quoteBlendLinks.forEach((link) => link.classList.toggle('is-active', link.dataset.tone === tone));
+}
+function clearQuoteTone() {
+  quoteHazes.forEach((haze) => haze.classList.remove('visible'));
+  quoteBlendLinks.forEach((link) => link.classList.remove('is-active'));
+}
+quoteBlendLinks.forEach((link) => {
+  link.addEventListener('mouseenter', () => setQuoteTone(link.dataset.tone));
+  link.addEventListener('focus', () => setQuoteTone(link.dataset.tone));
+  link.addEventListener('mouseleave', clearQuoteTone);
+  link.addEventListener('blur', clearQuoteTone);
+});
+
+let revealCurrent = 0;
+let revealTarget = 0;
+let revealRAF = null;
+
+function paintReveal() {
+  revealCurrent += (revealTarget - revealCurrent) * 0.085;
+  if (Math.abs(revealTarget - revealCurrent) < 0.0015) revealCurrent = revealTarget;
+
+  const eased = easeOutQuart(clamp(revealCurrent));
+  const radius = eased * 158;
+  const circleClip = `circle(${radius}vmax at 100% 0%)`;
   revealCircle.style.webkitClipPath = circleClip;
   revealCircle.style.clipPath = circleClip;
-  // 원이 거의 다 자란 뒤에만, 이 페이지가 유도하려는 다음 행동(스토리/디지털 다도실)을 드러냄
-  quoteCta.classList.toggle('visible', progress > 0.65);
 
+  quoteBrand.classList.toggle('visible', eased > 0.972);
+  quoteCta.classList.toggle('visible', eased > 0.992);
+
+  if (revealCurrent !== revealTarget) {
+    revealRAF = requestAnimationFrame(paintReveal);
+  } else {
+    revealRAF = null;
+  }
+}
+function setRevealTarget(v) {
+  revealTarget = clamp(v);
+  if (!revealRAF) revealRAF = requestAnimationFrame(paintReveal);
+}
+
+function updateScrollEffect() {
+  const rect = hero.getBoundingClientRect();
+  const heroProgress = clamp(-rect.top / rect.height, 0, 1);
+  hero.style.opacity = String(1 - heroProgress);
+  siteHeader.classList.toggle('visible', heroProgress > 0.56);
+  const quoteRect = quoteSection.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  const centerEl = document.elementFromPoint(Math.max(1, window.innerWidth * 0.5), Math.max(1, vh * 0.5));
+  const activeSection = centerEl ? centerEl.closest('section') : null;
+  const inQuote = !!activeSection && activeSection.id === 'quote';
+
+  // 원은 조금 더 천천히 자라되, 끝으로 갈수록 부드럽게 감쇠하며 화면을 덮는다.
+  let target = clamp((heroProgress - 0.12) / 0.82, 0, 1);
+  if (Math.abs(quoteRect.top) < 3 || (quoteRect.top <= 0 && quoteRect.bottom >= vh * .82)) target = 1;
+  setRevealTarget(target);
+
+  siteHeader.classList.toggle('on-dark', inQuote);
   ticking = false;
 }
 window.addEventListener('scroll', () => {
   if (!ticking) { requestAnimationFrame(updateScrollEffect); ticking = true; }
 }, { passive: true });
-// 스냅이 마지막에 자리 잡는 순간, 스크롤 이벤트가 정확한 최종 위치에서 한 번 더 안 걸리는
-// 경우가 있어서(특히 모바일 사파리), 스크롤이 완전히 멈추면 한 번 더 확실하게 재계산함
-window.addEventListener('scrollend', updateScrollEffect, { passive: true });
+window.addEventListener('scrollend', () => {
+  updateScrollEffect();
+  const quoteRect = quoteSection.getBoundingClientRect();
+  if (Math.abs(quoteRect.top) < 6) setRevealTarget(1);
+}, { passive: true });
 let scrollStillTimer = null;
 window.addEventListener('scroll', () => {
   clearTimeout(scrollStillTimer);
-  scrollStillTimer = setTimeout(updateScrollEffect, 150); // scrollend 미지원 브라우저 대비
+  scrollStillTimer = setTimeout(() => {
+    updateScrollEffect();
+    const quoteRect = quoteSection.getBoundingClientRect();
+    if (Math.abs(quoteRect.top) < 8) setRevealTarget(1);
+  }, 120);
 }, { passive: true });
 updateScrollEffect();
-
 // ---------- 모바일 햄버거 메뉴 ----------
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileNav = document.getElementById('mobileNav');
@@ -681,9 +763,6 @@ function frame() {
 }
 requestAnimationFrame(frame);
 // ---------- 사계 병풍 ----------
-const byeongpungSection = document.getElementById('byeongpung');
-const byeongpungScreen = document.getElementById('byeongpungScreen');
-
 if (byeongpungSection && byeongpungScreen) {
   let foldTimer = null;
 
