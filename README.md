@@ -1,33 +1,32 @@
-# MAJUON landing page
+# MAJUON landing prototype
 
-정적 사이트 형태로 분리한 Git 배포용 버전입니다. 빌드 과정 없이 바로 배포할 수 있습니다.
+Git/GitHub Pages ready split build based on the latest v62 preview.
 
-## 구조
+## Structure
 
-- `index.html` — 페이지 마크업
-- `css/styles.css` — 전체 스타일
-- `js/app.js` — 인터랙션/스크롤/족자 자동 루프
-- `assets/images/` — 로고 및 사계 일러스트(WebP)
-- `assets/models/majuon-scroll.glb` — 족자 3D 모델
+- `index.html` — page markup
+- `css/styles.css` — all page styles, including desktop/mobile split
+- `js/app.js` — interactions, 4-second seasonal auto loop, scroll/swipe controls
+- `assets/images/` — logo and four seasonal WebP illustrations
+- `assets/models/majuon-scroll.glb` — scroll 3D model
 
-## 로컬 실행
+## Run locally
 
-브라우저에서 파일을 직접 여는 것보다 간단한 로컬 서버를 권장합니다.
+Because the page loads a 3D web component and local assets, serve the folder instead of double-clicking the HTML file.
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 8000
 ```
 
-그 뒤 `http://localhost:8080`으로 접속하세요.
+Then open `http://localhost:8000`.
 
-## 배포
+## Current interaction settings
 
-GitHub Pages, Netlify, Vercel 같은 정적 호스팅에 그대로 올릴 수 있습니다.
+- Seasonal loop: 화담 → 청류 → 풍연 → 설한 → 화담
+- Hold time: about 4 seconds per blend
+- Transition: about 0.82 seconds
+- Manual wheel/swipe pauses auto-play before it resumes
+- Desktop and mobile scroll-model sizing are separated
+- Mobile scroll model: 175px wide / 78.5svh high / top 20.5svh / left -96px
 
-> 현재 `story.html`, `menu.html`, `store.html` 링크는 해당 페이지를 별도로 추가할 예정인 경로입니다.
-
-## Mobile layout
-`css/mobile.css` is loaded after the main stylesheet and contains the final mobile layout overrides for widths up to 720px. The third section uses a vertical artwork/copy composition while preserving the scroll model, automatic seasonal loop, and swipe/wheel controls.
-
-## Autoplay timing
-3페이지 사계 루프는 각 블렌드를 약 4초간 보여준 뒤 약 0.82초에 걸쳐 다음 블렌드로 전환합니다. 사용자가 휠/스와이프로 직접 넘기면 약 5.5초 동안 자동재생을 쉬었다가 다시 이어집니다.
+External dependencies currently used: Google Fonts and Google's `<model-viewer>` CDN.

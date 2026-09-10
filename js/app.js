@@ -1,3 +1,4 @@
+/* ===== inlined: js/app.js ===== */
 // ---------- 커서를 따라다니는 커스텀 팔각형 (mix-blend-mode로 배경색과 상관없이 항상 보이게) ----------
 const customCursor = document.getElementById('customCursor');
 if (customCursor) {
@@ -23,6 +24,7 @@ const quoteSection = document.getElementById('quote');
 const quoteCursorGlow = document.getElementById('quoteCursorGlow');
 const quoteCta = document.getElementById('quoteCta');
 const quoteBrand = document.getElementById('quoteBrand');
+const mobileQuoteMq = window.matchMedia('(max-width: 720px) and (any-pointer: coarse)');
 const byeongpungSection = document.getElementById('byeongpung');
 // ---------- 2페이지 전용 은은한 커서 광원 ----------
 if (quoteSection && quoteCursorGlow) {
@@ -137,11 +139,12 @@ function updateScrollEffect() {
   const inQuote = !!activeSection && activeSection.id === 'quote';
 
   // 특정 도형 없이, 한지색 장면의 조명이 꺼지듯 화면 전체가 서서히 어두워진다.
-  let target = clamp((heroProgress - 0.10) / 0.86, 0, 1);
+  let target = mobileQuoteMq.matches ? 1 : clamp((heroProgress - 0.10) / 0.86, 0, 1);
   if (Math.abs(quoteRect.top) < 3 || (quoteRect.top <= 0 && quoteRect.bottom >= vh * .82)) target = 1;
   setRevealTarget(target);
 
-  siteHeader.classList.toggle('on-dark', inQuote);
+  const mobileInQuote = mobileQuoteMq.matches && quoteRect.top < vh * .55 && quoteRect.bottom > vh * .45;
+  siteHeader.classList.toggle('on-dark', inQuote || mobileInQuote);
   ticking = false;
 }
 window.addEventListener('scroll', () => {
@@ -206,7 +209,10 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
       .cls-4 {
         stroke-width: 30px;
       }
-    </style>
+    
+
+
+</style>
   </defs>
   <g>
     <g>
@@ -794,7 +800,6 @@ requestAnimationFrame(frame);
   const track = document.getElementById('u24Track');
   const model = document.getElementById('u24Model');
   const modelWrap = document.getElementById('u24ModelWrap');
-  const instruction = section?.querySelector('.u24-instruction');
   if (!section || !stage || !track || !model) return;
 
   const tones = ['216,164,161','157,210,231','191,155,103','178,184,197'];
@@ -877,9 +882,6 @@ requestAnimationFrame(frame);
       spinTarget = 0;
       spinEase = .105;
       model.setAttribute('orientation', '0deg 0deg 0deg');
-      if (instruction) instruction.textContent = '스크롤을 내리면 족자는 제자리에서 회전하고, 화폭은 오른쪽으로 펼쳐집니다';
-    } else if (instruction) {
-      instruction.textContent = '약 4초마다 자동으로 다음 계절이 펼쳐집니다. 스크롤이나 스와이프로도 넘길 수 있습니다';
     }
   }
 
