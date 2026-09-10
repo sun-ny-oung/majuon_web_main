@@ -168,16 +168,28 @@ updateScrollEffect();
 // ---------- 모바일 햄버거 메뉴 ----------
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileNav = document.getElementById('mobileNav');
+const siteHeaderEl = document.getElementById('siteHeader');
+
+function setMobileMenu(open) {
+  mobileNav.classList.toggle('open', open);
+  siteHeaderEl?.classList.toggle('menu-open', open);
+  document.body.classList.toggle('mobile-menu-open', open);
+  hamburgerBtn.setAttribute('aria-expanded', String(open));
+  hamburgerBtn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+}
+
 hamburgerBtn.addEventListener('click', () => {
-  const isOpen = mobileNav.classList.toggle('open');
-  hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+  setMobileMenu(!mobileNav.classList.contains('open'));
 });
 mobileNav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileNav.classList.remove('open');
-    hamburgerBtn.setAttribute('aria-expanded', 'false');
-  });
+  link.addEventListener('click', () => setMobileMenu(false));
 });
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && mobileNav.classList.contains('open')) setMobileMenu(false);
+});
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 720 && mobileNav.classList.contains('open')) setMobileMenu(false);
+}, { passive: true });
 
 // ---------- 리플/크레마 (ripple-hero.html과 동일) ----------
 const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>

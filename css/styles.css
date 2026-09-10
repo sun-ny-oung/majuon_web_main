@@ -2177,3 +2177,197 @@ html, body { scroll-snap-type: y mandatory !important; }
     max-width: 260px !important;
   }
 }
+
+/* ===== v63 MOBILE FINAL: page 3 alignment + animated full-screen menu ===== */
+@media (max-width: 720px) {
+  /* Hamburger menu: background and links enter as one sheet. */
+  .site-header {
+    z-index: 100 !important;
+  }
+  .site-header-inner {
+    position: relative;
+    z-index: 102;
+  }
+  .mobile-nav {
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: calc(82px + env(safe-area-inset-top, 0px)) 24px calc(34px + env(safe-area-inset-bottom, 0px)) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    background: rgba(244, 241, 233, .985) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    backdrop-filter: blur(18px) !important;
+    opacity: 1 !important;
+    visibility: hidden;
+    pointer-events: none !important;
+    transform: none !important;
+    clip-path: inset(0 0 100% 0);
+    -webkit-clip-path: inset(0 0 100% 0);
+    transition:
+      clip-path .52s cubic-bezier(.22,.72,.16,1),
+      -webkit-clip-path .52s cubic-bezier(.22,.72,.16,1),
+      visibility 0s linear .52s !important;
+    z-index: 101 !important;
+  }
+  .mobile-nav.open {
+    visibility: visible;
+    pointer-events: auto !important;
+    clip-path: inset(0 0 0 0);
+    -webkit-clip-path: inset(0 0 0 0);
+    transition:
+      clip-path .52s cubic-bezier(.22,.72,.16,1),
+      -webkit-clip-path .52s cubic-bezier(.22,.72,.16,1),
+      visibility 0s linear 0s !important;
+  }
+  .mobile-nav a,
+  .site-header.on-dark .mobile-nav a {
+    color: rgba(23,19,16,.82) !important;
+    border-top-color: rgba(23,19,16,.10) !important;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity .34s ease, transform .42s cubic-bezier(.22,.72,.16,1) !important;
+  }
+  .mobile-nav.open a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .site-header.menu-open {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .site-header.menu-open .hamburger span,
+  .site-header.on-dark.menu-open .hamburger span {
+    background: #171310 !important;
+  }
+  body.mobile-menu-open {
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
+  /* Page 3: roller is the user's fixed mobile size. The paper is derived from its visible edge. */
+  #byeongpung.scroll3d-section {
+    --u24-mobile-roll-visible: 79px;
+    --u24-back-left: 66px !important;
+    --u24-back-width: calc(100vw - 66px + 6px) !important;
+    --u24-back-top: 29.2svh !important;
+    --u24-back-height: 58.5svh !important;
+    --u24-paper-left: 73px !important;
+    --u24-paper-width: calc(100vw - 73px - 8px) !important;
+    --u24-paper-top: 31.2svh !important;
+    --u24-paper-height: 54.8svh !important;
+  }
+  #byeongpung .u24-stage::after {
+    left: var(--u24-back-left) !important;
+    width: var(--u24-back-width) !important;
+    top: var(--u24-back-top) !important;
+    height: var(--u24-back-height) !important;
+  }
+  #byeongpung .u24-paper {
+    left: var(--u24-paper-left) !important;
+    right: auto !important;
+    width: var(--u24-paper-width) !important;
+    top: var(--u24-paper-top) !important;
+    height: var(--u24-paper-height) !important;
+    box-sizing: border-box !important;
+  }
+  #byeongpung .u24-model-wrap,
+  #byeongpung.is-u24-entered .u24-model-wrap {
+    width: 175px !important;
+    height: 78.5svh !important;
+    top: 20.5svh !important;
+    left: -96px !important;
+  }
+
+  /* Image and copy now share the same usable paper width; no off-screen right edge. */
+  #byeongpung .u24-blend {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 58% 42% !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+  #byeongpung .u24-blend-image {
+    box-sizing: border-box !important;
+    padding: 10px 14px 2px 12px !important;
+    overflow: hidden !important;
+  }
+  #byeongpung .u24-art {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 94% !important;
+    max-height: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    object-fit: contain !important;
+    object-position: var(--obj-pos-mobile, 50% 50%) !important;
+  }
+
+  /* Right-aligned copy with a real safe area. */
+  #byeongpung .u24-blend-copy {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 9px max(22px, env(safe-area-inset-right, 0px)) 12px 14px !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    overflow: hidden !important;
+  }
+  #byeongpung .u24-season,
+  #byeongpung .u24-name,
+  #byeongpung .u24-description,
+  #byeongpung .u24-notes {
+    box-sizing: border-box !important;
+    max-width: min(255px, calc(100vw - 118px)) !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    text-align: right !important;
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
+  }
+  #byeongpung .u24-name {
+    font-size: clamp(29px, 8.2vw, 34px) !important;
+  }
+  #byeongpung .u24-description {
+    margin-top: 8px !important;
+    font-size: clamp(10.5px, 3vw, 12px) !important;
+    line-height: 1.62 !important;
+  }
+  #byeongpung .u24-notes {
+    width: min(255px, calc(100vw - 118px)) !important;
+    margin-top: 9px !important;
+    padding-top: 8px !important;
+    font-size: 8.5px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung.scroll3d-section {
+    --u24-paper-left: 71px !important;
+    --u24-paper-width: calc(100vw - 71px - 7px) !important;
+    --u24-back-left: 64px !important;
+    --u24-back-width: calc(100vw - 64px + 5px) !important;
+  }
+  #byeongpung .u24-blend-copy {
+    padding-left: 12px !important;
+    padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
+  }
+  #byeongpung .u24-season,
+  #byeongpung .u24-name,
+  #byeongpung .u24-description,
+  #byeongpung .u24-notes {
+    max-width: min(235px, calc(100vw - 112px)) !important;
+  }
+  #byeongpung .u24-notes {
+    width: min(235px, calc(100vw - 112px)) !important;
+  }
+}
