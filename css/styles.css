@@ -1,4 +1,3 @@
-
 /* ===== inlined: css/styles.css ===== */
 *, *::before, *::after { box-sizing: border-box; }
   html, body, a, button, .frame {
@@ -2086,7 +2085,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 /* v61: desktop / mobile 값을 완전히 분리. 모바일 족자값은 coarse pointer + 720px 이하에서만 적용 */
 
 /* 데스크톱 기준값 복원 */
-@media (min-width: 721px), (hover: hover) and (pointer: fine) {
+@media (min-width: 721px) {
   #byeongpung .u24-model-wrap,
   #byeongpung.is-u24-entered .u24-model-wrap {
     width: 16.9vh !important;
@@ -2097,7 +2096,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 /* 실제 모바일 전용 */
-@media (max-width: 720px) and (hover: none) and (pointer: coarse) {
+@media (max-width: 720px) {
   /* 2페이지: Safari 포함 모바일에서는 reveal 상태와 무관하게 정상 표시 */
   #quote {
     background: #0e0d0c !important;
@@ -2256,12 +2255,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* Page 3: roller is the user's fixed mobile size. The paper is derived from its visible edge. */
   #byeongpung.scroll3d-section {
     --u24-mobile-roll-visible: 79px;
-    --u24-back-left: 66px !important;
-    --u24-back-width: calc(100vw - 66px + 6px) !important;
+    --u24-back-left: 50px !important;
+    --u24-back-width: calc(100vw - 50px + 6px) !important;
     --u24-back-top: 29.2svh !important;
     --u24-back-height: 58.5svh !important;
-    --u24-paper-left: 73px !important;
-    --u24-paper-width: calc(100vw - 73px - 8px) !important;
+    --u24-paper-left: 58px !important;
+    --u24-paper-width: calc(100vw - 58px - 8px) !important;
     --u24-paper-top: 31.2svh !important;
     --u24-paper-height: 54.8svh !important;
   }
@@ -2352,10 +2351,10 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 @media (max-width: 390px) {
   #byeongpung.scroll3d-section {
-    --u24-paper-left: 71px !important;
-    --u24-paper-width: calc(100vw - 71px - 7px) !important;
-    --u24-back-left: 64px !important;
-    --u24-back-width: calc(100vw - 64px + 5px) !important;
+    --u24-paper-left: 56px !important;
+    --u24-paper-width: calc(100vw - 56px - 7px) !important;
+    --u24-back-left: 48px !important;
+    --u24-back-width: calc(100vw - 48px + 5px) !important;
   }
   #byeongpung .u24-blend-copy {
     padding-left: 12px !important;

@@ -24,7 +24,7 @@ const quoteSection = document.getElementById('quote');
 const quoteCursorGlow = document.getElementById('quoteCursorGlow');
 const quoteCta = document.getElementById('quoteCta');
 const quoteBrand = document.getElementById('quoteBrand');
-const mobileQuoteMq = window.matchMedia('(max-width: 720px) and (any-pointer: coarse)');
+const mobileQuoteMq = window.matchMedia('(max-width: 720px)');
 const byeongpungSection = document.getElementById('byeongpung');
 // ---------- 2페이지 전용 은은한 커서 광원 ----------
 if (quoteSection && quoteCursorGlow) {
@@ -223,6 +223,51 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
       }
     
 
+
+
+/* ===== v65: mobile page 2 hard visibility fix — width is the only mobile criterion ===== */
+@media (max-width: 720px) {
+  #quote {
+    display: block !important;
+    position: relative !important;
+    min-height: 100svh !important;
+    height: 100svh !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #0e0d0c !important;
+    overflow: hidden !important;
+    z-index: 0 !important;
+  }
+  #quote .reveal-circle {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    transform: translateZ(0) !important;
+  }
+  #quote .quote-block {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 4 !important;
+  }
+  #quote .quote-brand {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(-50%) !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+  }
+  #quote .quote-cta {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+  }
+}
 
 </style>
   </defs>

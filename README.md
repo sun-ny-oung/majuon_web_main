@@ -1,39 +1,27 @@
-# MAJUON landing prototype
+# MAJUON website — v65
 
-Git/GitHub Pages ready split build based on the latest v62 preview.
+마주온 웹사이트 최신 확정본입니다.
 
-## Structure
-
-- `index.html` — page markup
-- `css/styles.css` — all page styles, including desktop/mobile split
-- `js/app.js` — interactions, 4-second seasonal auto loop, scroll/swipe controls
-- `assets/images/` — logo and four seasonal WebP illustrations
-- `assets/models/majuon-scroll.glb` — scroll 3D model
-
-## Run locally
-
-Because the page loads a 3D web component and local assets, serve the folder instead of double-clicking the HTML file.
+## 실행
+정적 파일이므로 `index.html`을 정적 호스팅에 배포하면 됩니다. 3D 족자 모델 로딩을 안정적으로 확인하려면 로컬에서도 HTTP 서버를 권장합니다.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+그 뒤 `http://localhost:8000`으로 접속하세요.
 
-## Current interaction settings
+## 구조
+- `index.html` — 페이지 마크업
+- `css/styles.css` — 전체 스타일 / 모바일 대응
+- `js/app.js` — 인터랙션, 메뉴, 사계 자동 루프
+- `assets/images/` — 로고 및 사계 이미지
+- `assets/models/majuon-scroll.glb` — 3D 족자 모델
 
-- Seasonal loop: 화담 → 청류 → 풍연 → 설한 → 화담
-- Hold time: about 4 seconds per blend
-- Transition: about 0.82 seconds
-- Manual wheel/swipe pauses auto-play before it resumes
-- Desktop and mobile scroll-model sizing are separated
-- Mobile scroll model: 175px wide / 78.5svh high / top 20.5svh / left -96px
-
-External dependencies currently used: Google Fonts and Google's `<model-viewer>` CDN.
-
-
-## v63 mobile fixes
-- 3페이지 모바일 족자: 175px × 78.5svh, top 20.5svh, left -96px 유지
-- 족자 노출 끝을 기준으로 화폭/이미지 영역 재정렬 및 우측 안전 여백 확보
-- 모바일 설명 우측 정렬 잘림 방지
-- 햄버거 메뉴 배경이 링크와 함께 위에서 아래로 펼쳐지는 풀스크린 시트 애니메이션 추가
+## v65 반영사항
+- 모바일 2페이지 표시 로직 확정
+- 모바일 3페이지 족자: 175px × 78.5svh / top 20.5svh / left -96px
+- 모바일 족자 뒤로 종이 겹침 보정
+- 모바일 우측 정렬 텍스트 안전영역 대응
+- 햄버거 메뉴 배경 애니메이션
+- 사계 4초 자동 루프 유지
