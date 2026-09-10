@@ -798,8 +798,10 @@ requestAnimationFrame(frame);
   if (!section || !stage || !track || !model) return;
 
   const tones = ['216,164,161','157,210,231','191,155,103','178,184,197'];
-  const TRANSITION = 'transform .82s cubic-bezier(.22,.72,.16,1)';
-  const STEP_DELAY = 1000;
+  const TRANSITION_MS = 820;
+  const HOLD_MS = 4000;
+  const MANUAL_RESUME_MS = 5500;
+  const TRANSITION = `transform ${TRANSITION_MS / 1000}s cubic-bezier(.22,.72,.16,1)`;
   const WRAP_MS = 860;
   const INTRO_MS = 1480;
 
@@ -877,7 +879,7 @@ requestAnimationFrame(frame);
       model.setAttribute('orientation', '0deg 0deg 0deg');
       if (instruction) instruction.textContent = '스크롤을 내리면 족자는 제자리에서 회전하고, 화폭은 오른쪽으로 펼쳐집니다';
     } else if (instruction) {
-      instruction.textContent = '1초마다 자동으로 다음 계절이 펼쳐집니다. 스크롤이나 스와이프로도 넘길 수 있습니다';
+      instruction.textContent = '약 4초마다 자동으로 다음 계절이 펼쳐집니다. 스크롤이나 스와이프로도 넘길 수 있습니다';
     }
   }
 
@@ -892,14 +894,14 @@ requestAnimationFrame(frame);
     }
   }
 
-  function scheduleAuto(delay = STEP_DELAY) {
+  function scheduleAuto(delay = HOLD_MS) {
     clearAuto();
     autoTimer = window.setTimeout(() => {
       autoTimer = null;
       if (document.hidden || !isSectionActive()) return;
       if (!entered) {
         introReveal();
-        scheduleAuto(INTRO_MS + 120);
+        scheduleAuto(INTRO_MS + HOLD_MS);
         return;
       }
       if (locked) {
@@ -911,7 +913,7 @@ requestAnimationFrame(frame);
       } else {
         updateState(index + 1, 1);
       }
-      scheduleAuto(STEP_DELAY);
+      scheduleAuto(TRANSITION_MS + HOLD_MS);
     }, delay);
   }
 
@@ -1006,7 +1008,7 @@ requestAnimationFrame(frame);
 
   function handleVisibility() {
     if (isSectionActive()) {
-      scheduleAuto(STEP_DELAY);
+      scheduleAuto(HOLD_MS);
     } else {
       clearAuto();
       if (entered && section.getBoundingClientRect().top > vh() * 0.45) {
@@ -1035,7 +1037,7 @@ requestAnimationFrame(frame);
     if (Math.abs(wheelAccum) < (entered ? 46 : 24)) return;
     step(direction);
     wheelAccum = 0;
-    scheduleAuto(1400);
+    scheduleAuto(MANUAL_RESUME_MS);
   }, { passive:false });
 
   stage.addEventListener('touchstart', (e) => {
@@ -1060,7 +1062,7 @@ requestAnimationFrame(frame);
     step(direction);
     touchX = x;
     touchY = y;
-    scheduleAuto(1400);
+    scheduleAuto(MANUAL_RESUME_MS);
   }, { passive:false });
 
   stage.addEventListener('touchend', () => {

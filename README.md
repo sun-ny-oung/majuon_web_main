@@ -28,3 +28,6 @@ GitHub Pages, Netlify, Vercel 같은 정적 호스팅에 그대로 올릴 수 �
 
 ## Mobile layout
 `css/mobile.css` is loaded after the main stylesheet and contains the final mobile layout overrides for widths up to 720px. The third section uses a vertical artwork/copy composition while preserving the scroll model, automatic seasonal loop, and swipe/wheel controls.
+
+## Autoplay timing
+3페이지 사계 루프는 각 블렌드를 약 4초간 보여준 뒤 약 0.82초에 걸쳐 다음 블렌드로 전환합니다. 사용자가 휠/스와이프로 직접 넘기면 약 5.5초 동안 자동재생을 쉬었다가 다시 이어집니다.
