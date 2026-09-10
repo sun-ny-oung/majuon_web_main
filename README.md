@@ -25,3 +25,6 @@ python3 -m http.server 8080
 GitHub Pages, Netlify, Vercel 같은 정적 호스팅에 그대로 올릴 수 있습니다.
 
 > 현재 `story.html`, `menu.html`, `store.html` 링크는 해당 페이지를 별도로 추가할 예정인 경로입니다.
+
+## Mobile layout
+`css/mobile.css` is loaded after the main stylesheet and contains the final mobile layout overrides for widths up to 720px. The third section uses a vertical artwork/copy composition while preserving the scroll model, automatic seasonal loop, and swipe/wheel controls.
