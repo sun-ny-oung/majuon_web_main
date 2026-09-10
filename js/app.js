@@ -1,12 +1,14 @@
 // ---------- 커서를 따라다니는 커스텀 팔각형 (mix-blend-mode로 배경색과 상관없이 항상 보이게) ----------
 const customCursor = document.getElementById('customCursor');
-window.addEventListener('mousemove', (e) => {
-  customCursor.style.transform = `translate(${e.clientX - 21.5}px, ${e.clientY - 21.5}px)`;
-});
-window.addEventListener('mouseleave', () => { customCursor.style.opacity = '0'; });
-window.addEventListener('mouseenter', () => { customCursor.style.opacity = '1'; });
+if (customCursor) {
+  window.addEventListener('mousemove', (e) => {
+    customCursor.style.transform = `translate(${e.clientX - 21.5}px, ${e.clientY - 21.5}px)`;
+  });
+  window.addEventListener('mouseleave', () => { customCursor.style.opacity = '0'; });
+  window.addEventListener('mouseenter', () => { customCursor.style.opacity = '1'; });
+}
 
-// ---------- 스크롤에 따라 자연스럽게 사라지는 히어로 (확대 없이 페이드만, 스크롤 스냅으로 다음 섹션까지 자동 이동) ----------
+// ---------- 스크롤에 따라 히어로가 사라지고, 다음 장면은 조명이 꺼지듯 어두워지는 전환 ----------
 const hero = document.getElementById('hero');
 
 // 히어로가 실제로 화면에 보이는지 추적 (스크롤로 벗어나면 무거운 캔버스 시뮬레이션을 멈추기 위함)
@@ -18,37 +20,60 @@ heroVisibilityObserver.observe(hero);
 const siteHeader = document.getElementById('siteHeader');
 const revealCircle = document.getElementById('revealCircle');
 const quoteSection = document.getElementById('quote');
+const quoteCursorGlow = document.getElementById('quoteCursorGlow');
 const quoteCta = document.getElementById('quoteCta');
 const quoteBrand = document.getElementById('quoteBrand');
 const byeongpungSection = document.getElementById('byeongpung');
-const byeongpungScreen = document.getElementById('byeongpungScreen');
-const byeongpungStage = byeongpungScreen ? byeongpungScreen.closest('.bp-stage') : null;
+// ---------- 2페이지 전용 은은한 커서 광원 ----------
+if (quoteSection && quoteCursorGlow) {
+  const mqDesktop = window.matchMedia('(min-width: 721px)');
+  let glowInside = false;
+  let glowRAF = null;
+  let glowX = 0, glowY = 0, targetGlowX = 0, targetGlowY = 0;
 
-function clearByeongpungHover() {
-  if (!byeongpungScreen) return;
-  byeongpungScreen.querySelectorAll('.bp-panel').forEach(panel => panel.classList.remove('is-hovered'));
-}
-if (byeongpungStage && byeongpungScreen) {
-  const panels = [...byeongpungScreen.querySelectorAll('.bp-panel')];
-  byeongpungStage.addEventListener('pointermove', (e) => {
-    if (window.matchMedia('(max-width: 720px)').matches) return;
-    const stageRect = byeongpungStage.getBoundingClientRect();
-    if (e.clientX < stageRect.left || e.clientX > stageRect.right || e.clientY < stageRect.top || e.clientY > stageRect.bottom) {
-      clearByeongpungHover();
-      return;
+  const animateQuoteGlow = () => {
+    glowX += (targetGlowX - glowX) * 0.11;
+    glowY += (targetGlowY - glowY) * 0.11;
+    quoteCursorGlow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
+    quoteCursorGlow.style.opacity = (glowInside && mqDesktop.matches) ? '0.92' : '0';
+    if (glowInside || Math.abs(targetGlowX - glowX) > 0.5 || Math.abs(targetGlowY - glowY) > 0.5) {
+      glowRAF = requestAnimationFrame(animateQuoteGlow);
+    } else {
+      glowRAF = null;
     }
-    // 회전으로 생기는 시각적 틈까지 포함: 현재 보이는 네 폭의 중심 중 가장 가까운 폭을 활성화한다.
-    let target = null;
-    let best = Infinity;
-    panels.forEach((panel) => {
-      const r = panel.getBoundingClientRect();
-      const cx = (r.left + r.right) * 0.5;
-      const dist = Math.abs(e.clientX - cx);
-      if (dist < best) { best = dist; target = panel; }
-    });
-    panels.forEach(panel => panel.classList.toggle('is-hovered', panel === target));
+  };
+
+  const wakeGlow = () => {
+    if (!glowRAF) glowRAF = requestAnimationFrame(animateQuoteGlow);
+  };
+
+  quoteSection.addEventListener('pointerenter', (e) => {
+    if (!mqDesktop.matches) return;
+    const r = quoteSection.getBoundingClientRect();
+    targetGlowX = e.clientX - r.left;
+    targetGlowY = e.clientY - r.top;
+    glowX = targetGlowX;
+    glowY = targetGlowY;
+    glowInside = true;
+    wakeGlow();
+  });
+  quoteSection.addEventListener('pointermove', (e) => {
+    if (!mqDesktop.matches) return;
+    const r = quoteSection.getBoundingClientRect();
+    targetGlowX = e.clientX - r.left;
+    targetGlowY = e.clientY - r.top;
+    wakeGlow();
   }, { passive:true });
-  byeongpungStage.addEventListener('pointerleave', clearByeongpungHover);
+  quoteSection.addEventListener('pointerleave', () => {
+    glowInside = false;
+    wakeGlow();
+  });
+  mqDesktop.addEventListener('change', () => {
+    if (!mqDesktop.matches) {
+      glowInside = false;
+      quoteCursorGlow.style.opacity = '0';
+    }
+  });
 }
 
 let ticking = false;
@@ -78,17 +103,15 @@ let revealTarget = 0;
 let revealRAF = null;
 
 function paintReveal() {
-  revealCurrent += (revealTarget - revealCurrent) * 0.085;
+  revealCurrent += (revealTarget - revealCurrent) * 0.082;
   if (Math.abs(revealTarget - revealCurrent) < 0.0015) revealCurrent = revealTarget;
 
   const eased = easeOutQuart(clamp(revealCurrent));
-  const radius = eased * 158;
-  const circleClip = `circle(${radius}vmax at 100% 0%)`;
-  revealCircle.style.webkitClipPath = circleClip;
-  revealCircle.style.clipPath = circleClip;
+  revealCircle.style.opacity = String(eased);
+  revealCircle.style.filter = `blur(${(1 - eased) * 14}px)`;
 
-  quoteBrand.classList.toggle('visible', eased > 0.972);
-  quoteCta.classList.toggle('visible', eased > 0.992);
+  quoteBrand.classList.toggle('visible', eased > 0.88);
+  quoteCta.classList.toggle('visible', eased > 0.95);
 
   if (revealCurrent !== revealTarget) {
     revealRAF = requestAnimationFrame(paintReveal);
@@ -105,6 +128,7 @@ function updateScrollEffect() {
   const rect = hero.getBoundingClientRect();
   const heroProgress = clamp(-rect.top / rect.height, 0, 1);
   hero.style.opacity = String(1 - heroProgress);
+  hero.style.filter = `saturate(${1 - heroProgress * 0.18}) brightness(${1 - heroProgress * 0.06})`;
   siteHeader.classList.toggle('visible', heroProgress > 0.56);
   const quoteRect = quoteSection.getBoundingClientRect();
   const vh = window.innerHeight || document.documentElement.clientHeight;
@@ -112,8 +136,8 @@ function updateScrollEffect() {
   const activeSection = centerEl ? centerEl.closest('section') : null;
   const inQuote = !!activeSection && activeSection.id === 'quote';
 
-  // 원은 조금 더 천천히 자라되, 끝으로 갈수록 부드럽게 감쇠하며 화면을 덮는다.
-  let target = clamp((heroProgress - 0.12) / 0.82, 0, 1);
+  // 특정 도형 없이, 한지색 장면의 조명이 꺼지듯 화면 전체가 서서히 어두워진다.
+  let target = clamp((heroProgress - 0.10) / 0.86, 0, 1);
   if (Math.abs(quoteRect.top) < 3 || (quoteRect.top <= 0 && quoteRect.bottom >= vh * .82)) target = 1;
   setRevealTarget(target);
 
@@ -762,38 +786,297 @@ function frame() {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-// ---------- 사계 병풍 ----------
-if (byeongpungSection && byeongpungScreen) {
-  let foldTimer = null;
 
-  const revealByeongpung = () => {
-    clearTimeout(foldTimer);
-    // 항상 평면 + 숨김 상태에서 시작해 진입 모션을 재생한다.
-    byeongpungScreen.classList.remove('is-folded');
-    byeongpungScreen.classList.add('is-visible');
+// ===== v56: 자동 루프 추가 — 1초 간격으로 화담→청류→풍연→설한→화담 반복 =====
+(() => {
+  const section = document.getElementById('byeongpung');
+  const stage = document.getElementById('u24Stage');
+  const track = document.getElementById('u24Track');
+  const model = document.getElementById('u24Model');
+  const modelWrap = document.getElementById('u24ModelWrap');
+  const instruction = section?.querySelector('.u24-instruction');
+  if (!section || !stage || !track || !model) return;
 
-    // 화담·풍연 → 0.1초 뒤 청류·설한이 모두 올라온 다음,
-    // 별도의 transform transition으로 네 폭이 함께 천천히 접힌다.
-    foldTimer = window.setTimeout(() => {
-      byeongpungScreen.classList.add('is-folded');
-    }, 1250);
+  const tones = ['216,164,161','157,210,231','191,155,103','178,184,197'];
+  const TRANSITION = 'transform .82s cubic-bezier(.22,.72,.16,1)';
+  const STEP_DELAY = 1000;
+  const WRAP_MS = 860;
+  const INTRO_MS = 1480;
+
+  /* 화면상 순서는 화담 → 청류 → 풍연 → 설한이지만,
+     기존 움직임 방향(현재 컷이 오른쪽으로 밀리며 다음 컷 등장)을 유지하기 위해
+     실제 track 순서는 뒤집고, 맨 앞에 화담 clone을 하나 더 붙여 무한루프를 만든다. */
+  const reversedSlides = Array.from(track.children).reverse();
+  reversedSlides.forEach(slide => track.appendChild(slide));
+
+  const springClone = track.lastElementChild?.cloneNode(true);
+  if (springClone) {
+    springClone.setAttribute('aria-hidden', 'true');
+    springClone.setAttribute('data-clone', 'spring-head');
+    track.insertBefore(springClone, track.firstElementChild);
+  }
+
+  const slides = Array.from(track.children);
+  const logicalCount = 4;
+  const totalSlides = slides.length;
+  const slidePct = 100 / totalSlides;
+  track.style.width = `${totalSlides * 100}%`;
+  track.style.transition = TRANSITION;
+  slides.forEach(slide => {
+    slide.style.flex = `0 0 ${slidePct}%`;
+    slide.style.width = `${slidePct}%`;
+  });
+
+  let index = 0;
+  let wheelAccum = 0;
+  let locked = false;
+  let entered = false;
+  let spin = 0;
+  let spinTarget = 0;
+  let spinRAF = null;
+  let spinEase = .105;
+  let touchX = null;
+  let touchY = null;
+  let autoTimer = null;
+
+  const vh = () => window.innerHeight || document.documentElement.clientHeight;
+  const isSectionActive = () => {
+    const r = section.getBoundingClientRect();
+    const h = vh();
+    return r.top < h * 0.35 && r.bottom > h * 0.65;
   };
 
-  const resetByeongpung = () => {
-    clearTimeout(foldTimer);
-    byeongpungScreen.classList.remove('is-folded');
-    byeongpungScreen.classList.remove('is-visible');
-  };
+  const getOffsetForIndex = (logicalIndex) => (logicalCount - logicalIndex) * slidePct;
 
-  const bpObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.30) {
-        revealByeongpung();
-      } else if (!entry.isIntersecting || entry.intersectionRatio < 0.10) {
-        resetByeongpung();
+  function applyOffset(offsetPct, animate = true) {
+    track.style.transition = animate ? TRANSITION : 'none';
+    track.style.transform = `translate3d(-${offsetPct}%,0,0)`;
+    if (!animate) void track.offsetWidth;
+  }
+
+  function animateSpin() {
+    spin += (spinTarget - spin) * spinEase;
+    if (Math.abs(spinTarget - spin) < .15) spin = spinTarget;
+    model.setAttribute('orientation', `0deg 0deg ${spin.toFixed(2)}deg`);
+    if (spin !== spinTarget) spinRAF = requestAnimationFrame(animateSpin);
+    else spinRAF = null;
+  }
+
+  function setSpinTarget(v) {
+    spinTarget = v;
+    if (!spinRAF) spinRAF = requestAnimationFrame(animateSpin);
+  }
+
+  function setEntered(next) {
+    entered = next;
+    section.classList.toggle('is-u24-entered', entered);
+    if (!entered) {
+      spin = 0;
+      spinTarget = 0;
+      spinEase = .105;
+      model.setAttribute('orientation', '0deg 0deg 0deg');
+      if (instruction) instruction.textContent = '스크롤을 내리면 족자는 제자리에서 회전하고, 화폭은 오른쪽으로 펼쳐집니다';
+    } else if (instruction) {
+      instruction.textContent = '1초마다 자동으로 다음 계절이 펼쳐집니다. 스크롤이나 스와이프로도 넘길 수 있습니다';
+    }
+  }
+
+  function setTone(logicalIndex) {
+    section.style.setProperty('--u24-rgb', tones[((logicalIndex % logicalCount) + logicalCount) % logicalCount]);
+  }
+
+  function clearAuto() {
+    if (autoTimer) {
+      clearTimeout(autoTimer);
+      autoTimer = null;
+    }
+  }
+
+  function scheduleAuto(delay = STEP_DELAY) {
+    clearAuto();
+    autoTimer = window.setTimeout(() => {
+      autoTimer = null;
+      if (document.hidden || !isSectionActive()) return;
+      if (!entered) {
+        introReveal();
+        scheduleAuto(INTRO_MS + 120);
+        return;
       }
-    });
-  }, { threshold: [0.08, 0.10, 0.30, 0.55] });
+      if (locked) {
+        scheduleAuto(260);
+        return;
+      }
+      if (index >= logicalCount - 1) {
+        wrapToStart(1);
+      } else {
+        updateState(index + 1, 1);
+      }
+      scheduleAuto(STEP_DELAY);
+    }, delay);
+  }
 
-  bpObserver.observe(byeongpungSection);
-}
+  function updateState(next, direction = 0) {
+    index = Math.max(0, Math.min(logicalCount - 1, next));
+    applyOffset(getOffsetForIndex(index), true);
+    setTone(index);
+
+    if (entered && direction !== 0) setSpinTarget(spinTarget + direction * -45);
+
+    if (direction !== 0) {
+      locked = true;
+      window.setTimeout(() => {
+        locked = false;
+        wheelAccum = 0;
+      }, 820);
+    }
+  }
+
+  function wrapToStart(direction = 1) {
+    if (!entered || locked) return false;
+    locked = true;
+    setTone(0);
+    setSpinTarget(spinTarget + direction * -45);
+
+    /* clone 화담(맨 앞 0%)까지 같은 방향으로 이동한 뒤,
+       transition을 끄고 실제 화담 위치로 즉시 되돌려 무한루프처럼 보이게 만든다. */
+    applyOffset(0, true);
+
+    window.setTimeout(() => {
+      index = 0;
+      applyOffset(getOffsetForIndex(0), false);
+      track.style.transition = TRANSITION;
+      locked = false;
+      wheelAccum = 0;
+    }, WRAP_MS);
+    return true;
+  }
+
+  function introReveal() {
+    if (entered || locked) return;
+    locked = true;
+    index = 0;
+    applyOffset(getOffsetForIndex(0), false);
+    setTone(0);
+    setEntered(true);
+    spin = 0;
+    spinTarget = 0;
+    model.setAttribute('orientation', '0deg 0deg 0deg');
+    spinEase = .115;
+    setSpinTarget(-45);
+
+    window.setTimeout(() => {
+      spinEase = .105;
+      locked = false;
+      wheelAccum = 0;
+    }, INTRO_MS);
+  }
+
+  function step(direction) {
+    if (!entered) {
+      if (direction > 0) {
+        introReveal();
+        return true;
+      }
+      return false;
+    }
+
+    if (locked) return true;
+
+    if (direction > 0) {
+      if (index >= logicalCount - 1) return wrapToStart(direction);
+      updateState(index + 1, direction);
+      return true;
+    }
+
+    const next = index + direction;
+    if (next < 0) return false;
+    updateState(next, direction);
+    return true;
+  }
+
+  model.addEventListener('load', () => {
+    modelWrap?.classList.add('is-loaded');
+    model.setAttribute('camera-orbit', '0deg 90deg 0.98m');
+    model.setAttribute('field-of-view', '28deg');
+    model.setAttribute('camera-target', '0m -0.01m 0m');
+    model.setAttribute('orientation', '0deg 0deg 0deg');
+    if (typeof model.updateFraming === 'function') model.updateFraming();
+    if (typeof model.jumpCameraToGoal === 'function') model.jumpCameraToGoal();
+  });
+
+  function handleVisibility() {
+    if (isSectionActive()) {
+      scheduleAuto(STEP_DELAY);
+    } else {
+      clearAuto();
+      if (entered && section.getBoundingClientRect().top > vh() * 0.45) {
+        setEntered(false);
+        updateState(0, 0);
+      }
+    }
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (!isSectionActive()) {
+      wheelAccum = 0;
+      handleVisibility();
+      return;
+    }
+
+    const primary = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(primary) < 2) return;
+    const direction = primary > 0 ? 1 : -1;
+    const shouldCapture = !entered || direction > 0 || (direction < 0 && index > 0);
+    if (!shouldCapture) return;
+
+    e.preventDefault();
+    if (locked) return;
+    wheelAccum += primary;
+    if (Math.abs(wheelAccum) < (entered ? 46 : 24)) return;
+    step(direction);
+    wheelAccum = 0;
+    scheduleAuto(1400);
+  }, { passive:false });
+
+  stage.addEventListener('touchstart', (e) => {
+    touchX = e.touches[0]?.clientX ?? null;
+    touchY = e.touches[0]?.clientY ?? null;
+  }, { passive:true });
+
+  stage.addEventListener('touchmove', (e) => {
+    if (touchX == null || touchY == null || !isSectionActive() || locked) return;
+    const x = e.touches[0]?.clientX ?? touchX;
+    const y = e.touches[0]?.clientY ?? touchY;
+    const dx = touchX - x;
+    const dy = touchY - y;
+    const primary = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+    if (Math.abs(primary) < 50) return;
+
+    const direction = primary > 0 ? 1 : -1;
+    const shouldCapture = !entered || direction > 0 || (direction < 0 && index > 0);
+    if (!shouldCapture) return;
+
+    e.preventDefault();
+    step(direction);
+    touchX = x;
+    touchY = y;
+    scheduleAuto(1400);
+  }, { passive:false });
+
+  stage.addEventListener('touchend', () => {
+    touchX = null;
+    touchY = null;
+  }, { passive:true });
+
+  window.addEventListener('scroll', handleVisibility, { passive:true });
+  window.addEventListener('resize', handleVisibility);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearAuto();
+    else handleVisibility();
+  });
+
+  setTone(0);
+  updateState(0, 0);
+  setEntered(false);
+  handleVisibility();
+})();
