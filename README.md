@@ -99,19 +99,8 @@ Production-style separated source package.
 - Preserved the improved text position from v91.
 
 
-## v93 update
-- Replaced the mobile page 3 artwork rendering method with background-image mode for Safari stability.
-- Kept the user-approved text position from v91.
-- Limited blending to the left and bottom edges only.
-
-
-## v94 update
-- Restored mobile page 3 artwork using layered CSS backgrounds instead of pseudo-overlay mode.
-- Removed the accidental hidden/back-layer behavior from v93.
-- Kept the approved copy position and limited blending to left/bottom edge fades.
-
-
-## v95 update
-- Fixed the mobile page 3 artwork not appearing.
-- Cause: earlier mobile background logic was being overridden in an unsafe way.
-- New fix writes the full layered background-image inline and only hides the original img after the background is confirmed.
+## v96 update
+- Rebased from v92 to remove the failed background-image experiments.
+- Restored the real artwork `<img>` element.
+- Fixed the mask bug by explicitly resetting inherited `inset: 0` and anchoring the left/bottom fades to their actual edges.
+- Preserved the approved mobile copy position.

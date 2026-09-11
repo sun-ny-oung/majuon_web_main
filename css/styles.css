@@ -3849,81 +3849,97 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v93: mobile page 3 render method replaced (background-image mode) ===== */
+/* ===== v96: mobile page 3 image + edge mask FINAL FIX ===== */
 @media (max-width: 720px) {
-  #byeongpung .u24-blend {
-    position: relative !important;
-    overflow: hidden !important;
-    background: rgb(var(--paper-rgb)) !important;
-  }
-
-  /* disable older full-surface overlays */
-  #byeongpung .u24-blend::before,
-  #byeongpung .u24-blend::after {
-    display: none !important;
-  }
-
-  /* render the artwork as a background on mobile to avoid Safari img/overlay artifacts */
+  /* Always use the real <img>; do not convert it to a background image. */
   #byeongpung .u24-blend-image {
     position: absolute !important;
     top: 0 !important;
     right: 0 !important;
-    left: 16% !important;
+    left: 16.5% !important;
     height: 58.5% !important;
+    width: auto !important;
     padding: 0 !important;
     margin: 0 !important;
     overflow: hidden !important;
-    background-repeat: no-repeat !important;
-    background-position: right top !important;
-    background-size: auto 100% !important;
-    background-color: transparent !important;
-    z-index: 2 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+    background: transparent !important;
+    z-index: 3 !important;
   }
 
-  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
+  #byeongpung .u24-art {
+    position: static !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: auto !important;
+    height: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    overflow: hidden !important;
-    position: absolute !important;
-    inset: 0 !important;
-    pointer-events: none !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 0 0 auto !important;
+    object-fit: contain !important;
+    object-position: right top !important;
+    transform: none !important;
+    filter: none !important;
+    z-index: 3 !important;
   }
 
-  /* only the left and bottom edge fades */
+  /* Critical fix: older rules left `inset:0 !important` on these pseudo-elements.
+     Reset inset completely, then anchor each fade to the intended edge only. */
   #byeongpung .u24-blend-image::before,
   #byeongpung .u24-blend-image::after {
     content: "" !important;
     position: absolute !important;
     display: block !important;
     pointer-events: none !important;
-    z-index: 3 !important;
+    z-index: 4 !important;
+    inset: auto !important;
   }
 
+  /* LEFT edge fade only */
   #byeongpung .u24-blend-image::before {
     left: 0 !important;
+    right: auto !important;
     top: 0 !important;
     bottom: 0 !important;
     width: 12% !important;
-    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 35%, rgba(var(--paper-rgb), .28) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
+    height: auto !important;
+    background: linear-gradient(
+      to right,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .84) 36%,
+      rgba(var(--paper-rgb), .26) 74%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
   }
 
+  /* BOTTOM edge fade only — explicitly top:auto prevents the stripe appearing near the top. */
   #byeongpung .u24-blend-image::after {
     left: 0 !important;
     right: 0 !important;
+    top: auto !important;
     bottom: 0 !important;
+    width: auto !important;
     height: 7% !important;
-    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 32%, rgba(var(--paper-rgb), .24) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
+    background: linear-gradient(
+      to top,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .84) 34%,
+      rgba(var(--paper-rgb), .22) 72%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
   }
 
-  /* keep the copy where the user said it was correct */
+  /* Keep the copy position the user approved. */
   #byeongpung .u24-blend-copy {
     left: 54px !important;
     right: 20px !important;
     bottom: 18px !important;
-    z-index: 4 !important;
+    z-index: 5 !important;
   }
 }
 
@@ -3933,102 +3949,17 @@ html, body { scroll-snap-type: y mandatory !important; }
     height: 57.5% !important;
   }
 
-  #byeongpung .u24-blend-copy {
-    left: 48px !important;
-    right: 18px !important;
-    bottom: 16px !important;
+  #byeongpung .u24-blend-image::before {
+    width: 11% !important;
   }
-}
 
-
-/* ===== v94: mobile page 3 image restored with layered background mode ===== */
-@media (max-width: 720px) {
-  #byeongpung .u24-blend::before,
-  #byeongpung .u24-blend::after,
-  #byeongpung .u24-blend-image::before,
   #byeongpung .u24-blend-image::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  #byeongpung .u24-blend-image {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 16% !important;
-    height: 58.5% !important;
-    width: auto !important;
-    overflow: hidden !important;
-    z-index: 2 !important;
-    background-color: transparent !important;
-    background-image:
-      linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 36%, rgba(var(--paper-rgb), .26) 74%, rgba(var(--paper-rgb), 0) 100%),
-      linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 34%, rgba(var(--paper-rgb), .22) 72%, rgba(var(--paper-rgb), 0) 100%),
-      var(--blend-art, none) !important;
-    background-repeat: no-repeat, no-repeat, no-repeat !important;
-    background-size: 12% 100%, 100% 7%, auto 100% !important;
-    background-position: left top, left bottom, right top !important;
-  }
-
-  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    position: absolute !important;
-    inset: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 54px !important;
-    right: 20px !important;
-    bottom: 18px !important;
-    z-index: 4 !important;
-  }
-}
-
-@media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 16% !important;
-    height: 57.5% !important;
-    background-size: 11% 100%, 100% 6.5%, auto 100% !important;
+    height: 6.5% !important;
   }
 
   #byeongpung .u24-blend-copy {
     left: 48px !important;
     right: 18px !important;
     bottom: 16px !important;
-  }
-}
-
-
-/* ===== v95: mobile page 3 image visibility hotfix ===== */
-@media (max-width: 720px) {
-  /* keep original img visible as fallback; only hide it after background is ready */
-  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
-    opacity: 1 !important;
-    width: auto !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    position: static !important;
-    inset: auto !important;
-    overflow: visible !important;
-    pointer-events: auto !important;
-  }
-
-  #byeongpung .u24-blend-image.mobile-bg-ready > img.u24-art {
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    position: absolute !important;
-    inset: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
   }
 }
