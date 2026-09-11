@@ -33,3 +33,11 @@ Production-style separated source package.
 - backplate width: 699px
 - backplate top: 29.2svh
 - backplate height: 58.5svh
+
+
+## v81 update
+- Mobile Page 3 scroll illustration enlarged slightly so the top of the artwork fills the scroll paper more naturally.
+
+
+## v82 update
+- On mobile, Page 3 now opens the scroll automatically as soon as the section becomes active; a second swipe is no longer required.

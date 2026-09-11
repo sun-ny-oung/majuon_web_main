@@ -640,7 +640,15 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
   function handleVisibility() {
     if (isSectionActive()) {
-      scheduleAuto(HOLD_MS);
+      /* Mobile: as soon as page 3 becomes the active snapped section,
+         open the scroll immediately. Do not require one more swipe. */
+      const mobileViewport = window.matchMedia('(max-width: 720px)').matches;
+      if (mobileViewport && !entered && !locked) {
+        introReveal();
+        scheduleAuto(INTRO_MS + HOLD_MS);
+      } else {
+        scheduleAuto(HOLD_MS);
+      }
     } else {
       clearAuto();
       if (entered && section.getBoundingClientRect().top > vh() * 0.45) {
