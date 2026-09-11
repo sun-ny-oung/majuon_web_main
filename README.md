@@ -141,3 +141,8 @@ Production-style separated source package.
 - Applied new mobile defaults: illustration scale 1.15x, left mask 1.00, bottom mask 1.00.
 - Raised Hwadam and Seolhan artwork by about 10px on mobile page 3 while preserving aspect ratio.
 - The upward move naturally crops the top edge by the same amount, as requested.
+
+
+## v105 update
+- On mobile page 3, Hwadam and Seolhan artwork are now shifted up by 50px.
+- The top is cropped by the same amount naturally, per request.

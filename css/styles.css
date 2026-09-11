@@ -4233,6 +4233,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* Hwadam + Seolhan only: move artwork up by ~10px and crop the top naturally */
   #byeongpung .u24-blend.spring .u24-art,
   #byeongpung .u24-blend.winter .u24-art {
-    transform: translateY(-10px) scale(var(--u24-gui-art-scale)) !important;
+    transform: translateY(-50px) scale(var(--u24-gui-art-scale)) !important;
   }
 }
