@@ -3659,3 +3659,148 @@ html, body { scroll-snap-type: y mandatory !important; }
     line-height: 1.66 !important;
   }
 }
+
+
+/* ===== v91: mobile page 3 corrected after failed v90 ===== */
+@media (max-width: 720px) {
+  #byeongpung .u24-blend {
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
+    background: rgb(var(--paper-rgb)) !important;
+  }
+
+  /* illustration area sits against top/right of the paper */
+  #byeongpung .u24-blend-image {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 17% !important;
+    height: 56.5% !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: flex-start !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    z-index: 2 !important;
+  }
+
+  #byeongpung .u24-art {
+    width: auto !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: right top !important;
+    display: block !important;
+    margin-left: auto !important;
+    transform: none !important;
+  }
+
+  /* soft paper blends only on the left and bottom */
+  #byeongpung .u24-blend-image::before,
+  #byeongpung .u24-blend-image::after {
+    content: "" !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    display: block !important;
+  }
+
+  #byeongpung .u24-blend-image::before {
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 22% !important;
+    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .95) 26%, rgba(var(--paper-rgb), .55) 58%, rgba(var(--paper-rgb), 0) 100%) !important;
+    z-index: 3 !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 17% !important;
+    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .95) 22%, rgba(var(--paper-rgb), .55) 56%, rgba(var(--paper-rgb), 0) 100%) !important;
+    z-index: 3 !important;
+  }
+
+  /* copy block: pulled back left, but kept clear of the roll */
+  #byeongpung .u24-blend-copy {
+    position: absolute !important;
+    left: 54px !important;
+    right: 20px !important;
+    bottom: 18px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    z-index: 4 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+    text-align: left !important;
+  }
+
+  #byeongpung .u24-season,
+  #byeongpung .u24-name,
+  #byeongpung .u24-description,
+  #byeongpung .u24-notes,
+  #byeongpung .u24-index {
+    text-align: left !important;
+    align-self: stretch !important;
+  }
+
+  #byeongpung .u24-season {
+    margin: 0 0 10px !important;
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+    letter-spacing: .16em !important;
+  }
+
+  #byeongpung .u24-name {
+    margin: 0 !important;
+    font-size: 34px !important;
+    line-height: 1.02 !important;
+  }
+
+  #byeongpung .u24-description {
+    margin: 12px 0 0 !important;
+    max-width: 92% !important;
+    font-size: 12px !important;
+    line-height: 1.68 !important;
+  }
+
+  #byeongpung .u24-notes {
+    margin: 14px 0 0 !important;
+    padding-top: 10px !important;
+    width: 100% !important;
+    font-size: 9px !important;
+    line-height: 1.55 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung .u24-blend-image {
+    left: 16.5% !important;
+    height: 55.5% !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    left: 48px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+  }
+
+  #byeongpung .u24-name {
+    font-size: 31px !important;
+  }
+
+  #byeongpung .u24-description {
+    font-size: 11.5px !important;
+    line-height: 1.64 !important;
+    max-width: 94% !important;
+  }
+}

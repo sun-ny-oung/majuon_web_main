@@ -85,3 +85,9 @@ Production-style separated source package.
 - Fixed mobile page 3 copy block position (shifted back left).
 - Replaced the problematic single overlay with separate left and bottom gradient masks.
 - Kept the illustration aligned to the top/right while preserving aspect ratio and avoiding crop.
+
+
+## v91 update
+- Mobile page 3 copy block pulled left again after v90 overshot.
+- Removed the problematic broad overlay effect and replaced it with softer left/bottom paper fades.
+- Illustration kept on the top/right edges with preserved aspect ratio and no crop.
