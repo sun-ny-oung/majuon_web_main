@@ -79,3 +79,9 @@ Production-style separated source package.
 - Mobile page 3 text shifted right so the scroll roll no longer clips the copy.
 - Added paper-blend gradients on the left and bottom of the illustration area.
 - Illustration aligned to the top and right edges while preserving aspect ratio and avoiding crop.
+
+
+## v90 update
+- Fixed mobile page 3 copy block position (shifted back left).
+- Replaced the problematic single overlay with separate left and bottom gradient masks.
+- Kept the illustration aligned to the top/right while preserving aspect ratio and avoiding crop.
