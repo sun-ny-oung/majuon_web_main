@@ -61,3 +61,9 @@ Production-style separated source package.
 ## v86 update
 - Mobile Page 3 illustrations now preserve the original aspect ratio with no cropping.
 - Artwork is anchored to the top-left edge of the scroll paper; any extra space remains on the right/bottom instead of cropping.
+
+
+## v87 update
+- Refined mobile page 3 illustration and text layout.
+- Illustration now keeps original aspect ratio, sits against the top and left of the scroll paper, and is enlarged without cropping.
+- Text block on mobile is re-balanced with cleaner spacing and left alignment.
