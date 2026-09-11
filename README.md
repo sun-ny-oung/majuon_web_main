@@ -110,3 +110,16 @@ Production-style separated source package.
 - Mobile page 3 artwork enlarged without changing copy placement.
 - Artwork grows toward the left and bottom while preserving aspect ratio and avoiding crop.
 - Left and bottom paper-fade masks were made substantially stronger for a clearer blend into the background.
+
+
+## v100 update
+- Restored desktop by rebuilding from the last stable v97 base.
+- The page 3 GUI is now strictly mobile-only, with desktop CSS/JS isolation.
+- Fixed the previous JavaScript syntax issue that broke page 2 and page 3 on desktop.
+
+
+## v101 update
+- Applied the user-provided mobile page 3 GUI values as the new defaults.
+- Illustration scale: 1.10x
+- Left mask strength: 1.00
+- Bottom mask strength: 1.00

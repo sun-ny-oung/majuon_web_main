@@ -976,3 +976,124 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
   requestSync();
 })();
+
+
+/* ===== v100: mobile-only page3 tuning GUI; desktop isolated ===== */
+(() => {
+  const mq = window.matchMedia('(max-width: 720px)');
+  const gui = document.getElementById('u24TuneGui');
+  if (!gui) return;
+
+  const root = document.documentElement;
+  const toggle = document.getElementById('u24TuneToggle');
+  const panel = document.getElementById('u24TunePanel');
+  const artScale = document.getElementById('u24ArtScale');
+  const leftMask = document.getElementById('u24LeftMask');
+  const bottomMask = document.getElementById('u24BottomMask');
+  const artScaleOut = document.getElementById('u24ArtScaleOut');
+  const leftMaskOut = document.getElementById('u24LeftMaskOut');
+  const bottomMaskOut = document.getElementById('u24BottomMaskOut');
+  const readout = document.getElementById('u24TuneReadout');
+  const resetBtn = document.getElementById('u24TuneReset');
+  const copyBtn = document.getElementById('u24TuneCopy');
+  const storageKey = 'majuon-u24-gui-v100';
+
+  const defaults = { artScale: 1.10, leftMask: 1.00, bottomMask: 1.00, collapsed: false };
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+
+  function readState() {
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (e) {}
+    return {
+      artScale: clamp(Number(saved.artScale ?? defaults.artScale), 0.90, 1.35),
+      leftMask: clamp(Number(saved.leftMask ?? defaults.leftMask), 0.00, 1.40),
+      bottomMask: clamp(Number(saved.bottomMask ?? defaults.bottomMask), 0.00, 1.40),
+      collapsed: Boolean(saved.collapsed ?? defaults.collapsed),
+    };
+  }
+
+  let state = readState();
+
+  function saveState() {
+    try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function applyDesktopReset() {
+    root.style.setProperty('--u24-gui-art-scale', '1');
+    root.style.setProperty('--u24-gui-left-mask-strength', '1');
+    root.style.setProperty('--u24-gui-bottom-mask-strength', '1');
+  }
+
+  function render() {
+    if (!mq.matches) {
+      applyDesktopReset();
+      return;
+    }
+
+    root.style.setProperty('--u24-gui-art-scale', state.artScale.toFixed(2));
+    root.style.setProperty('--u24-gui-left-mask-strength', state.leftMask.toFixed(2));
+    root.style.setProperty('--u24-gui-bottom-mask-strength', state.bottomMask.toFixed(2));
+
+    artScale.value = state.artScale.toFixed(2);
+    leftMask.value = state.leftMask.toFixed(2);
+    bottomMask.value = state.bottomMask.toFixed(2);
+    artScaleOut.textContent = `${state.artScale.toFixed(2)}x`;
+    leftMaskOut.textContent = state.leftMask.toFixed(2);
+    bottomMaskOut.textContent = state.bottomMask.toFixed(2);
+    readout.textContent = [
+      `일러스트 크기: ${state.artScale.toFixed(2)}x`,
+      `왼쪽 마스크 강도: ${state.leftMask.toFixed(2)}`,
+      `아래 마스크 강도: ${state.bottomMask.toFixed(2)}`,
+    ].join('\n');
+
+    gui.classList.toggle('is-collapsed', state.collapsed);
+    toggle.setAttribute('aria-expanded', String(!state.collapsed));
+    const icon = toggle.querySelector('span');
+    if (icon) icon.textContent = state.collapsed ? '+' : '−';
+    panel.hidden = state.collapsed;
+  }
+
+  function updateFromInputs() {
+    if (!mq.matches) return;
+    state.artScale = clamp(Number(artScale.value), 0.90, 1.35);
+    state.leftMask = clamp(Number(leftMask.value), 0.00, 1.40);
+    state.bottomMask = clamp(Number(bottomMask.value), 0.00, 1.40);
+    render();
+    saveState();
+  }
+
+  [artScale, leftMask, bottomMask].forEach((input) => {
+    input.addEventListener('input', updateFromInputs, { passive: true });
+    input.addEventListener('change', updateFromInputs);
+  });
+
+  toggle.addEventListener('click', () => {
+    if (!mq.matches) return;
+    state.collapsed = !state.collapsed;
+    render();
+    saveState();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if (!mq.matches) return;
+    state = { ...defaults };
+    render();
+    saveState();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    if (!mq.matches) return;
+    try {
+      await navigator.clipboard.writeText(readout.textContent);
+      copyBtn.textContent = '복사됨';
+    } catch (e) {
+      copyBtn.textContent = '복사 실패';
+    }
+    setTimeout(() => { copyBtn.textContent = '값 복사'; }, 1200);
+  });
+
+  if (mq.addEventListener) mq.addEventListener('change', render);
+  else if (mq.addListener) mq.addListener(render);
+  window.addEventListener('resize', render, { passive: true });
+  render();
+})();
