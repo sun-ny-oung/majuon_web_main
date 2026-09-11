@@ -103,3 +103,9 @@ Production-style separated source package.
 - Replaced the mobile page 3 artwork rendering method with background-image mode for Safari stability.
 - Kept the user-approved text position from v91.
 - Limited blending to the left and bottom edges only.
+
+
+## v94 update
+- Restored mobile page 3 artwork using layered CSS backgrounds instead of pseudo-overlay mode.
+- Removed the accidental hidden/back-layer behavior from v93.
+- Kept the approved copy position and limited blending to left/bottom edge fades.

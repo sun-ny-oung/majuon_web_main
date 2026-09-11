@@ -1004,3 +1004,31 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   window.addEventListener('pageshow', syncBlendImages);
   syncBlendImages();
 })();
+
+
+/* v94: restore mobile page 3 images reliably with CSS variable layered backgrounds */
+(() => {
+  const mq = window.matchMedia('(max-width: 720px)');
+  const items = Array.from(document.querySelectorAll('#byeongpung .u24-blend-image'));
+  if (!items.length) return;
+
+  function syncBlendImagesV94() {
+    items.forEach((el) => {
+      const img = el.querySelector('img.u24-art');
+      if (!img) return;
+      const src = img.getAttribute('src');
+      if (mq.matches) {
+        if (src) el.style.setProperty('--blend-art', `url("${src}")`);
+        el.classList.add('mobile-bg-mode');
+      } else {
+        el.style.removeProperty('--blend-art');
+        el.classList.remove('mobile-bg-mode');
+      }
+    });
+  }
+
+  window.addEventListener('load', syncBlendImagesV94);
+  window.addEventListener('resize', syncBlendImagesV94, { passive:true });
+  window.addEventListener('pageshow', syncBlendImagesV94);
+  syncBlendImagesV94();
+})();

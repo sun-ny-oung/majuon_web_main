@@ -3939,3 +3939,67 @@ html, body { scroll-snap-type: y mandatory !important; }
     bottom: 16px !important;
   }
 }
+
+
+/* ===== v94: mobile page 3 image restored with layered background mode ===== */
+@media (max-width: 720px) {
+  #byeongpung .u24-blend::before,
+  #byeongpung .u24-blend::after,
+  #byeongpung .u24-blend-image::before,
+  #byeongpung .u24-blend-image::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  #byeongpung .u24-blend-image {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 16% !important;
+    height: 58.5% !important;
+    width: auto !important;
+    overflow: hidden !important;
+    z-index: 2 !important;
+    background-color: transparent !important;
+    background-image:
+      linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 36%, rgba(var(--paper-rgb), .26) 74%, rgba(var(--paper-rgb), 0) 100%),
+      linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 34%, rgba(var(--paper-rgb), .22) 72%, rgba(var(--paper-rgb), 0) 100%),
+      var(--blend-art, none) !important;
+    background-repeat: no-repeat, no-repeat, no-repeat !important;
+    background-size: 12% 100%, 100% 7%, auto 100% !important;
+    background-position: left top, left bottom, right top !important;
+  }
+
+  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    left: 54px !important;
+    right: 20px !important;
+    bottom: 18px !important;
+    z-index: 4 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung .u24-blend-image {
+    left: 16% !important;
+    height: 57.5% !important;
+    background-size: 11% 100%, 100% 6.5%, auto 100% !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    left: 48px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+  }
+}
