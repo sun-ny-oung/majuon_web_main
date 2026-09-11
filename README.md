@@ -104,3 +104,9 @@ Production-style separated source package.
 - Restored the real artwork `<img>` element.
 - Fixed the mask bug by explicitly resetting inherited `inset: 0` and anchoring the left/bottom fades to their actual edges.
 - Preserved the approved mobile copy position.
+
+
+## v97 update
+- Mobile page 3 artwork enlarged without changing copy placement.
+- Artwork grows toward the left and bottom while preserving aspect ratio and avoiding crop.
+- Left and bottom paper-fade masks were made substantially stronger for a clearer blend into the background.

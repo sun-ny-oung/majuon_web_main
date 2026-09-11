@@ -3963,3 +3963,79 @@ html, body { scroll-snap-type: y mandatory !important; }
     bottom: 16px !important;
   }
 }
+
+
+/* ===== v97: mobile page 3 image larger + stronger paper blend (text untouched) ===== */
+@media (max-width: 720px) {
+  /* enlarge only the artwork area, keeping the approved text block untouched */
+  #byeongpung .u24-blend-image {
+    left: 12.5% !important;
+    height: 63.5% !important;
+    top: 0 !important;
+    right: 0 !important;
+  }
+
+  #byeongpung .u24-art {
+    width: auto !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: right top !important;
+  }
+
+  /* make the left/bottom paper fade much more visible so the image actually blends */
+  #byeongpung .u24-blend-image::before {
+    width: 17% !important;
+    background: linear-gradient(
+      to right,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .97) 18%,
+      rgba(var(--paper-rgb), .78) 40%,
+      rgba(var(--paper-rgb), .42) 66%,
+      rgba(var(--paper-rgb), .12) 84%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    height: 14% !important;
+    background: linear-gradient(
+      to top,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .97) 18%,
+      rgba(var(--paper-rgb), .76) 40%,
+      rgba(var(--paper-rgb), .40) 66%,
+      rgba(var(--paper-rgb), .10) 84%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
+  }
+
+  /* do not touch copy placement */
+  #byeongpung .u24-blend-copy {
+    left: 54px !important;
+    right: 20px !important;
+    bottom: 18px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung .u24-blend-image {
+    left: 11.5% !important;
+    height: 62.5% !important;
+  }
+
+  #byeongpung .u24-blend-image::before {
+    width: 16% !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    height: 13% !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    left: 48px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+  }
+}
