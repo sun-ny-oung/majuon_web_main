@@ -3804,3 +3804,46 @@ html, body { scroll-snap-type: y mandatory !important; }
     max-width: 94% !important;
   }
 }
+
+
+/* ===== v92: mobile page 3 mask fix ===== */
+@media (max-width: 720px) {
+  /* keep text placement from v91; only refine the image blend */
+  #byeongpung .u24-blend-image {
+    left: 16.5% !important;
+    height: 58.5% !important;
+  }
+
+  /* soften the fades and keep them tight to the actual edges */
+  #byeongpung .u24-blend-image::before {
+    width: 13% !important;
+    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .88) 34%, rgba(var(--paper-rgb), .38) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    height: 8% !important;
+    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .88) 32%, rgba(var(--paper-rgb), .32) 70%, rgba(var(--paper-rgb), 0) 100%) !important;
+  }
+
+  #byeongpung .u24-art {
+    height: 100% !important;
+    width: auto !important;
+    object-fit: contain !important;
+    object-position: right top !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung .u24-blend-image {
+    left: 16% !important;
+    height: 57.5% !important;
+  }
+
+  #byeongpung .u24-blend-image::before {
+    width: 12% !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    height: 7% !important;
+  }
+}

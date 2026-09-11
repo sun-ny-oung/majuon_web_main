@@ -91,3 +91,9 @@ Production-style separated source package.
 - Mobile page 3 copy block pulled left again after v90 overshot.
 - Removed the problematic broad overlay effect and replaced it with softer left/bottom paper fades.
 - Illustration kept on the top/right edges with preserved aspect ratio and no crop.
+
+
+## v92 update
+- Fixed the intrusive horizontal mask band on mobile page 3.
+- Left and bottom gradients are now much tighter and softer, anchored only to the illustration edges.
+- Preserved the improved text position from v91.
