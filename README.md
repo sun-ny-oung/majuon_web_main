@@ -73,3 +73,9 @@ Production-style separated source package.
 - Reworked mobile page 3 so the illustration and text share one continuous paper/background area.
 - Illustration is placed larger in the upper-right zone while preserving aspect ratio and avoiding crop.
 - Copy sits naturally in the lower-left / lower area, matching the provided guide direction.
+
+
+## v89 update
+- Mobile page 3 text shifted right so the scroll roll no longer clips the copy.
+- Added paper-blend gradients on the left and bottom of the illustration area.
+- Illustration aligned to the top and right edges while preserving aspect ratio and avoiding crop.
