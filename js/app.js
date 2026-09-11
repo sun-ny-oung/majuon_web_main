@@ -976,3 +976,31 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
   requestSync();
 })();
+
+
+/* v93: mobile page 3 artwork rendered as background-image to prevent Safari artifacts */
+(() => {
+  const mq = window.matchMedia('(max-width: 720px)');
+  const items = Array.from(document.querySelectorAll('#byeongpung .u24-blend-image'));
+  if (!items.length) return;
+
+  function syncBlendImages() {
+    items.forEach((el) => {
+      const img = el.querySelector('img.u24-art');
+      if (!img) return;
+      if (mq.matches) {
+        const src = img.getAttribute('src');
+        if (src) el.style.backgroundImage = `url("${src}")`;
+        el.classList.add('mobile-bg-mode');
+      } else {
+        el.style.backgroundImage = '';
+        el.classList.remove('mobile-bg-mode');
+      }
+    });
+  }
+
+  window.addEventListener('load', syncBlendImages);
+  window.addEventListener('resize', syncBlendImages, { passive:true });
+  window.addEventListener('pageshow', syncBlendImages);
+  syncBlendImages();
+})();

@@ -97,3 +97,9 @@ Production-style separated source package.
 - Fixed the intrusive horizontal mask band on mobile page 3.
 - Left and bottom gradients are now much tighter and softer, anchored only to the illustration edges.
 - Preserved the improved text position from v91.
+
+
+## v93 update
+- Replaced the mobile page 3 artwork rendering method with background-image mode for Safari stability.
+- Kept the user-approved text position from v91.
+- Limited blending to the left and bottom edges only.

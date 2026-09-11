@@ -3847,3 +3847,95 @@ html, body { scroll-snap-type: y mandatory !important; }
     height: 7% !important;
   }
 }
+
+
+/* ===== v93: mobile page 3 render method replaced (background-image mode) ===== */
+@media (max-width: 720px) {
+  #byeongpung .u24-blend {
+    position: relative !important;
+    overflow: hidden !important;
+    background: rgb(var(--paper-rgb)) !important;
+  }
+
+  /* disable older full-surface overlays */
+  #byeongpung .u24-blend::before,
+  #byeongpung .u24-blend::after {
+    display: none !important;
+  }
+
+  /* render the artwork as a background on mobile to avoid Safari img/overlay artifacts */
+  #byeongpung .u24-blend-image {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 16% !important;
+    height: 58.5% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background-repeat: no-repeat !important;
+    background-position: right top !important;
+    background-size: auto 100% !important;
+    background-color: transparent !important;
+    z-index: 2 !important;
+  }
+
+  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* only the left and bottom edge fades */
+  #byeongpung .u24-blend-image::before,
+  #byeongpung .u24-blend-image::after {
+    content: "" !important;
+    position: absolute !important;
+    display: block !important;
+    pointer-events: none !important;
+    z-index: 3 !important;
+  }
+
+  #byeongpung .u24-blend-image::before {
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 12% !important;
+    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 35%, rgba(var(--paper-rgb), .28) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
+  }
+
+  #byeongpung .u24-blend-image::after {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 7% !important;
+    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 32%, rgba(var(--paper-rgb), .24) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
+  }
+
+  /* keep the copy where the user said it was correct */
+  #byeongpung .u24-blend-copy {
+    left: 54px !important;
+    right: 20px !important;
+    bottom: 18px !important;
+    z-index: 4 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #byeongpung .u24-blend-image {
+    left: 16% !important;
+    height: 57.5% !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    left: 48px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+  }
+}
