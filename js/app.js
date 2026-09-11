@@ -480,6 +480,10 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   const isSectionActive = () => {
     const r = section.getBoundingClientRect();
     const h = vh();
+    const mobileViewport = window.matchMedia('(max-width: 720px)').matches;
+    /* Mobile Safari can finish scroll-snap after the last scroll event.
+       Treat page 3 as active as soon as it owns the viewport center. */
+    if (mobileViewport) return r.top <= h * 0.52 && r.bottom >= h * 0.48;
     return r.top < h * 0.35 && r.bottom > h * 0.65;
   };
 
@@ -711,7 +715,28 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   }, { passive:true });
 
   window.addEventListener('scroll', handleVisibility, { passive:true });
+  window.addEventListener('scrollend', handleVisibility, { passive:true });
   window.addEventListener('resize', handleVisibility);
+
+  /* iOS Safari sometimes does not emit a useful final scroll event after scroll-snap.
+     IntersectionObserver catches the snapped arrival and opens the scroll immediately. */
+  const mobileEntryObserver = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    const mobileViewport = window.matchMedia('(max-width: 720px)').matches;
+    if (!mobileViewport || !entry) return;
+    if (entry.isIntersecting && entry.intersectionRatio >= 0.36) {
+      if (!entered && !locked) introReveal();
+      scheduleAuto(INTRO_MS + HOLD_MS);
+    }
+  }, { threshold:[0.18,0.36,0.5,0.68] });
+  mobileEntryObserver.observe(section);
+
+  document.addEventListener('touchend', () => {
+    if (!window.matchMedia('(max-width: 720px)').matches) return;
+    window.setTimeout(handleVisibility, 70);
+    window.setTimeout(handleVisibility, 220);
+  }, { passive:true });
+
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) clearAuto();
     else handleVisibility();
@@ -862,4 +887,62 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   window.addEventListener('resize', () => {
     if (window.innerWidth > 720) setOpen(false);
   }, { passive:true });
+})();
+
+
+/* v83 FINAL: deterministic mobile section + hamburger theme sync */
+(() => {
+  const header = document.getElementById('siteHeader');
+  const hero = document.getElementById('hero');
+  const quote = document.getElementById('quote');
+  const page3 = document.getElementById('byeongpung');
+  const nav = document.getElementById('mobileNav');
+  if (!header || !hero || !quote || !page3) return;
+
+  const mq = window.matchMedia('(max-width: 720px)');
+  let raf = 0;
+
+  function resolveSection() {
+    const h = window.innerHeight || document.documentElement.clientHeight || 1;
+    const r3 = page3.getBoundingClientRect();
+    const rq = quote.getBoundingClientRect();
+
+    /* Flip to page 3 as soon as it crosses the viewport midpoint.
+       This also covers Safari's delayed scroll-snap settlement. */
+    if (r3.top <= h * 0.52 && r3.bottom > h * 0.20) return 'byeongpung';
+    if (rq.top <= h * 0.52 && rq.bottom > h * 0.20) return 'quote';
+    return 'hero';
+  }
+
+  function syncNow() {
+    raf = 0;
+    if (!mq.matches || nav?.classList.contains('open')) return;
+    const id = resolveSection();
+    header.setAttribute('data-mobile-section', id);
+    header.classList.toggle('on-dark', id !== 'byeongpung');
+  }
+
+  function requestSync() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(syncNow);
+  }
+
+  window.addEventListener('scroll', requestSync, { passive:true });
+  window.addEventListener('scrollend', requestSync, { passive:true });
+  window.addEventListener('resize', requestSync, { passive:true });
+  window.addEventListener('pageshow', requestSync);
+  document.addEventListener('touchend', () => {
+    requestSync();
+    setTimeout(requestSync, 70);
+    setTimeout(requestSync, 220);
+  }, { passive:true });
+
+  const observer = new IntersectionObserver(() => requestSync(), {
+    threshold:[0.20,0.35,0.50,0.65]
+  });
+  observer.observe(hero);
+  observer.observe(quote);
+  observer.observe(page3);
+
+  requestSync();
 })();

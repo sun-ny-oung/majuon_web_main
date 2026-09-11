@@ -41,3 +41,8 @@ Production-style separated source package.
 
 ## v82 update
 - On mobile, Page 3 now opens the scroll automatically as soon as the section becomes active; a second swipe is no longer required.
+
+
+## v83 update
+- Mobile page 3 opens the scroll automatically on scroll-snap arrival via IntersectionObserver + scrollend/touchend fallback.
+- Mobile hamburger color switches to the page 3 dark tone as soon as page 3 crosses the viewport midpoint.
