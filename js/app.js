@@ -998,7 +998,7 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   const copyBtn = document.getElementById('u24TuneCopy');
   const storageKey = 'majuon-u24-gui-v100';
 
-  const defaults = { artScale: 1.10, leftMask: 1.00, bottomMask: 1.00, collapsed: false };
+  const defaults = { artScale: 1.19, leftMask: 1.00, bottomMask: 0.87, collapsed: false };
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
   function readState() {
@@ -1096,4 +1096,66 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   else if (mq.addListener) mq.addListener(render);
   window.addEventListener('resize', render, { passive: true });
   render();
+})();
+
+
+/* ===== v102: measure actual mobile artwork frame so fades hit the image, not empty paper ===== */
+(() => {
+  const mq = window.matchMedia('(max-width: 720px)');
+  const containers = Array.from(document.querySelectorAll('#byeongpung .u24-blend-image'));
+  if (!containers.length) return;
+
+  function syncArtworkMetrics() {
+    if (!mq.matches) {
+      containers.forEach((wrap) => {
+        wrap.style.removeProperty('--u24-art-left-offset');
+        wrap.style.removeProperty('--u24-art-top-offset');
+        wrap.style.removeProperty('--u24-art-rendered-width');
+        wrap.style.removeProperty('--u24-art-rendered-height');
+      });
+      return;
+    }
+
+    containers.forEach((wrap) => {
+      const img = wrap.querySelector('.u24-art');
+      if (!img) return;
+      const wrapRect = wrap.getBoundingClientRect();
+      const imgRect = img.getBoundingClientRect();
+      const left = Math.max(0, imgRect.left - wrapRect.left);
+      const top = Math.max(0, imgRect.top - wrapRect.top);
+      const width = Math.max(0, imgRect.width);
+      const height = Math.max(0, imgRect.height);
+      wrap.style.setProperty('--u24-art-left-offset', `${left}px`);
+      wrap.style.setProperty('--u24-art-top-offset', `${top}px`);
+      wrap.style.setProperty('--u24-art-rendered-width', `${width}px`);
+      wrap.style.setProperty('--u24-art-rendered-height', `${height}px`);
+    });
+  }
+
+  let raf = null;
+  function scheduleSync() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      syncArtworkMetrics();
+      setTimeout(syncArtworkMetrics, 50);
+    });
+  }
+
+  window.addEventListener('load', scheduleSync);
+  window.addEventListener('resize', scheduleSync, { passive: true });
+  window.addEventListener('pageshow', scheduleSync);
+  document.addEventListener('scroll', scheduleSync, { passive: true });
+  document.addEventListener('touchend', scheduleSync, { passive: true });
+  document.querySelectorAll('#u24ArtScale, #u24LeftMask, #u24BottomMask').forEach((el) => {
+    el.addEventListener('input', scheduleSync, { passive: true });
+    el.addEventListener('change', scheduleSync);
+  });
+  containers.forEach((wrap) => {
+    const img = wrap.querySelector('.u24-art');
+    if (img) {
+      if (img.complete) scheduleSync();
+      img.addEventListener('load', scheduleSync);
+    }
+  });
+  scheduleSync();
 })();

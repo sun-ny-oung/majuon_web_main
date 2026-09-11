@@ -4043,9 +4043,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 /* ===== v100: mobile-only page3 tuning GUI; desktop untouched ===== */
 :root {
-  --u24-gui-art-scale: 1.10;
+  --u24-gui-art-scale: 1.19;
   --u24-gui-left-mask-strength: 1.00;
-  --u24-gui-bottom-mask-strength: 1.00;
+  --u24-gui-bottom-mask-strength: 0.87;
 }
 
 .u24-tune-gui { display: none !important; }
@@ -4152,6 +4152,66 @@ html, body { scroll-snap-type: y mandatory !important; }
       rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.76)) 40%,
       rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.40)) 66%,
       rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.10)) 84%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
+  }
+}
+
+
+/* ===== v102: mobile page 3 fade anchored to actual artwork frame ===== */
+@media (max-width: 720px) {
+  /* Keep artwork scaling as requested; anchor remains top-right. */
+  #byeongpung .u24-art {
+    transform-origin: right top !important;
+    transform: scale(var(--u24-gui-art-scale)) !important;
+  }
+
+  /* Reason fix: the old fade was applied to the container, not the actual visible image.
+     On iPhone Safari the artwork sits right-aligned with empty paper space on the left,
+     so the left fade was only fading empty space. These overlays are now pinned to the
+     measured artwork frame itself. */
+  #byeongpung .u24-blend-image::before,
+  #byeongpung .u24-blend-image::after {
+    content: "" !important;
+    position: absolute !important;
+    display: block !important;
+    pointer-events: none !important;
+    z-index: 4 !important;
+    inset: auto !important;
+  }
+
+  /* left fade: now starts at the real left edge of the artwork */
+  #byeongpung .u24-blend-image::before {
+    left: var(--u24-art-left-offset, 0px) !important;
+    top: var(--u24-art-top-offset, 0px) !important;
+    width: calc(var(--u24-art-rendered-width, 0px) * 0.18 * var(--u24-gui-left-mask-strength)) !important;
+    height: var(--u24-art-rendered-height, 0px) !important;
+    right: auto !important;
+    bottom: auto !important;
+    background: linear-gradient(
+      to right,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .97) 18%,
+      rgba(var(--paper-rgb), .78) 42%,
+      rgba(var(--paper-rgb), .38) 72%,
+      rgba(var(--paper-rgb), 0) 100%
+    ) !important;
+  }
+
+  /* bottom fade: now sits on the real lower edge of the artwork */
+  #byeongpung .u24-blend-image::after {
+    left: var(--u24-art-left-offset, 0px) !important;
+    top: calc(var(--u24-art-top-offset, 0px) + var(--u24-art-rendered-height, 0px) - (var(--u24-art-rendered-height, 0px) * 0.14 * var(--u24-gui-bottom-mask-strength))) !important;
+    width: var(--u24-art-rendered-width, 0px) !important;
+    height: calc(var(--u24-art-rendered-height, 0px) * 0.14 * var(--u24-gui-bottom-mask-strength)) !important;
+    right: auto !important;
+    bottom: auto !important;
+    background: linear-gradient(
+      to top,
+      rgb(var(--paper-rgb)) 0%,
+      rgba(var(--paper-rgb), .97) 18%,
+      rgba(var(--paper-rgb), .76) 42%,
+      rgba(var(--paper-rgb), .34) 72%,
       rgba(var(--paper-rgb), 0) 100%
     ) !important;
   }

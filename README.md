@@ -123,3 +123,9 @@ Production-style separated source package.
 - Illustration scale: 1.10x
 - Left mask strength: 1.00
 - Bottom mask strength: 1.00
+
+
+## v102 update
+- Applied user values: illustration scale 1.19x, left mask 1.00, bottom mask 0.87.
+- Fixed the left mask issue on iPhone: the old fade was applied to the container, but the visible artwork was right-aligned inside it, so the left fade mostly hit empty space.
+- The fade overlays are now anchored to the measured artwork frame itself, while the text block remains untouched.
