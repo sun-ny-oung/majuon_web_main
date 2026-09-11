@@ -146,3 +146,9 @@ Production-style separated source package.
 ## v105 update
 - On mobile page 3, Hwadam and Seolhan artwork are now shifted up by 50px.
 - The top is cropped by the same amount naturally, per request.
+
+
+## v106 update
+- Removed the floating mobile GUI from the final build.
+- Kept the confirmed final tuning values: illustration 1.15x, left mask 1.00, bottom mask 1.00.
+- Kept the Hwadam and Seolhan artwork shifted upward by 50px on mobile page 3.
