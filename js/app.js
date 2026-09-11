@@ -1032,3 +1032,43 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   window.addEventListener('pageshow', syncBlendImagesV94);
   syncBlendImagesV94();
 })();
+
+
+/* v95: overwrite mobile page 3 inline backgrounds directly so Safari shows the artwork */
+(() => {
+  const mq = window.matchMedia('(max-width: 720px)');
+  const items = Array.from(document.querySelectorAll('#byeongpung .u24-blend-image'));
+  if (!items.length) return;
+
+  function applyMobileBlend() {
+    items.forEach((el) => {
+      const img = el.querySelector('img.u24-art');
+      const src = img?.getAttribute('src');
+      if (mq.matches) {
+        el.classList.add('mobile-bg-mode');
+        if (src) {
+          const leftFade = 'linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 36%, rgba(var(--paper-rgb), .26) 74%, rgba(var(--paper-rgb), 0) 100%)';
+          const bottomFade = 'linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .84) 34%, rgba(var(--paper-rgb), .22) 72%, rgba(var(--paper-rgb), 0) 100%)';
+          el.style.backgroundImage = `${leftFade}, ${bottomFade}, url("${src}")`;
+          el.style.backgroundRepeat = 'no-repeat, no-repeat, no-repeat';
+          el.style.backgroundPosition = 'left top, left bottom, right top';
+          el.style.backgroundSize = window.innerWidth <= 390 ? '11% 100%, 100% 6.5%, auto 100%' : '12% 100%, 100% 7%, auto 100%';
+          el.classList.add('mobile-bg-ready');
+        } else {
+          el.classList.remove('mobile-bg-ready');
+        }
+      } else {
+        el.classList.remove('mobile-bg-mode', 'mobile-bg-ready');
+        el.style.backgroundImage = '';
+        el.style.backgroundRepeat = '';
+        el.style.backgroundPosition = '';
+        el.style.backgroundSize = '';
+      }
+    });
+  }
+
+  window.addEventListener('load', applyMobileBlend);
+  window.addEventListener('resize', applyMobileBlend, { passive:true });
+  window.addEventListener('pageshow', applyMobileBlend);
+  applyMobileBlend();
+})();

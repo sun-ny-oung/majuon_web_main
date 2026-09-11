@@ -4003,3 +4003,32 @@ html, body { scroll-snap-type: y mandatory !important; }
     bottom: 16px !important;
   }
 }
+
+
+/* ===== v95: mobile page 3 image visibility hotfix ===== */
+@media (max-width: 720px) {
+  /* keep original img visible as fallback; only hide it after background is ready */
+  #byeongpung .u24-blend-image.mobile-bg-mode > img.u24-art {
+    opacity: 1 !important;
+    width: auto !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+  }
+
+  #byeongpung .u24-blend-image.mobile-bg-ready > img.u24-art {
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+}

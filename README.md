@@ -109,3 +109,9 @@ Production-style separated source package.
 - Restored mobile page 3 artwork using layered CSS backgrounds instead of pseudo-overlay mode.
 - Removed the accidental hidden/back-layer behavior from v93.
 - Kept the approved copy position and limited blending to left/bottom edge fades.
+
+
+## v95 update
+- Fixed the mobile page 3 artwork not appearing.
+- Cause: earlier mobile background logic was being overridden in an unsafe way.
+- New fix writes the full layered background-image inline and only hides the original img after the background is confirmed.
