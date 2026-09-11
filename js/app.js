@@ -1,3 +1,4 @@
+/* source block: main */
 /* ===== inlined: js/app.js ===== */
 // ---------- 커서를 따라다니는 커스텀 팔각형 (mix-blend-mode로 배경색과 상관없이 항상 보이게) ----------
 const customCursor = document.getElementById('customCursor');
@@ -131,7 +132,7 @@ function updateScrollEffect() {
   const heroProgress = clamp(-rect.top / rect.height, 0, 1);
   hero.style.opacity = String(1 - heroProgress);
   hero.style.filter = `saturate(${1 - heroProgress * 0.18}) brightness(${1 - heroProgress * 0.06})`;
-  siteHeader.classList.toggle('visible', heroProgress > 0.56);
+  siteHeader.classList.add('visible');
   const quoteRect = quoteSection.getBoundingClientRect();
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const centerEl = document.elementFromPoint(Math.max(1, window.innerWidth * 0.5), Math.max(1, vh * 0.5));
@@ -144,7 +145,12 @@ function updateScrollEffect() {
   setRevealTarget(target);
 
   const mobileInQuote = mobileQuoteMq.matches && quoteRect.top < vh * .55 && quoteRect.bottom > vh * .45;
-  siteHeader.classList.toggle('on-dark', inQuote || mobileInQuote);
+  const heroInView = rect.bottom > vh * 0.12;
+  const headerSection = activeSection?.id || (
+    rect.bottom > vh * .5 ? 'hero' :
+    (quoteRect.top < vh * .5 && quoteRect.bottom > vh * .5 ? 'quote' : 'byeongpung')
+  );
+  siteHeader.classList.toggle('on-dark', headerSection === 'hero' || headerSection === 'quote');
   ticking = false;
 }
 window.addEventListener('scroll', () => {
@@ -321,534 +327,101 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 </svg>`;
 
-const canvas = document.getElementById('c');
-const gl = canvas.getContext('webgl2', { alpha: false, antialias: false, depth: false, stencil: false });
-if (!gl) { document.body.innerHTML = '<p style="padding:40px">이 브라우저는 WebGL2를 지원하지 않습니다.</p>'; }
 
-gl.getExtension('EXT_color_buffer_float');
-gl.getExtension('EXT_color_buffer_half_float');
+// ---------- v67: Got Work hero — photo + lightweight coffee-surface ripple ----------
+(() => {
+  const heroEl = document.getElementById('hero');
+  const surfaceEl = document.getElementById('gwCoffeeSurface');
+  const invitationEl = document.getElementById('gwTouchInvitation');
+  if (!heroEl || !surfaceEl) return;
 
-// 모바일/저성능 기기에서는 시뮬레이션 해상도를 낮춰서 프레임드랍을 줄임
-const IS_MOBILE = matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
-const SIM_RESOLUTION = IS_MOBILE ? 288 : 512;
-const DAMPING = 0.992;
-const AUTO_DROP_INTERVAL = 5.1; // 자동 방울 간격 (기존의 3배)
-const AUTO_DROP_STRENGTH = 0.35;
-const CLICK_STRENGTH = 0.55;
-const MOVE_STRENGTH = 0.05;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let disturb = null;
 
-const FOAM_RECOVER_RATE = 0.0035; // 낮출수록 문양이 더 오래, 더 천천히 사라짐
-const FOAM_ADVECT_STRENGTH = 1500.0;
-const FOAM_DROP_RADIUS = 0.007;
-const FOAM_DROP_STRENGTH = 0.9;
-const FOAM_CLICK_RADIUS = 0.006;
-const FOAM_CLICK_STRENGTH = 1.0;
-const FOAM_MOVE_RADIUS = 0.0035;
-const FOAM_MOVE_STRENGTH = 0.6;
-
-const baseVertex = `#version 300 es
-precision highp float;
-layout(location = 0) in vec2 aPosition;
-out vec2 vUv;
-void main () {
-  vUv = aPosition * 0.5 + 0.5;
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-}`;
-
-const updateShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uState;
-uniform vec2 texelSize;
-uniform float damping;
-out vec4 fragColor;
-void main () {
-  vec2 dx = vec2(texelSize.x, 0.0);
-  vec2 dy = vec2(0.0, texelSize.y);
-  float n = texture(uState, vUv + dy).x;
-  float s = texture(uState, vUv - dy).x;
-  float e = texture(uState, vUv + dx).x;
-  float w = texture(uState, vUv - dx).x;
-  vec2 self = texture(uState, vUv).xy;
-  float current = self.x;
-  float previous = self.y;
-  float average = (n + s + e + w) * 0.25;
-  float newHeight = average * 2.0 - previous;
-  newHeight *= damping;
-  fragColor = vec4(newHeight, current, 0.0, 1.0);
-}`;
-
-const splatShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uTarget;
-uniform float aspectRatio;
-uniform vec2 point;
-uniform float radius;
-uniform float strength;
-out vec4 fragColor;
-void main () {
-  vec2 p = vUv - point;
-  p.x *= aspectRatio;
-  float d = exp(-dot(p, p) / radius);
-  vec2 base = texture(uTarget, vUv).xy;
-  fragColor = vec4(base.x + d * strength, base.y, 0.0, 1.0);
-}`;
-
-const foamUpdateShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uFoam;
-uniform sampler2D uBaseFoam;
-uniform sampler2D uState;
-uniform vec2 texelSize;
-uniform float recoverRate;
-uniform float advectStrength;
-uniform float dt;
-out vec4 fragColor;
-void main () {
-  vec2 dx = vec2(texelSize.x, 0.0);
-  vec2 dy = vec2(0.0, texelSize.y);
-  float hL = texture(uState, vUv - dx).x;
-  float hR = texture(uState, vUv + dx).x;
-  float hT = texture(uState, vUv + dy).x;
-  float hB = texture(uState, vUv - dy).x;
-  float hC = texture(uState, vUv).x;
-  // 이 지점에 물결이 실제로 지나가고 있는 정도(0~1) — 건드리지 않은 곳은 0에 가까움
-  float activity = smoothstep(0.02, 0.16, abs(hC));
-
-  vec2 slope = vec2(hR - hL, hT - hB) * 0.5;
-  vec2 vel = -slope * advectStrength;
-  vec2 coord = clamp(vUv + vel * dt * texelSize, 0.0, 1.0);
-  float advected = texture(uFoam, coord).x;
-
-  float n = texture(uFoam, vUv + dy).x;
-  float s = texture(uFoam, vUv - dy).x;
-  float e = texture(uFoam, vUv + dx).x;
-  float w = texture(uFoam, vUv - dx).x;
-  float blurred = advected * 0.7 + (n + s + e + w) * 0.075;
-  // 블러(주변 픽셀과 섞이는 것)도 물결이 지나가는 자리에서만 일어나게 해서,
-  // 건드리지 않은 영역은 매 프레임 아주 조금씩이라도 뭉개지지 않고 또렷하게 유지됨
-  float smoothed = mix(advected, blurred, activity);
-
-  float base = texture(uBaseFoam, vUv).x;
-  float effectiveRecoverRate = recoverRate * activity;
-  float relaxed = mix(smoothed, base, effectiveRecoverRate);
-  fragColor = vec4(clamp(relaxed, -0.1, 1.4), 0.0, 0.0, 1.0);
-}`;
-
-const generateFoamShader = `#version 300 es
-precision highp float;
-in vec2 vUv;
-uniform vec2 aspect;
-out vec4 fragColor;
-float hash (vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float valueNoise (vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-float fbm (vec2 p) {
-  float v = 0.0; float amp = 0.5;
-  for (int i = 0; i < 5; i++) { v += amp * valueNoise(p); p *= 2.05; amp *= 0.52; }
-  return v;
-}
-void main () {
-  vec2 p = vUv * aspect * 5.5;
-  float n = fbm(p);
-  n = smoothstep(0.20, 0.62, n);
-  fragColor = vec4(n, 0.0, 0.0, 1.0);
-}`;
-
-const blurLogoShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uTex;
-uniform vec2 texelSize;
-uniform float radiusPx;
-uniform float warpAmount;
-out vec4 fragColor;
-void main () {
-  // 완벽한 벡터 선 대신, 손으로 부은 라떼아트처럼 살짝 흔들리는 왜곡을 얹음
-  vec2 warp = vec2(
-    sin(vUv.y * 26.0) * warpAmount,
-    cos(vUv.x * 24.0 + 1.7) * warpAmount
-  );
-  vec2 uv = vUv + warp;
-
-  vec4 sum = vec4(0.0);
-  float total = 0.0;
-  for (int x = -3; x <= 3; x++) {
-    for (int y = -3; y <= 3; y++) {
-      vec2 offset = vec2(float(x), float(y)) * texelSize * radiusPx;
-      sum += texture(uTex, uv + offset);
-      total += 1.0;
+  function initCoffeeSurface() {
+    const gl2 = surfaceEl.getContext('webgl', { alpha:false, antialias:false, powerPreference:'low-power' });
+    if (!gl2) return false;
+    const vertex = `attribute vec2 position; varying vec2 uv; void main(){ uv=position*.5+.5; gl_Position=vec4(position,0.,1.); }`;
+    const fragment = `precision mediump float;
+      varying vec2 uv; uniform sampler2D photo; uniform vec2 resolution;
+      uniform float time; uniform vec4 ripples[16];
+      void main(){
+        float aspect=resolution.x/resolution.y;
+        vec2 fit=aspect>1.5?vec2(1.,1.5/aspect):vec2(aspect/1.5,1.);
+        vec2 base=uv*fit+(1.-fit)*vec2(.63,.5);
+        vec2 offset=vec2(0.); float light=0.;
+        for(int i=0;i<16;i++){
+          float age=time-ripples[i].z;
+          if(age>0.&&age<5.&&ripples[i].w>0.){
+            vec2 delta=(uv-ripples[i].xy)*vec2(aspect,1.);
+            float d=length(delta)+.0001;
+            float front=d-age*.23;
+            float envelope=exp(-front*front*45.)*exp(-age*.85)*smoothstep(0.,.09,age);
+            float wave=sin(front*64.)*envelope*ripples[i].w;
+            offset+=delta/d*vec2(1./aspect,1.)*wave*.011;
+            light+=cos(front*64.)*envelope*ripples[i].w*.06;
+          }
+        }
+        float mask=smoothstep(.22,.52,base.x);
+        vec3 col=texture2D(photo,clamp(base+offset*mask,vec2(.001),vec2(.999))).rgb;
+        col+=vec3(.6,.43,.23)*light*mask;
+        gl_FragColor=vec4(max(col,vec3(0.)),1.);
+      }`;
+    function compile(type, source){
+      const sh=gl2.createShader(type); gl2.shaderSource(sh,source); gl2.compileShader(sh);
+      if(!gl2.getShaderParameter(sh,gl2.COMPILE_STATUS)){ gl2.deleteShader(sh); throw new Error('hero shader'); }
+      return sh;
     }
-  }
-  fragColor = sum / total;
-}`;
-
-const seedShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uBase;
-uniform sampler2D uLogo;
-uniform float logoBoost;
-uniform float baseWeight;
-out vec4 fragColor;
-void main () {
-  float base = texture(uBase, vUv).x;
-  float logo = texture(uLogo, vUv).r;
-  fragColor = vec4(clamp(base * baseWeight + logo * logoBoost, 0.0, 1.4), 0.0, 0.0, 1.0);
-}`;
-
-const displayShader = `#version 300 es
-precision highp float;
-precision highp sampler2D;
-in vec2 vUv;
-uniform sampler2D uState;
-uniform sampler2D uFoam;
-uniform vec2 texelSize;
-out vec4 fragColor;
-void main () {
-  float hL = texture(uState, vUv - vec2(texelSize.x, 0.0)).x;
-  float hR = texture(uState, vUv + vec2(texelSize.x, 0.0)).x;
-  float hT = texture(uState, vUv + vec2(0.0, texelSize.y)).x;
-  float hB = texture(uState, vUv - vec2(0.0, texelSize.y)).x;
-  vec3 normal = normalize(vec3((hL - hR) * 6.0, (hB - hT) * 6.0, 1.0));
-  vec3 lightDir = normalize(vec3(-0.35, 0.55, 0.75));
-  float diff = max(dot(normal, lightDir), 0.0);
-  float spec = pow(max(dot(reflect(-lightDir, normal), vec3(0.0, 0.0, 1.0)), 0.0), 90.0);
-  vec3 espressoDeep = vec3(0.16, 0.09, 0.05);
-  vec3 espressoLit = vec3(0.34, 0.21, 0.13);
-  vec3 color = mix(espressoDeep, espressoLit, diff);
-  float foam = clamp(texture(uFoam, vUv).x, 0.0, 1.0);
-  float foamT = smoothstep(0.04, 0.8, foam);
-  vec3 crema = vec3(0.86, 0.70, 0.44);
-  vec3 cremaLit = crema * (0.85 + diff * 0.3);
-  color = mix(color, cremaLit, foamT * 0.92);
-  vec3 highlight = vec3(1.0, 0.95, 0.85);
-  float specAmount = spec * 0.5;
-  color = color + highlight * specAmount * (1.0 - color);
-  float vignette = smoothstep(0.75, 0.15, length(vUv - 0.5));
-  color *= mix(0.75, 1.0, vignette);
-  fragColor = vec4(color, 1.0);
-}`;
-
-function compileShader(type, source) {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(shader));
-  return shader;
-}
-function createProgram(vsSource, fsSource) {
-  const vs = compileShader(gl.VERTEX_SHADER, vsSource);
-  const fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
-  const program = gl.createProgram();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) console.error(gl.getProgramInfoLog(program));
-  const uniforms = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  for (let i = 0; i < count; i++) {
-    const info = gl.getActiveUniform(program, i);
-    uniforms[info.name] = gl.getUniformLocation(program, info.name);
-  }
-  return { program, uniforms, bind() { gl.useProgram(program); } };
-}
-function createFBO(w, h, internalFormat, format, type, filter) {
-  gl.activeTexture(gl.TEXTURE0);
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, null);
-  const fbo = gl.createFramebuffer();
-  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-  gl.viewport(0, 0, w, h);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-  return {
-    texture, fbo, width: w, height: h, texelSizeX: 1 / w, texelSizeY: 1 / h,
-    attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, texture); return id; }
-  };
-}
-function createDoubleFBO(w, h, internalFormat, format, type, filter) {
-  let a = createFBO(w, h, internalFormat, format, type, filter);
-  let b = createFBO(w, h, internalFormat, format, type, filter);
-  return {
-    width: w, height: h, texelSizeX: a.texelSizeX, texelSizeY: a.texelSizeY,
-    get read() { return a; }, set read(v) { a = v; },
-    get write() { return b; }, set write(v) { b = v; },
-    swap() { const t = a; a = b; b = t; }
-  };
-}
-
-const quadBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), gl.STATIC_DRAW);
-const quadIndex = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadIndex);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
-
-function blit(target) {
-  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
-  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(0);
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadIndex);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, target);
-  gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-}
-
-const updateProgram = createProgram(baseVertex, updateShader);
-const foamUpdateProgram = createProgram(baseVertex, foamUpdateShader);
-const generateFoamProgram = createProgram(baseVertex, generateFoamShader);
-const seedProgram = createProgram(baseVertex, seedShader);
-const blurLogoProgram = createProgram(baseVertex, blurLogoShader);
-const splatProgram = createProgram(baseVertex, splatShader);
-const displayProgram = createProgram(baseVertex, displayShader);
-
-let state, foam, baseFoam;
-function getResolution(resolution) {
-  let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
-  if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
-  const min = Math.round(resolution);
-  const max = Math.round(resolution * aspectRatio);
-  if (gl.drawingBufferWidth > gl.drawingBufferHeight) return { width: max, height: min };
-  return { width: min, height: max };
-}
-function initFramebuffers() {
-  const res = getResolution(SIM_RESOLUTION);
-  state = createDoubleFBO(res.width, res.height, gl.RG16F, gl.RG, gl.HALF_FLOAT, gl.LINEAR);
-  foam = createDoubleFBO(res.width, res.height, gl.R16F, gl.RED, gl.HALF_FLOAT, gl.LINEAR);
-  baseFoam = createFBO(res.width, res.height, gl.R16F, gl.RED, gl.HALF_FLOAT, gl.LINEAR);
-  generateBaseFoam();
-}
-function generateBaseFoam() {
-  gl.viewport(0, 0, baseFoam.width, baseFoam.height);
-  generateFoamProgram.bind();
-  gl.uniform2f(generateFoamProgram.uniforms.aspect, canvas.width / canvas.height, 1.0);
-  blit(baseFoam.fbo);
-  blit(foam.read.fbo);
-  blit(foam.write.fbo);
-}
-
-// ---------- 로고를 크레마 초기 모양으로 사용 (시간이 지나면 자연스러운 얼룩 패턴으로 서서히 녹아듦) ----------
-const LOGO_BOOST = 1.15;
-const LOGO_BLUR_RADIUS_PX = 2.3; // 로고 엣지를 부드럽게 하는 정도 (GPU 블러, 브라우저 무관하게 동일하게 보임)
-const LOGO_WARP_AMOUNT = 0.003; // 완벽한 벡터 선 대신 손으로 부은 듯한 흔들림 정도(UV 단위)
-let logoImage = null;
-let logoMaskTex = null;
-
-function createTextureFromCanvas(canvasEl) {
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvasEl);
-  return {
-    texture,
-    attach(id) { gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, texture); return id; }
-  };
-}
-
-function loadLogoImage() {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => { logoImage = img; resolve(); };
-    img.onerror = () => resolve(); // 로고 로드에 실패해도 나머지는 정상 동작하도록
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(LOGO_SVG_MARKUP);
-  });
-}
-
-let logoMaskFBO = null;
-function rasterizeLogoMask(size) {
-  const off = document.createElement('canvas');
-  off.width = size; off.height = size;
-  const ctx = off.getContext('2d');
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, size, size);
-  if (logoImage) ctx.drawImage(logoImage, 0, 0, size, size);
-
-  // 캔버스 2D의 ctx.filter(blur)는 사파리에서 안정적으로 적용되지 않아서(브라우저마다 결과가 다름),
-  // 블러는 WebGL 셰이더로 직접 처리 — 모든 브라우저에서 동일하게 보이고, 축소/확대 방식보다 화질도 좋음
-  const sharpTex = createTextureFromCanvas(off);
-
-  if (logoMaskFBO) gl.deleteFramebuffer(logoMaskFBO.fbo);
-  if (logoMaskTex) gl.deleteTexture(logoMaskTex.texture);
-
-  logoMaskFBO = createFBO(size, size, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gl.LINEAR);
-  gl.viewport(0, 0, size, size);
-  blurLogoProgram.bind();
-  gl.uniform1i(blurLogoProgram.uniforms.uTex, sharpTex.attach(0));
-  gl.uniform2f(blurLogoProgram.uniforms.texelSize, 1 / size, 1 / size);
-  gl.uniform1f(blurLogoProgram.uniforms.radiusPx, LOGO_BLUR_RADIUS_PX);
-  gl.uniform1f(blurLogoProgram.uniforms.warpAmount, LOGO_WARP_AMOUNT);
-  blit(logoMaskFBO.fbo);
-
-  gl.deleteTexture(sharpTex.texture);
-  logoMaskTex = logoMaskFBO;
-}
-
-function seedFoamWithLogo() {
-  if (!logoMaskTex) return;
-  gl.viewport(0, 0, foam.width, foam.height);
-  seedProgram.bind();
-  gl.uniform1f(seedProgram.uniforms.logoBoost, LOGO_BOOST);
-  // 처음엔 노이즈(자연스러운 얼룩 패턴)를 전혀 섞지 않고 로고 모양만 크레마로 보이게 함(baseWeight: 0)
-  // — 노이즈는 이후 실제로 건드린/물결이 친 자리에서 foamUpdateShader의 relax 로직을 통해서만 서서히 드러남
-  gl.uniform1f(seedProgram.uniforms.baseWeight, 0.0);
-  gl.uniform1i(seedProgram.uniforms.uBase, baseFoam.attach(0));
-  gl.uniform1i(seedProgram.uniforms.uLogo, logoMaskTex.attach(1));
-  blit(foam.read.fbo);
-  blit(foam.write.fbo);
-}
-function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, IS_MOBILE ? 1 : 1.5);
-  const w = Math.round(canvas.clientWidth * dpr);
-  const h = Math.round(canvas.clientHeight * dpr);
-  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; return true; }
-  return false;
-}
-resizeCanvas();
-initFramebuffers();
-loadLogoImage().then(() => {
-  rasterizeLogoMask(512);
-  seedFoamWithLogo();
-});
-window.addEventListener('resize', () => {
-  if (resizeCanvas()) {
-    initFramebuffers();
-    if (logoImage) { rasterizeLogoMask(512); seedFoamWithLogo(); }
-  }
-});
-
-function splat(x, y, radius, strength) {
-  gl.viewport(0, 0, state.width, state.height);
-  splatProgram.bind();
-  gl.uniform1i(splatProgram.uniforms.uTarget, state.read.attach(0));
-  gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
-  gl.uniform2f(splatProgram.uniforms.point, x, y);
-  gl.uniform1f(splatProgram.uniforms.radius, radius);
-  gl.uniform1f(splatProgram.uniforms.strength, strength);
-  blit(state.write.fbo);
-  state.swap();
-}
-function foamSplat(x, y, radius, strength) {
-  gl.viewport(0, 0, foam.width, foam.height);
-  splatProgram.bind();
-  gl.uniform1i(splatProgram.uniforms.uTarget, foam.read.attach(0));
-  gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
-  gl.uniform2f(splatProgram.uniforms.point, x, y);
-  gl.uniform1f(splatProgram.uniforms.radius, radius);
-  gl.uniform1f(splatProgram.uniforms.strength, strength);
-  blit(foam.write.fbo);
-  foam.swap();
-}
-
-let lastPointer = null;
-canvas.addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = 1.0 - (e.clientY - rect.top) / rect.height;
-  splat(x, y, 0.0025, -CLICK_STRENGTH);
-  foamSplat(x, y, FOAM_CLICK_RADIUS, -FOAM_CLICK_STRENGTH);
-});
-canvas.addEventListener('pointermove', (e) => {
-  e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = 1.0 - (e.clientY - rect.top) / rect.height;
-  if (lastPointer) {
-    const dx = x - lastPointer.x, dy = y - lastPointer.y;
-    const speed = Math.min(Math.sqrt(dx * dx + dy * dy) * 40.0, 1.0);
-    if (speed > 0.02) {
-      splat(x, y, 0.0015, -MOVE_STRENGTH * speed);
-      foamSplat(x, y, FOAM_MOVE_RADIUS, -FOAM_MOVE_STRENGTH * speed);
+    const program=gl2.createProgram();
+    try {
+      gl2.attachShader(program,compile(gl2.VERTEX_SHADER,vertex));
+      gl2.attachShader(program,compile(gl2.FRAGMENT_SHADER,fragment));
+      gl2.linkProgram(program);
+      if(!gl2.getProgramParameter(program,gl2.LINK_STATUS)) throw new Error('hero link');
+    } catch { return false; }
+    gl2.useProgram(program);
+    const buffer=gl2.createBuffer(); gl2.bindBuffer(gl2.ARRAY_BUFFER,buffer);
+    gl2.bufferData(gl2.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl2.STATIC_DRAW);
+    const position=gl2.getAttribLocation(program,'position'); gl2.enableVertexAttribArray(position); gl2.vertexAttribPointer(position,2,gl2.FLOAT,false,0,0);
+    const texture=gl2.createTexture(); gl2.bindTexture(gl2.TEXTURE_2D,texture);
+    gl2.texParameteri(gl2.TEXTURE_2D,gl2.TEXTURE_MIN_FILTER,gl2.LINEAR); gl2.texParameteri(gl2.TEXTURE_2D,gl2.TEXTURE_MAG_FILTER,gl2.LINEAR);
+    gl2.texParameteri(gl2.TEXTURE_2D,gl2.TEXTURE_WRAP_S,gl2.CLAMP_TO_EDGE); gl2.texParameteri(gl2.TEXTURE_2D,gl2.TEXTURE_WRAP_T,gl2.CLAMP_TO_EDGE);
+    const loc={time:gl2.getUniformLocation(program,'time'),resolution:gl2.getUniformLocation(program,'resolution'),ripples:gl2.getUniformLocation(program,'ripples[0]')};
+    const waves=new Float32Array(64); let cursor=0, raf=0, lastDisturbance=0, ready=false, visible=true;
+    function size(){
+      const rect=heroEl.getBoundingClientRect();
+      const dpr=Math.min(window.devicePixelRatio||1,1.5);
+      surfaceEl.width=Math.max(1,Math.round(rect.width*dpr)); surfaceEl.height=Math.max(1,Math.round(rect.height*dpr));
+      gl2.viewport(0,0,surfaceEl.width,surfaceEl.height); render(performance.now());
     }
+    function render(now){ if(!ready)return; gl2.uniform1f(loc.time,now/1000);gl2.uniform2f(loc.resolution,surfaceEl.width,surfaceEl.height);gl2.uniform4fv(loc.ripples,waves);gl2.drawArrays(gl2.TRIANGLES,0,6); }
+    function frame2(now){ raf=0;if(!visible||document.hidden)return;render(now);if(now-lastDisturbance<5100&&!reduceMotion.matches)raf=requestAnimationFrame(frame2); }
+    function wake(){ if(!raf&&ready&&visible&&!document.hidden) raf=requestAnimationFrame(frame2); }
+    disturb=(x,y,strength=1)=>{ if(!ready||reduceMotion.matches)return; const now=performance.now();waves.set([x,1-y,now/1000,strength],cursor*4);cursor=(cursor+1)%16;lastDisturbance=now;wake(); };
+    const photo=new Image();
+    photo.onload=()=>{gl2.pixelStorei(gl2.UNPACK_FLIP_Y_WEBGL,true);gl2.texImage2D(gl2.TEXTURE_2D,0,gl2.RGB,gl2.RGB,gl2.UNSIGNED_BYTE,photo);ready=true;size();surfaceEl.classList.add('ready');disturb(.69,.47,.8);};
+    photo.src=heroEl.querySelector('.gw-hero-picture img').src;
+    new ResizeObserver(size).observe(heroEl);
+    new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else{cancelAnimationFrame(raf);raf=0;}},{threshold:.05}).observe(heroEl);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;}else wake();});
+    surfaceEl.addEventListener('webglcontextlost',e=>{e.preventDefault();ready=false;surfaceEl.classList.remove('ready');cancelAnimationFrame(raf);});
+    return true;
   }
-  lastPointer = { x, y };
-}, { passive: false });
-canvas.addEventListener('pointerleave', () => { lastPointer = null; });
-// 일부 인앱 브라우저(카카오톡 등)는 touch-action CSS를 제대로 안 지키는 경우가 있어서,
-// 터치 스크롤 자체를 캔버스 위에서는 JS로 한 번 더 확실히 막아줌
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
-canvas.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
 
-let lastTime = performance.now();
-let autoDropTimer = 0;
-
-function step() {
-  gl.viewport(0, 0, state.width, state.height);
-  updateProgram.bind();
-  gl.uniform2f(updateProgram.uniforms.texelSize, state.texelSizeX, state.texelSizeY);
-  gl.uniform1i(updateProgram.uniforms.uState, state.read.attach(0));
-  gl.uniform1f(updateProgram.uniforms.damping, DAMPING);
-  blit(state.write.fbo);
-  state.swap();
-}
-function foamStep(dt) {
-  gl.viewport(0, 0, foam.width, foam.height);
-  foamUpdateProgram.bind();
-  gl.uniform2f(foamUpdateProgram.uniforms.texelSize, foam.texelSizeX, foam.texelSizeY);
-  gl.uniform1i(foamUpdateProgram.uniforms.uFoam, foam.read.attach(0));
-  gl.uniform1i(foamUpdateProgram.uniforms.uBaseFoam, baseFoam.attach(1));
-  gl.uniform1i(foamUpdateProgram.uniforms.uState, state.read.attach(2));
-  gl.uniform1f(foamUpdateProgram.uniforms.recoverRate, FOAM_RECOVER_RATE);
-  gl.uniform1f(foamUpdateProgram.uniforms.advectStrength, FOAM_ADVECT_STRENGTH);
-  gl.uniform1f(foamUpdateProgram.uniforms.dt, dt);
-  blit(foam.write.fbo);
-  foam.swap();
-}
-function render() {
-  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  displayProgram.bind();
-  gl.uniform2f(displayProgram.uniforms.texelSize, state.texelSizeX, state.texelSizeY);
-  gl.uniform1i(displayProgram.uniforms.uState, state.read.attach(0));
-  gl.uniform1i(displayProgram.uniforms.uFoam, foam.read.attach(1));
-  blit(null);
-}
-function frame() {
-  // 히어로가 화면에 안 보일 때는 무거운 시뮬레이션(파동/크레마/렌더)을 완전히 멈춰서,
-  // 다른 섹션(문구 페이지의 원 애니메이션 등)과 프레임을 두고 경쟁하지 않게 함
-  if (heroVisible) {
-    const now = performance.now();
-    const dt = Math.min((now - lastTime) / 1000, 0.033);
-    lastTime = now;
-    autoDropTimer += dt;
-    if (autoDropTimer > AUTO_DROP_INTERVAL) {
-      autoDropTimer = 0;
-      const x = 0.5 + (Math.random() - 0.5) * 0.5;
-      const y = 0.5 + (Math.random() - 0.5) * 0.5;
-      splat(x, y, 0.003, -AUTO_DROP_STRENGTH);
-      foamSplat(x, y, FOAM_DROP_RADIUS, -FOAM_DROP_STRENGTH);
-    }
-    step();
-    foamStep(dt);
-    render();
-  } else {
-    lastTime = performance.now(); // 다시 보일 때 dt가 확 튀지 않도록 갱신만 해둠
+  let supported=false; try { supported=initCoffeeSurface(); } catch { supported=false; }
+  let lastPointer=0;
+  function touchCoffee(e,force){
+    const r=heroEl.getBoundingClientRect();
+    disturb?.((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height,force);
+    heroEl.classList.add('has-touched');
+    const label=invitationEl?.querySelector('span:last-child'); if(label) label.textContent='한 번의 손길, 오래 남는 파문';
   }
-  requestAnimationFrame(frame);
-}
-requestAnimationFrame(frame);
+  heroEl.addEventListener('pointermove',e=>{if(e.pointerType==='touch'&&!e.buttons)return;if(performance.now()-lastPointer<90)return;lastPointer=performance.now();touchCoffee(e,.48);});
+  heroEl.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;touchCoffee(e,1.25);});
+  surfaceEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();disturb?.(.69,.51,1.35);heroEl.classList.add('has-touched');}});
+  function surfacePreference(){const enabled=supported&&!reduceMotion.matches;surfaceEl.tabIndex=enabled?0:-1;surfaceEl.setAttribute('aria-hidden',String(!enabled));if(invitationEl)invitationEl.hidden=!enabled;}
+  reduceMotion.addEventListener?.('change',surfacePreference); surfacePreference();
+})();
 
 // ===== v56: 자동 루프 추가 — 1초 간격으로 화담→청류→풍연→설한→화담 반복 =====
 (() => {
@@ -1140,4 +713,145 @@ requestAnimationFrame(frame);
   updateState(0, 0);
   setEntered(false);
   handleVisibility();
+})();
+
+/* source block: v71-mobile-header-reset */
+(() => {
+  const header = document.getElementById('siteHeader');
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('hamburgerBtn');
+  if (!header || !nav || !btn) return;
+
+  const mq = window.matchMedia('(max-width: 720px)');
+
+  function closeStaleMobileMenu() {
+    if (!mq.matches) return;
+    nav.classList.remove('open');
+    header.classList.remove('menu-open');
+    document.body.classList.remove('mobile-menu-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', '메뉴 열기');
+  }
+
+  function syncMobileHeaderTheme() {
+    if (!mq.matches || nav.classList.contains('open')) return;
+    const y = Math.max(1, (window.innerHeight || document.documentElement.clientHeight) * 0.5);
+    const x = Math.max(1, window.innerWidth * 0.5);
+    const el = document.elementFromPoint(x, y);
+    const section = el?.closest?.('section');
+    const id = section?.id;
+    header.classList.toggle('on-dark', id === 'hero' || id === 'quote');
+  }
+
+  /* Safari bfcache can restore an old menu/header class state. Reset it on every page show. */
+  window.addEventListener('pageshow', () => {
+    closeStaleMobileMenu();
+    requestAnimationFrame(syncMobileHeaderTheme);
+  });
+
+  window.addEventListener('scroll', () => requestAnimationFrame(syncMobileHeaderTheme), { passive: true });
+  window.addEventListener('resize', () => requestAnimationFrame(syncMobileHeaderTheme), { passive: true });
+
+  closeStaleMobileMenu();
+  requestAnimationFrame(syncMobileHeaderTheme);
+})();
+
+/* source block: v72-mobile-header-section-sync */
+(() => {
+  const header = document.getElementById('siteHeader');
+  const nav = document.getElementById('mobileNav');
+  if (!header) return;
+  const mq = window.matchMedia('(max-width: 720px)');
+  let ticking = false;
+
+  function currentSectionId() {
+    const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+    const probeY = Math.min(vh - 1, Math.max(1, vh * 0.42));
+    const probeX = Math.min(window.innerWidth - 1, Math.max(1, window.innerWidth * 0.5));
+    const el = document.elementFromPoint(probeX, probeY);
+    const direct = el && el.closest ? el.closest('section') : null;
+    if (direct && ['hero','quote','byeongpung'].includes(direct.id)) return direct.id;
+
+    const sections = ['hero','quote','byeongpung']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+    let best = 'hero';
+    let bestDist = Infinity;
+    for (const section of sections) {
+      const r = section.getBoundingClientRect();
+      const center = r.top + r.height / 2;
+      const dist = Math.abs(center - vh * 0.5);
+      if (dist < bestDist) { bestDist = dist; best = section.id; }
+    }
+    return best;
+  }
+
+  function sync() {
+    ticking = false;
+    if (!mq.matches) {
+      header.removeAttribute('data-mobile-section');
+      return;
+    }
+    const id = currentSectionId();
+    header.setAttribute('data-mobile-section', id);
+    header.classList.toggle('on-dark', id === 'hero' || id === 'quote');
+  }
+
+  function requestSync() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(sync);
+  }
+
+  window.addEventListener('scroll', requestSync, { passive: true });
+  window.addEventListener('resize', requestSync, { passive: true });
+  window.addEventListener('pageshow', requestSync);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) requestSync(); });
+
+  /* Closing the menu must immediately restore the page-specific icon colors. */
+  if (nav) {
+    const observer = new MutationObserver(requestSync);
+    observer.observe(nav, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  requestSync();
+})();
+
+/* source block: v76-mobile-menu-final */
+(() => {
+  const header = document.getElementById('siteHeader');
+  const oldBtn = document.getElementById('hamburgerBtn');
+  const nav = document.getElementById('mobileNav');
+  if (!header || !oldBtn || !nav) return;
+
+  /* Strip every accumulated old click listener from previous iterations. */
+  const btn = oldBtn.cloneNode(true);
+  oldBtn.replaceWith(btn);
+
+  function setOpen(open) {
+    nav.classList.toggle('open', open);
+    header.classList.toggle('menu-open', open);
+    document.body.classList.toggle('mobile-menu-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  }
+
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(!nav.classList.contains('open'));
+  });
+
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  window.addEventListener('keydown', event => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+
+  window.addEventListener('pageshow', () => setOpen(false));
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 720) setOpen(false);
+  }, { passive:true });
 })();

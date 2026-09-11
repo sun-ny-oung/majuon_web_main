@@ -1,27 +1,20 @@
-# MAJUON website — v65
+# MAJUON website source
 
-마주온 웹사이트 최신 확정본입니다.
+Production-style separated source package.
 
-## 실행
-정적 파일이므로 `index.html`을 정적 호스팅에 배포하면 됩니다. 3D 족자 모델 로딩을 안정적으로 확인하려면 로컬에서도 HTTP 서버를 권장합니다.
+## Structure
 
-```bash
-python3 -m http.server 8000
-```
+- `index.html` — page markup only
+- `css/styles.css` — all site styles
+- `js/app.js` — site interactions and mobile menu/header logic
+- `assets/images/` — hero and seasonal artwork
+- `assets/logos/` — original logo/wordmarks
+- `assets/models/` — scroll 3D model
 
-그 뒤 `http://localhost:8000`으로 접속하세요.
+## Notes
 
-## 구조
-- `index.html` — 페이지 마크업
-- `css/styles.css` — 전체 스타일 / 모바일 대응
-- `js/app.js` — 인터랙션, 메뉴, 사계 자동 루프
-- `assets/images/` — 로고 및 사계 이미지
-- `assets/models/majuon-scroll.glb` — 3D 족자 모델
-
-## v65 반영사항
-- 모바일 2페이지 표시 로직 확정
-- 모바일 3페이지 족자: 175px × 78.5svh / top 20.5svh / left -96px
-- 모바일 족자 뒤로 종이 겹침 보정
-- 모바일 우측 정렬 텍스트 안전영역 대응
-- 햄버거 메뉴 배경 애니메이션
-- 사계 4초 자동 루프 유지
+- The page 3 adjustment GUI and its JavaScript were removed.
+- The top-left logo uses the original SVG without color filters. Only the hamburger color changes by section.
+- `MAJU:ON` is right-aligned beneath the hero wordmark, uses a lighter 400 weight, and sits closer to the SVG.
+- Google Fonts and `<model-viewer>` remain CDN dependencies.
+- `story.html` and `store.html` links are kept as existing navigation targets; those pages are not included because they have not been built in this source.

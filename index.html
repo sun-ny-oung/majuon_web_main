@@ -1,187 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="한국의 사계와 풍류를 담은 마주온의 네 가지 블렌드 커피를 만나보세요.">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="한국의 사계와 풍류를 담은 마주온의 네 가지 블렌드 커피를 만나보세요." name="description"/>
 <title>마주온 — 한국의 사계와 풍류를 담은 커피</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-</head>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js" type="module"></script>
+<link href="css/styles.css" rel="stylesheet"/></head>
 <body>
-
 <div id="customCursor">
-  <svg width="43" height="43" viewBox="0 0 48 48">
-    <path d="M29.74,10.14 L37.86,18.26 L37.86,29.74 L29.74,37.86 L18.26,37.86 L10.14,29.74 L10.14,18.26 L18.26,10.14 Z" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
-  </svg>
+<svg height="43" viewbox="0 0 48 48" width="43">
+<path d="M29.74,10.14 L37.86,18.26 L37.86,29.74 L29.74,37.86 L18.26,37.86 L10.14,29.74 L10.14,18.26 L18.26,10.14 Z" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path>
+</svg>
 </div>
-
 <header class="site-header" id="siteHeader">
-  <div class="site-header-inner">
-    <a href="index.html" class="site-logo"><img src="assets/images/logo.svg" alt="마주온"></a>
-    <nav class="site-nav">
-      <a href="story.html">스토리</a>
-      <span class="dot">·</span>
-      <a href="menu.html">메뉴</a>
-      <span class="dot">·</span>
-      <a href="store.html">스토어</a>
-      <span class="dot">·</span>
-      <a href="#">디지털 다도실</a>
-    </nav>
-    <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <nav class="mobile-nav" id="mobileNav">
-    <a href="story.html">스토리</a>
-    <a href="menu.html">메뉴</a>
-    <a href="store.html">스토어</a>
-    <a href="#">디지털 다도실</a>
-  </nav>
+<div class="site-header-inner">
+<a class="site-logo" href="index.html"><img alt="마주온 로고" class="logo-original" fetchpriority="high" src="assets/logos/majuon-logo.svg"/></a>
+<nav class="site-nav">
+<a href="story.html">마주온 이야기</a>
+<span class="dot">·</span>
+<a href="store.html">상품</a>
+<span class="dot">·</span>
+<a href="#">디지털 다도실</a>
+</nav>
+<button aria-expanded="false" aria-label="메뉴 열기" class="hamburger" id="hamburgerBtn">
+<span></span><span></span><span></span>
+</button>
+</div>
+<nav aria-label="모바일 메뉴" class="mobile-nav" id="mobileNav">
+<a href="story.html">마주온 이야기</a>
+<a href="store.html">상품</a>
+<a href="#">디지털 다도실</a>
+</nav>
 </header>
-
-<section id="hero">
-  <div class="hero-editorial" aria-hidden="true">
-    <div class="hero-culture-note">풍류 · 마주온 커피 · 2026</div>
-  </div>
-  <main>
-    <div class="art-wrap">
-      <div class="frame" id="frame">
-        <canvas id="c"></canvas>
-      </div>
-    </div>
-    <div class="gallery-caption">《마주온 커피, 2026》 — 인터랙티브 캔버스</div>
-    <div class="scroll-hint">
-      <span>스크롤을 내리세요</span>
-      <div class="chevrons">
-        <svg viewBox="0 0 24 12"><path d="M2,2 L12,9 L22,2" fill="none" stroke="#171310" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <svg viewBox="0 0 24 12"><path d="M2,2 L12,9 L22,2" fill="none" stroke="#171310" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <svg viewBox="0 0 24 12"><path d="M2,2 L12,9 L22,2" fill="none" stroke="#171310" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </div>
-  </main>
+<section aria-labelledby="gwHeroTitle" class="gw-hero" id="hero">
+<div aria-hidden="true" class="gw-hero-picture">
+<img alt="" fetchpriority="high" height="1024" src="assets/images/hero-coffee.png" width="1536"/>
+</div>
+<canvas aria-label="커피 표면에 파문 만들기. 클릭하거나 터치해보세요." class="gw-coffee-surface" id="gwCoffeeSurface" role="button" tabindex="0"></canvas>
+<div aria-hidden="true" class="gw-hero-shade"></div>
+<p class="gw-touch-invitation" id="gwTouchInvitation"><span aria-hidden="true" class="gw-touch-dot"></span><span>손끝으로 커피를 만나보세요</span></p>
+<div class="gw-hero-copy">
+<p class="gw-vertical gw-hero-note">한국의 사계와 풍류를 담은 커피</p>
+<h1 class="gw-vertical" id="gwHeroTitle">커피로 잇는 풍류</h1>
+</div>
+<div class="gw-hero-footer">
+<p>오래된 마음에<br/>오늘의 커피를 놓습니다.</p>
+<a aria-label="다음 섹션으로 이동" class="gw-journey-link" href="#quote"><span class="gw-journey-mark"><img alt="마주온" src="assets/logos/majuon-wordmark-small.svg"/></span><svg aria-hidden="true" viewbox="0 0 24 40"><path d="M12 0v36M3 27l9 9 9-9"></path></svg></a>
+</div>
+<span aria-hidden="true" class="gw-hero-signature"><img alt="" src="assets/logos/majuon-wordmark-hero.svg"/><span class="gw-hero-signature-sub">MAJU:ON</span></span>
 </section>
-
 <section id="quote">
-  <div class="reveal-circle" id="revealCircle"></div>
-  <div class="quote-cursor-glow" id="quoteCursorGlow"></div>
-  <div class="quote-haze" data-tone="spring" style="--haze-rgb:216,164,161"></div>
-  <div class="quote-haze" data-tone="summer" style="--haze-rgb:134,185,180"></div>
-  <div class="quote-haze" data-tone="autumn" style="--haze-rgb:180,154,108"></div>
-  <div class="quote-haze" data-tone="winter" style="--haze-rgb:150,168,184"></div>
-  <div class="quote-block">
-    <p><span class="quote-mark">『</span>마시는 것은 달라졌지만 즐기는 마음은 이어집니다<span class="quote-mark">』</span></p>
-  </div>
-
-  <div class="quote-brand" id="quoteBrand" aria-label="마주온 커피 소개">
-    <p class="quote-brand-kicker">마주온의 커피</p>
-    <p class="quote-brand-copy">옛 선조들이 차와 술을 곁에 두고 풍류를 즐겼듯,<br>마주온은 오늘 그 자리에 커피를 놓습니다.</p>
-    <p class="quote-brand-product">한국의 사계와 풍류를 담은 네 가지 블렌드 커피.</p>
-    <div class="quote-blends" aria-label="마주온 사계 블렌드">
-      <a href="#byeongpung" data-tone="spring" style="--row-rgb:216,164,161"><small>봄</small><span>화담</span></a>
-      <a href="#byeongpung" data-tone="summer" style="--row-rgb:134,185,180"><small>여름</small><span>청류</span></a>
-      <a href="#byeongpung" data-tone="autumn" style="--row-rgb:180,154,108"><small>가을</small><span>풍연</span></a>
-      <a href="#byeongpung" data-tone="winter" style="--row-rgb:150,168,184"><small>겨울</small><span>설한</span></a>
-    </div>
-  </div>
-  <div class="quote-cta" id="quoteCta">
-    <span class="quote-cta-eyebrow">알아보기</span>
-    <a href="story.html">
-      <span class="cta-label-wrap">
-        <span class="cta-label">마주온의 이야기 →</span>
-        <span class="cta-label cta-label-fill">마주온의 이야기 →</span>
-      </span>
-      <span class="cta-track"></span>
-      <span class="cta-ink"></span>
-      <span class="cta-octagon">
-        <svg viewBox="0 0 32 32">
-          <defs>
-            <linearGradient id="ctaGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2fadcf"/>
-              <stop offset="20%" stop-color="#d1bada"/>
-              <stop offset="40%" stop-color="#a2c3e7"/>
-              <stop offset="55%" stop-color="#f9d2dc"/>
-              <stop offset="70%" stop-color="#bcbcd7"/>
-              <stop offset="85%" stop-color="#94bfe6"/>
-              <stop offset="100%" stop-color="#a691be"/>
-            </linearGradient>
-          </defs>
-          <path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"/>
-          <path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad1)"/>
-        </svg>
-      </span>
-    </a>
-    <a href="#">
-      <span class="cta-label-wrap">
-        <span class="cta-label">디지털 다도실 →</span>
-        <span class="cta-label cta-label-fill">디지털 다도실 →</span>
-      </span>
-      <span class="cta-track"></span>
-      <span class="cta-ink"></span>
-      <span class="cta-octagon">
-        <svg viewBox="0 0 32 32">
-          <defs>
-            <linearGradient id="ctaGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2fadcf"/>
-              <stop offset="20%" stop-color="#d1bada"/>
-              <stop offset="40%" stop-color="#a2c3e7"/>
-              <stop offset="55%" stop-color="#f9d2dc"/>
-              <stop offset="70%" stop-color="#bcbcd7"/>
-              <stop offset="85%" stop-color="#94bfe6"/>
-              <stop offset="100%" stop-color="#a691be"/>
-            </linearGradient>
-          </defs>
-          <path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"/>
-          <path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad2)"/>
-        </svg>
-      </span>
-    </a>
-  </div>
+<div class="reveal-circle" id="revealCircle"></div>
+<div class="quote-cursor-glow" id="quoteCursorGlow"></div>
+<div class="quote-haze" data-tone="spring" style="--haze-rgb:216,164,161"></div>
+<div class="quote-haze" data-tone="summer" style="--haze-rgb:134,185,180"></div>
+<div class="quote-haze" data-tone="autumn" style="--haze-rgb:180,154,108"></div>
+<div class="quote-haze" data-tone="winter" style="--haze-rgb:150,168,184"></div>
+<div class="quote-block">
+<p><span class="quote-mark">『</span>마시는 것은 달라졌지만 즐기는 마음은 이어집니다<span class="quote-mark">』</span></p>
+</div>
+<div aria-label="마주온 커피 소개" class="quote-brand" id="quoteBrand">
+<p class="quote-brand-kicker">마주온의 커피</p>
+<p class="quote-brand-copy">옛 선조들이 차와 술을 곁에 두고 풍류를 즐겼듯,<br/>마주온은 오늘 그 자리에 커피를 놓습니다.</p>
+<p class="quote-brand-product">한국의 사계와 풍류를 담은 네 가지 블렌드 커피.</p>
+<div aria-label="마주온 사계 블렌드" class="quote-blends">
+<a data-tone="spring" href="#byeongpung" style="--row-rgb:216,164,161"><small>봄</small><span>화담</span></a>
+<a data-tone="summer" href="#byeongpung" style="--row-rgb:134,185,180"><small>여름</small><span>청류</span></a>
+<a data-tone="autumn" href="#byeongpung" style="--row-rgb:180,154,108"><small>가을</small><span>풍연</span></a>
+<a data-tone="winter" href="#byeongpung" style="--row-rgb:150,168,184"><small>겨울</small><span>설한</span></a>
+</div>
+</div>
+<div class="quote-cta" id="quoteCta">
+<span class="quote-cta-eyebrow">알아보기</span>
+<a href="story.html">
+<span class="cta-label-wrap">
+<span class="cta-label">마주온의 이야기 →</span>
+<span class="cta-label cta-label-fill">마주온의 이야기 →</span>
+</span>
+<span class="cta-track"></span>
+<span class="cta-ink"></span>
+<span class="cta-octagon">
+<svg viewbox="0 0 32 32">
+<defs>
+<lineargradient id="ctaGrad1" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#2fadcf"></stop>
+<stop offset="20%" stop-color="#d1bada"></stop>
+<stop offset="40%" stop-color="#a2c3e7"></stop>
+<stop offset="55%" stop-color="#f9d2dc"></stop>
+<stop offset="70%" stop-color="#bcbcd7"></stop>
+<stop offset="85%" stop-color="#94bfe6"></stop>
+<stop offset="100%" stop-color="#a691be"></stop>
+</lineargradient>
+</defs>
+<path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"></path>
+<path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad1)"></path>
+</svg>
+</span>
+</a>
+<a href="#">
+<span class="cta-label-wrap">
+<span class="cta-label">디지털 다도실 →</span>
+<span class="cta-label cta-label-fill">디지털 다도실 →</span>
+</span>
+<span class="cta-track"></span>
+<span class="cta-ink"></span>
+<span class="cta-octagon">
+<svg viewbox="0 0 32 32">
+<defs>
+<lineargradient id="ctaGrad2" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#2fadcf"></stop>
+<stop offset="20%" stop-color="#d1bada"></stop>
+<stop offset="40%" stop-color="#a2c3e7"></stop>
+<stop offset="55%" stop-color="#f9d2dc"></stop>
+<stop offset="70%" stop-color="#bcbcd7"></stop>
+<stop offset="85%" stop-color="#94bfe6"></stop>
+<stop offset="100%" stop-color="#a691be"></stop>
+</lineargradient>
+</defs>
+<path d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="#ffffff"></path>
+<path class="cta-octagon-fill" d="M20.97,3.99 L28.01,11.03 L28.01,20.97 L20.97,28.01 L11.03,28.01 L3.99,20.97 L3.99,11.03 L11.03,3.99 Z" fill="url(#ctaGrad2)"></path>
+</svg>
+</span>
+</a>
+</div>
+</section>
+<section aria-label="마주온 사계 블렌드" class="scroll3d-section" id="byeongpung">
+<div class="u24-stage" id="u24Stage">
+<div aria-hidden="true" class="u24-glow"></div>
+<div class="u24-head">
+<div class="u24-head-copy">
+<p class="u24-kicker">사계를 펼치다</p>
+<h2>마주온의 사계</h2>
+<p>한국의 사계와 풍류를 담은 네 가지 블렌드 커피. 족자 속 여백과 함께 차분히 펼쳐보세요.</p>
+</div>
+</div>
+<div class="u24-paper" id="u24Paper">
+<div class="u24-track" id="u24Track">
+<a class="u24-blend spring" href="store.html" style="--paper-rgb:245,238,225; --obj-pos:50% 49%; --obj-pos-mobile:50% 44%;">
+<div class="u24-blend-image"><img alt="화담" class="u24-art" src="assets/images/hwadam.webp"/></div>
+<div class="u24-blend-copy"><span class="u24-season">봄 · 화담</span><h3 class="u24-name">화담</h3><p class="u24-description">살구와 복숭아의 화사한 과실향 위로 라벤더와 로즈힙이 부드럽게 머뭅니다.</p><p class="u24-notes">살구 · 복숭아 · 라벤더 · 로즈힙</p><span class="u24-index">SPRING · 01</span></div>
+</a>
+<a class="u24-blend summer" href="store.html" style="--paper-rgb:221,231,221; --obj-pos:50% 52%; --obj-pos-mobile:50% 47%;">
+<div class="u24-blend-image"><img alt="청류" class="u24-art" src="assets/images/cheongryu.webp"/></div>
+<div class="u24-blend-copy"><span class="u24-season">여름 · 청류</span><h3 class="u24-name">청류</h3><p class="u24-description">라임과 청사과의 맑은 산미, 허브와 그린티의 투명한 여운이 깨끗하게 이어집니다.</p><p class="u24-notes">라임 · 청사과 · 허브 · 그린티</p><span class="u24-index">SUMMER · 02</span></div>
+</a>
+<a class="u24-blend autumn" href="store.html" style="--paper-rgb:231,214,189; --obj-pos:51% 50%; --obj-pos-mobile:51% 44%;">
+<div class="u24-blend-image"><img alt="풍연" class="u24-art" src="assets/images/pungyeon.webp"/></div>
+<div class="u24-blend-copy"><span class="u24-season">가을 · 풍연</span><h3 class="u24-name">풍연</h3><p class="u24-description">로스티 곡물과 흑설탕의 담백한 고소함 뒤로 은은한 스파이스가 깊이를 더합니다.</p><p class="u24-notes">로스티 곡물 · 흑설탕 · 스파이스</p><span class="u24-index">AUTUMN · 03</span></div>
+</a>
+<a class="u24-blend winter" href="store.html" style="--paper-rgb:228,229,233; --obj-pos:50% 53%; --obj-pos-mobile:50% 46%;">
+<div class="u24-blend-image"><img alt="설한" class="u24-art" src="assets/images/seolhan.webp"/></div>
+<div class="u24-blend-copy"><span class="u24-season">겨울 · 설한</span><h3 class="u24-name">설한</h3><p class="u24-description">차분한 허브와 스파이스, 무겁지 않은 바디가 겨울처럼 잔잔하고 길게 이어집니다.</p><p class="u24-notes">허브 · 스파이스 · 맑은 바디 · 긴 여운</p><span class="u24-index">WINTER · 04</span></div>
+</a>
+</div>
+</div>
+<div class="u24-model-wrap" id="u24ModelWrap">
+<model-viewer alt="마주온 족자 3D 모델" camera-controls="false" camera-orbit="0deg 90deg 0.98m" camera-target="0m -0.01m 0m" environment-image="neutral" exposure="1.03" field-of-view="28deg" id="u24Model" interaction-prompt="none" loading="eager" orientation="0deg 0deg 0deg" reveal="auto" shadow-intensity="0.35" shadow-softness="0.9" src="assets/models/majuon-scroll.glb"></model-viewer>
+<span class="u24-loading">족자 불러오는 중</span>
+</div>
+</div>
 </section>
 
-<section id="byeongpung" class="scroll3d-section" aria-label="마주온 사계 블렌드">
-  <div class="u24-stage" id="u24Stage">
-    <div class="u24-glow" aria-hidden="true"></div>
-    <div class="u24-head">
-      <div class="u24-head-copy">
-        <p class="u24-kicker">사계를 펼치다</p>
-        <h2>마주온의 사계</h2>
-        <p>한국의 사계와 풍류를 담은 네 가지 블렌드 커피. 족자 속 여백과 함께 차분히 펼쳐보세요.</p>
-      </div>
-    </div>
 
-    <div class="u24-paper" id="u24Paper">
-      <div class="u24-track" id="u24Track">
-        <a class="u24-blend spring" href="store.html" style="--paper-rgb:245,238,225; --obj-pos:50% 49%; --obj-pos-mobile:50% 44%;">
-          <div class="u24-blend-image"><img class="u24-art" src="assets/images/hwadam.webp" alt="화담"></div>
-          <div class="u24-blend-copy"><span class="u24-season">봄 · 화담</span><h3 class="u24-name">화담</h3><p class="u24-description">살구와 복숭아의 화사한 과실향 위로 라벤더와 로즈힙이 부드럽게 머뭅니다.</p><p class="u24-notes">살구 · 복숭아 · 라벤더 · 로즈힙</p><span class="u24-index">SPRING · 01</span></div>
-        </a>
-        <a class="u24-blend summer" href="store.html" style="--paper-rgb:221,231,221; --obj-pos:50% 52%; --obj-pos-mobile:50% 47%;">
-          <div class="u24-blend-image"><img class="u24-art" src="assets/images/cheongryu.webp" alt="청류"></div>
-          <div class="u24-blend-copy"><span class="u24-season">여름 · 청류</span><h3 class="u24-name">청류</h3><p class="u24-description">라임과 청사과의 맑은 산미, 허브와 그린티의 투명한 여운이 깨끗하게 이어집니다.</p><p class="u24-notes">라임 · 청사과 · 허브 · 그린티</p><span class="u24-index">SUMMER · 02</span></div>
-        </a>
-        <a class="u24-blend autumn" href="store.html" style="--paper-rgb:231,214,189; --obj-pos:51% 50%; --obj-pos-mobile:51% 44%;">
-          <div class="u24-blend-image"><img class="u24-art" src="assets/images/pungyeon.webp" alt="풍연"></div>
-          <div class="u24-blend-copy"><span class="u24-season">가을 · 풍연</span><h3 class="u24-name">풍연</h3><p class="u24-description">로스티 곡물과 흑설탕의 담백한 고소함 뒤로 은은한 스파이스가 깊이를 더합니다.</p><p class="u24-notes">로스티 곡물 · 흑설탕 · 스파이스</p><span class="u24-index">AUTUMN · 03</span></div>
-        </a>
-        <a class="u24-blend winter" href="store.html" style="--paper-rgb:228,229,233; --obj-pos:50% 53%; --obj-pos-mobile:50% 46%;">
-          <div class="u24-blend-image"><img class="u24-art" src="assets/images/seolhan.webp" alt="설한"></div>
-          <div class="u24-blend-copy"><span class="u24-season">겨울 · 설한</span><h3 class="u24-name">설한</h3><p class="u24-description">차분한 허브와 스파이스, 무겁지 않은 바디가 겨울처럼 잔잔하고 길게 이어집니다.</p><p class="u24-notes">허브 · 스파이스 · 맑은 바디 · 긴 여운</p><span class="u24-index">WINTER · 04</span></div>
-        </a>
-      </div>
-    </div>
 
-    <div class="u24-model-wrap" id="u24ModelWrap">
-      <model-viewer id="u24Model" src="assets/models/majuon-scroll.glb" alt="마주온 족자 3D 모델" loading="eager" reveal="auto" camera-controls="false" interaction-prompt="none" environment-image="neutral" exposure="1.03" shadow-intensity="0.35" shadow-softness="0.9" field-of-view="28deg" camera-orbit="0deg 90deg 0.98m" camera-target="0m -0.01m 0m" orientation="0deg 0deg 0deg"></model-viewer>
-      <span class="u24-loading">족자 불러오는 중</span>
-    </div>
-  </div>
-</section>
 
-<script src="js/app.js"></script>
 
-</body>
+
+
+
+
+<script src="js/app.js"></script></body>
 </html>

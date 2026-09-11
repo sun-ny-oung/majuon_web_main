@@ -2370,3 +2370,686 @@ html, body { scroll-snap-type: y mandatory !important; }
     width: min(235px, calc(100vw - 112px)) !important;
   }
 }
+
+
+/* ===== v66: MOBILE COMMON PROPORTION SYSTEM (iOS + Android) =====
+   One geometry source for roller → paper → artwork → copy.
+   This final block intentionally overrides all older mobile Page 3 patches. */
+@media (max-width: 720px) {
+  #byeongpung.scroll3d-section {
+    /* Roller: preserves the approved 390px-wide look, scales gently on smaller phones. */
+    --m-roll-width: clamp(160px, 44.872vw, 175px);
+    --m-roll-visible: clamp(72px, 20.256vw, 79px);
+    --m-roll-left: calc(var(--m-roll-visible) - var(--m-roll-width));
+    --m-roll-top: 20.5svh;
+    --m-roll-height: min(78.5svh, 720px);
+
+    /* Paper derives from the roller's visible edge instead of from 100vw magic numbers. */
+    --m-paper-overlap: clamp(19px, 5.385vw, 21px);
+    --m-paper-left: calc(var(--m-roll-visible) - var(--m-paper-overlap));
+    --m-paper-right: max(8px, env(safe-area-inset-right, 0px));
+    --m-paper-top: 31.2svh;
+    --m-paper-height: min(54.8svh, 505px);
+
+    /* Blue-grey backing follows the same paper geometry and sits slightly underneath it. */
+    --m-back-overlap-left: 8px;
+    --m-back-left: calc(var(--m-paper-left) - var(--m-back-overlap-left));
+    --m-back-right: -6px;
+    --m-back-top: 29.2svh;
+    --m-back-height: min(58.5svh, 540px);
+  }
+
+  #byeongpung .u24-stage::after {
+    left: var(--m-back-left) !important;
+    right: var(--m-back-right) !important;
+    width: auto !important;
+    top: var(--m-back-top) !important;
+    height: var(--m-back-height) !important;
+  }
+
+  #byeongpung .u24-paper {
+    left: var(--m-paper-left) !important;
+    right: var(--m-paper-right) !important;
+    width: auto !important;
+    top: var(--m-paper-top) !important;
+    height: var(--m-paper-height) !important;
+    box-sizing: border-box !important;
+  }
+
+  #byeongpung .u24-model-wrap,
+  #byeongpung.is-u24-entered .u24-model-wrap {
+    left: var(--m-roll-left) !important;
+    top: var(--m-roll-top) !important;
+    width: var(--m-roll-width) !important;
+    height: var(--m-roll-height) !important;
+  }
+
+  /* The copy owns only the height it needs; the illustration gets all remaining paper height. */
+  #byeongpung .u24-blend {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #byeongpung .u24-blend-image {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+    padding: clamp(8px, 1.3svh, 12px) clamp(10px, 3.4vw, 14px) 2px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+  }
+
+  #byeongpung .u24-art {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 auto !important;
+    object-fit: contain !important;
+    object-position: var(--obj-pos-mobile, 50% 50%) !important;
+  }
+
+  #byeongpung .u24-blend-copy {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    padding:
+      clamp(6px, 1svh, 9px)
+      max(20px, calc(env(safe-area-inset-right, 0px) + 8px))
+      clamp(10px, 1.5svh, 14px)
+      14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    overflow: visible !important;
+  }
+
+  #byeongpung .u24-season,
+  #byeongpung .u24-name,
+  #byeongpung .u24-description,
+  #byeongpung .u24-notes {
+    box-sizing: border-box !important;
+    width: min(88%, 255px) !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    text-align: right !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  #byeongpung .u24-season {
+    font-size: clamp(9px, 2.45vw, 10px) !important;
+    line-height: 1.35 !important;
+  }
+
+  #byeongpung .u24-name {
+    margin-top: clamp(1px, .35svh, 3px) !important;
+    font-size: clamp(28px, 8.2vw, 34px) !important;
+    line-height: 1.08 !important;
+  }
+
+  #byeongpung .u24-description {
+    margin-top: clamp(5px, .9svh, 8px) !important;
+    font-size: clamp(10px, 2.95vw, 12px) !important;
+    line-height: 1.58 !important;
+  }
+
+  #byeongpung .u24-notes {
+    margin-top: clamp(6px, 1svh, 9px) !important;
+    padding-top: clamp(6px, .9svh, 8px) !important;
+    font-size: clamp(8px, 2.15vw, 8.5px) !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Prevent legacy narrow-device patches from changing the Page 3 geometry again. */
+  #byeongpung .u24-index { display: block !important; }
+}
+
+/* Short phones: retain the same geometry, only compress typography/spacing slightly. */
+@media (max-width: 720px) and (max-height: 720px) {
+  #byeongpung.scroll3d-section {
+    --m-paper-top: 30.7svh;
+    --m-paper-height: 55.6svh;
+    --m-back-top: 28.8svh;
+    --m-back-height: 59.2svh;
+  }
+  #byeongpung .u24-blend-copy {
+    padding-top: 4px !important;
+    padding-bottom: 8px !important;
+  }
+  #byeongpung .u24-name { font-size: clamp(27px, 7.8vw, 31px) !important; }
+  #byeongpung .u24-description { font-size: clamp(9.5px, 2.75vw, 11px) !important; line-height: 1.5 !important; }
+  #byeongpung .u24-notes { margin-top: 5px !important; padding-top: 5px !important; }
+}
+
+
+
+/* ===== v67: Got Work-inspired page 1 only. Page 2+ remains the existing MAJUON build. ===== */
+#hero.gw-hero {
+  position: relative !important;
+  isolation: isolate;
+  height: max(820px, 100svh) !important;
+  min-height: 820px !important;
+  max-height: 1400px !important;
+  overflow: hidden !important;
+  background: #15130f !important;
+  color: #f3eddf;
+  opacity: 1;
+}
+#hero.gw-hero .gw-hero-picture,
+#hero.gw-hero .gw-hero-shade,
+#hero.gw-hero .gw-coffee-surface { position:absolute; inset:0; width:100%; height:100%; }
+#hero.gw-hero .gw-hero-picture { z-index:0; }
+#hero.gw-hero .gw-hero-picture img { width:100%;height:100%;object-fit:cover;object-position:60% 50%;display:block; }
+#hero.gw-hero .gw-coffee-surface { z-index:1; opacity:0; transition:opacity 1s ease; touch-action:pan-y; cursor:crosshair; }
+#hero.gw-hero .gw-coffee-surface.ready { opacity:1; }
+#hero.gw-hero .gw-hero-shade { z-index:2; pointer-events:none; background:linear-gradient(90deg,rgba(12,13,11,.82) 0%,rgba(12,13,11,.56) 36%,rgba(12,13,11,.10) 72%),linear-gradient(0deg,rgba(12,13,11,.68) 0%,transparent 48%); }
+#hero.gw-hero .gw-vertical { writing-mode:vertical-rl; text-orientation:upright; white-space:nowrap; font-family:"Noto Serif KR","Nanum Myeongjo",serif; font-weight:300; }
+#hero.gw-hero .gw-hero-copy { position:absolute;z-index:3;left:12.5%;top:24%;display:flex;align-items:flex-start;gap:40px;flex-direction:row-reverse; }
+#hero.gw-hero h1 { margin:0;font-size:clamp(30px,3.2vw,49px);line-height:1.25;letter-spacing:.20em;color:#f5efe4; }
+#hero.gw-hero .gw-hero-note { margin:6px 0 0;font-size:14px;line-height:1.5;letter-spacing:.20em;color:#d5cebe; }
+#hero.gw-hero .gw-touch-invitation { position:absolute;z-index:3;right:8%;top:27%;margin:0;color:#dfd3bc;font-size:13px;display:flex;gap:11px;align-items:center;transition:opacity .7s;pointer-events:none; }
+#hero.gw-hero.has-touched .gw-touch-invitation { opacity:.65; }
+#hero.gw-hero .gw-touch-dot { width:7px;height:7px;border:1px solid currentColor;border-radius:50%;box-shadow:0 0 0 6px rgba(238,227,189,.06);animation:gwTouchPulse 3s infinite; }
+#hero.gw-hero .gw-hero-footer { position:absolute;z-index:3;left:5.4%;right:5.4%;bottom:6%;display:flex;justify-content:space-between;align-items:flex-end; }
+#hero.gw-hero .gw-hero-footer p { margin:0;font-family:"Noto Serif KR","Nanum Myeongjo",serif;font-size:14px;line-height:1.9;color:#e3dccf; }
+#hero.gw-hero .gw-journey-link { color:#f3eddf;text-decoration:none;display:flex;align-items:center;gap:26px;font-size:14px;letter-spacing:.03em; }
+#hero.gw-hero .gw-journey-link svg { width:18px;height:36px;fill:none;stroke:currentColor;stroke-width:1.2;transition:transform .3s; }
+#hero.gw-hero .gw-journey-link:hover svg { transform:translateY(5px); }
+#hero.gw-hero .gw-hero-signature { position:absolute;z-index:3;right:5.1%;bottom:15.5%;width:clamp(330px,36vw,650px);opacity:.88;pointer-events:none;text-align:right; }
+#hero.gw-hero .gw-hero-signature img { display:block;width:100%;height:auto; }
+#hero.gw-hero .gw-hero-signature-sub { display:block;width:100%;margin-top:4px;padding-right:0;font-family:"Helvetica Neue","SF Pro Display",Arial,sans-serif;font-size:clamp(30px,2.25vw,48px);font-weight:400;letter-spacing:.14em;line-height:1;color:#e2daca;text-align:right;white-space:nowrap; }
+@keyframes gwTouchPulse { 0%,100%{box-shadow:0 0 0 5px rgba(238,227,189,.04)} 50%{box-shadow:0 0 0 12px rgba(238,227,189,.015)} }
+
+/* Header contrast for the photographic hero and the existing dark page 2. */
+.site-header.visible { opacity:1 !important; transform:none !important; pointer-events:auto !important; }
+.site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.36),rgba(12,13,11,0)) !important;border-bottom-color:rgba(255,255,255,.12) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important; }
+.site-header.on-dark .site-logo img { filter:grayscale(1) brightness(0) invert(1); opacity:.94; }
+.site-header:not(.on-dark) .site-logo img { filter:none; }
+
+@media (max-width:720px) {
+  #hero.gw-hero { height:100svh !important; min-height:700px !important; max-height:1000px !important; }
+  #hero.gw-hero .gw-hero-picture img { object-position:65% 50%; }
+  #hero.gw-hero .gw-hero-shade { background:linear-gradient(90deg,rgba(17,18,15,.89),rgba(17,18,15,.34) 68%,rgba(17,18,15,.12)),linear-gradient(0deg,rgba(17,18,15,.78),transparent 52%); }
+  #hero.gw-hero .gw-hero-copy { left:10%;top:21%;gap:25px; }
+  #hero.gw-hero h1 { font-size:32px;letter-spacing:.19em; }
+  #hero.gw-hero .gw-hero-note { font-size:12px;letter-spacing:.15em; }
+  #hero.gw-hero .gw-touch-invitation { right:6%;top:17%;font-size:11px; }
+  #hero.gw-hero .gw-hero-signature { width:clamp(240px,56vw,380px);right:6%;bottom:19%; }
+#hero.gw-hero .gw-hero-signature-sub { margin-top:4px;font-size:22px;letter-spacing:.12em;text-align:right; }
+  #hero.gw-hero .gw-hero-footer { left:6%;right:6%;bottom:max(6%,env(safe-area-inset-bottom)); }
+  #hero.gw-hero .gw-hero-footer p { font-size:12px;line-height:1.9; }
+  #hero.gw-hero .gw-journey-link { font-size:12px;gap:15px; }
+  #hero.gw-hero .gw-journey-link svg { width:13px;height:29px; }
+  .site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.50),rgba(12,13,11,0)) !important; }
+}
+@media (max-width:390px) {
+  #hero.gw-hero .gw-hero-copy { left:8%;gap:20px; }
+  #hero.gw-hero h1 { font-size:29px; }
+  #hero.gw-hero .gw-touch-invitation { display:none; }
+  #hero.gw-hero .gw-hero-signature { width:230px;bottom:21%; }
+}
+@media (prefers-reduced-motion:reduce) {
+  #hero.gw-hero .gw-touch-dot { animation:none; }
+  #hero.gw-hero .gw-coffee-surface { display:none; }
+}
+
+
+/* ===== v77 final overrides ===== */
+.site-header .site-logo img,
+.site-header.on-dark .site-logo img,
+.site-header.menu-open .site-logo img,
+.site-header.on-dark.menu-open .site-logo img {
+  filter:none !important;
+  opacity:1 !important;
+}
+.site-header .site-logo .logo-default,
+.site-header .site-logo .logo-on-dark { display:none !important; }
+.site-header .site-logo .logo-original { display:block !important; }
+#mobileNav.mobile-nav { pointer-events:none; }
+#mobileNav.mobile-nav.open { pointer-events:auto; }
+
+
+
+/* ===== separated from inline build ===== */
+
+
+  .site-header .site-logo { position: relative; }
+  .site-header .site-logo img { height: 49px; width: auto; display: block; filter: none !important; opacity: 1 !important; }
+  .site-header .site-logo .logo-on-dark { display: none; }
+  .site-header.on-dark .site-logo .logo-default { display: none; }
+  .site-header.on-dark .site-logo .logo-on-dark { display: block; }
+  .site-header.on-dark .site-nav a, .site-header.on-dark .site-nav .dot { color: rgba(243,237,223,.95) !important; }
+
+  #hero.gw-hero .gw-touch-invitation,
+  #hero.gw-hero .gw-hero-copy,
+  #hero.gw-hero .gw-hero-footer p { display:none !important; }
+  #hero.gw-hero .gw-hero-footer { justify-content:flex-end !important; }
+  #hero.gw-hero .gw-journey-link { gap: 14px; color:#e2daca; }
+  #hero.gw-hero .gw-journey-mark { display:inline-flex; align-items:center; }
+  #hero.gw-hero .gw-journey-mark img { display:block; width:auto; height:22px; }
+  #hero.gw-hero .gw-journey-link:hover svg { transform:translateY(5px); }
+  @media (max-width:720px) {
+    .site-header .site-logo img { height: 36px; }
+    #hero.gw-hero .gw-journey-mark img { height:18px; }
+  }
+
+  #byeongpung .u24-blend::after { content:""; position:absolute; inset:0; z-index:1; background: rgb(var(--paper-rgb)); pointer-events:none; }
+  #byeongpung .u24-blend-copy { z-index:2 !important; }
+  #byeongpung .u24-blend-image, #byeongpung .u24-art { z-index:3 !important; }
+
+  @media (min-width:721px) {
+    #byeongpung {
+      --v68-d-roll-left: -0.6vw;
+      --v68-d-roll-width: 17.8vh;
+      --v68-d-roll-height: 68.4vh;
+      --v68-d-roll-top: 25.3vh;
+      --v68-d-paper-left: 8.7vw;
+      --v68-d-paper-width: 91.7vw;
+      --v68-d-paper-top: 32.3vh;
+      --v68-d-paper-height: 51.9vh;
+      --v68-d-back-left: 8vw;
+      --v68-d-back-width: 93.7vw;
+      --v68-d-back-top: 31.6vh;
+      --v68-d-back-height: 53.5vh;
+    }
+    #byeongpung .u24-model-wrap, #byeongpung.is-u24-entered .u24-model-wrap {
+      left: var(--v68-d-roll-left) !important;
+      width: var(--v68-d-roll-width) !important;
+      height: var(--v68-d-roll-height) !important;
+      top: var(--v68-d-roll-top) !important;
+    }
+    #byeongpung .u24-paper {
+      left: var(--v68-d-paper-left) !important;
+      width: var(--v68-d-paper-width) !important;
+      top: var(--v68-d-paper-top) !important;
+      height: var(--v68-d-paper-height) !important;
+      right: auto !important;
+    }
+    #byeongpung .u24-stage::after {
+      left: var(--v68-d-back-left) !important;
+      width: var(--v68-d-back-width) !important;
+      top: var(--v68-d-back-top) !important;
+      height: var(--v68-d-back-height) !important;
+    }
+  }
+  @media (max-width:720px) {
+    #byeongpung {
+      --v68-m-roll-left: -108px;
+      --v68-m-roll-width: 175px;
+      --v68-m-roll-height: 78.5svh;
+      --v68-m-roll-top: 20.5svh;
+      --v68-m-paper-left: 0px;
+      --v68-m-paper-width: 404px;
+      --v68-m-paper-top: 31.2svh;
+      --v68-m-paper-height: 54.8svh;
+      --v68-m-back-left: 52px;
+      --v68-m-back-width: 438px;
+      --v68-m-back-top: 29.2svh;
+      --v68-m-back-height: 58.5svh;
+    }
+    #byeongpung .u24-model-wrap, #byeongpung.is-u24-entered .u24-model-wrap {
+      left: var(--v68-m-roll-left) !important;
+      width: var(--v68-m-roll-width) !important;
+      height: var(--v68-m-roll-height) !important;
+      top: var(--v68-m-roll-top) !important;
+    }
+    #byeongpung .u24-paper {
+      left: var(--v68-m-paper-left) !important;
+      width: var(--v68-m-paper-width) !important;
+      top: var(--v68-m-paper-top) !important;
+      height: var(--v68-m-paper-height) !important;
+      right: auto !important;
+    }
+    #byeongpung .u24-stage::after {
+      left: var(--v68-m-back-left) !important;
+      width: var(--v68-m-back-width) !important;
+      top: var(--v68-m-back-top) !important;
+      height: var(--v68-m-back-height) !important;
+    }
+  }
+
+  @media (max-width:720px) {
+  }
+
+  @media (max-width:720px) {
+    #quote .quote-block {
+      right: 22px !important;
+      top: 22svh !important;
+      transform: none !important;
+      transform-origin: top right !important;
+      text-align: right !important;
+      max-width: 46vw !important;
+    }
+    #quote .quote-block p {
+      font-size: 14px !important;
+      line-height: 1.68 !important;
+      letter-spacing: 0.02em !important;
+      text-align: right !important;
+      white-space: normal !important;
+    }
+  }
+
+
+/* ===== separated from inline build ===== */
+
+
+@media (max-width:720px) {
+  /* v71: header itself is always transparent. Only logo + hamburger float above the page. */
+  .site-header,
+  .site-header.visible,
+  .site-header.on-dark,
+  .site-header:not(.on-dark) {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    background: transparent !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .site-header-inner {
+    background: transparent !important;
+  }
+
+  /* Page 1 + 2 = dark scene, Page 3 = light scene. */
+  .site-header.on-dark .hamburger span {
+    background: #f3eddf !important;
+  }
+  .site-header:not(.on-dark) .hamburger span {
+    background: #171310 !important;
+  }
+
+  .site-header.on-dark .logo-default {
+    display: none !important;
+  }
+  .site-header.on-dark .logo-on-dark {
+    display: block !important;
+  }
+  .site-header:not(.on-dark) .logo-default {
+    display: block !important;
+  }
+  .site-header:not(.on-dark) .logo-on-dark {
+    display: none !important;
+  }
+
+  /* The sheet appears only while the hamburger menu is open. */
+  .site-header.menu-open,
+  .site-header.on-dark.menu-open {
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  /* Menu sheet is light, so force dark logo + close icon while open. */
+  .site-header.menu-open .logo-default,
+  .site-header.on-dark.menu-open .logo-default {
+    display: block !important;
+  }
+  .site-header.menu-open .logo-on-dark,
+  .site-header.on-dark.menu-open .logo-on-dark {
+    display: none !important;
+  }
+  .site-header.menu-open .hamburger span,
+  .site-header.on-dark.menu-open .hamburger span {
+    background: #171310 !important;
+  }
+
+  /* Keep the top controls touchable without creating a full-width visual bar. */
+  .site-header-inner {
+    padding-top: max(11px, env(safe-area-inset-top, 0px)) !important;
+  }
+}
+
+
+/* ===== separated from inline build ===== */
+
+
+@media (max-width:720px) {
+  /* No persistent rectangle: header chrome stays transparent on every page. */
+  #siteHeader,
+  #siteHeader.visible,
+  #siteHeader.on-dark,
+  #siteHeader:not(.on-dark) {
+    background: transparent !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Page-specific hamburger tones. */
+  #siteHeader[data-mobile-section="hero"] .hamburger span {
+    background: #e2daca !important;
+  }
+  #siteHeader[data-mobile-section="quote"] .hamburger span {
+    background: #f7f1e6 !important;
+  }
+  #siteHeader[data-mobile-section="byeongpung"] .hamburger span {
+    background: #2d241b !important;
+  }
+
+  /* Page-specific logo tone. Hero/quote use the light mark, page 3 uses the dark mark. */
+  #siteHeader[data-mobile-section="hero"] .logo-default,
+  #siteHeader[data-mobile-section="quote"] .logo-default {
+    display: none !important;
+  }
+  #siteHeader[data-mobile-section="hero"] .logo-on-dark,
+  #siteHeader[data-mobile-section="quote"] .logo-on-dark {
+    display: block !important;
+  }
+  #siteHeader[data-mobile-section="byeongpung"] .logo-default {
+    display: block !important;
+  }
+  #siteHeader[data-mobile-section="byeongpung"] .logo-on-dark {
+    display: none !important;
+  }
+
+  /* When the menu opens, the animated .mobile-nav sheet is the only background. */
+  #siteHeader.menu-open,
+  #siteHeader.on-dark.menu-open {
+    background: transparent !important;
+    border: 0 !important;
+  }
+  #siteHeader.menu-open .hamburger span,
+  #siteHeader.on-dark.menu-open .hamburger span {
+    background: #171310 !important;
+  }
+  #siteHeader.menu-open .logo-default,
+  #siteHeader.on-dark.menu-open .logo-default {
+    display: block !important;
+  }
+  #siteHeader.menu-open .logo-on-dark,
+  #siteHeader.on-dark.menu-open .logo-on-dark {
+    display: none !important;
+  }
+}
+
+
+/* ===== separated from inline build ===== */
+
+
+@media (max-width:720px) {
+  /* 로고 색상은 페이지/메뉴 상태와 무관하게 원본 그대로 고정 */
+  .site-header .site-logo .logo-default,
+  .site-header.on-dark .site-logo .logo-default,
+  .site-header.menu-open .site-logo .logo-default,
+  .site-header.on-dark.menu-open .site-logo .logo-default {
+    display:block !important;
+    filter:none !important;
+    opacity:1 !important;
+  }
+  .site-header .site-logo .logo-on-dark,
+  .site-header.on-dark .site-logo .logo-on-dark,
+  .site-header.menu-open .site-logo .logo-on-dark,
+  .site-header.on-dark.menu-open .site-logo .logo-on-dark {
+    display:none !important;
+  }
+}
+
+
+/* ===== separated from inline build ===== */
+
+
+/* v76 FINAL: the logo never changes. Only hamburger color follows the section. */
+.site-header .site-logo .logo-original,
+.site-header.on-dark .site-logo .logo-original,
+.site-header.menu-open .site-logo .logo-original,
+.site-header.on-dark.menu-open .site-logo .logo-original {
+  display: block !important;
+  height: 49px !important;
+  width: auto !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  transform: none !important;
+}
+.site-header .site-logo .logo-default,
+.site-header .site-logo .logo-on-dark { display:none !important; }
+
+@media (max-width:720px) {
+  /* No persistent bar/rectangle on mobile. */
+  #siteHeader,
+  #siteHeader.visible,
+  #siteHeader.on-dark,
+  #siteHeader:not(.on-dark),
+  #siteHeader.menu-open,
+  #siteHeader.on-dark.menu-open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    z-index: 1000 !important;
+  }
+  #siteHeader .site-header-inner {
+    position: relative !important;
+    z-index: 1002 !important;
+    background: transparent !important;
+  }
+  #siteHeader .site-logo .logo-original {
+    height: 36px !important;
+  }
+
+  /* Only the hamburger changes tone by page. */
+  #siteHeader[data-mobile-section="hero"] .hamburger span,
+  #siteHeader[data-mobile-section="quote"] .hamburger span {
+    background: #f3eddf !important;
+  }
+  #siteHeader[data-mobile-section="byeongpung"] .hamburger span {
+    background: #171310 !important;
+  }
+
+  /* Full-screen paper sheet exists only while the menu is open. */
+  #mobileNav.mobile-nav {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100svh !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: calc(104px + env(safe-area-inset-top, 0px)) 28px calc(34px + env(safe-area-inset-bottom, 0px)) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    background: rgba(244,241,233,.992) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    backdrop-filter: blur(18px) !important;
+    z-index: 1001 !important;
+    opacity: 1 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: none !important;
+    clip-path: inset(0 0 100% 0) !important;
+    -webkit-clip-path: inset(0 0 100% 0) !important;
+    transition:
+      clip-path .50s cubic-bezier(.22,.72,.16,1),
+      -webkit-clip-path .50s cubic-bezier(.22,.72,.16,1),
+      visibility 0s linear .50s !important;
+  }
+  #mobileNav.mobile-nav.open {
+    visibility: visible !important;
+    pointer-events: auto !important;
+    clip-path: inset(0 0 0 0) !important;
+    -webkit-clip-path: inset(0 0 0 0) !important;
+    transition:
+      clip-path .50s cubic-bezier(.22,.72,.16,1),
+      -webkit-clip-path .50s cubic-bezier(.22,.72,.16,1),
+      visibility 0s linear 0s !important;
+  }
+
+  #mobileNav.mobile-nav a,
+  #siteHeader.on-dark #mobileNav.mobile-nav a {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 70px !important;
+    padding: 0 !important;
+    color: #171310 !important;
+    text-decoration: none !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Noto Sans KR",Pretendard,sans-serif !important;
+    font-size: clamp(22px, 6vw, 28px) !important;
+    font-weight: 500 !important;
+    letter-spacing: -.025em !important;
+    border-top: 1px solid rgba(23,19,16,.10) !important;
+    opacity: 0 !important;
+    transform: translateY(-12px) !important;
+    transition: opacity .30s ease, transform .40s cubic-bezier(.22,.72,.16,1) !important;
+  }
+  #mobileNav.mobile-nav a:last-child {
+    border-bottom: 1px solid rgba(23,19,16,.10) !important;
+  }
+  #mobileNav.mobile-nav.open a {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+  #mobileNav.mobile-nav.open a:nth-child(1) { transition-delay: .08s !important; }
+  #mobileNav.mobile-nav.open a:nth-child(2) { transition-delay: .13s !important; }
+  #mobileNav.mobile-nav.open a:nth-child(3) { transition-delay: .18s !important; }
+
+  /* Close icon is dark on the paper menu. Logo remains the exact same original asset. */
+  #siteHeader.menu-open .hamburger span,
+  #siteHeader.on-dark.menu-open .hamburger span {
+    background: #171310 !important;
+  }
+
+  body.mobile-menu-open {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    touch-action: none;
+  }
+}
