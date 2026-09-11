@@ -2709,8 +2709,8 @@ html, body { scroll-snap-type: y mandatory !important; }
       --v68-m-paper-width: 404px;
       --v68-m-paper-top: 31.2svh;
       --v68-m-paper-height: 54.8svh;
-      --v68-m-back-left: 52px;
-      --v68-m-back-width: 438px;
+      --v68-m-back-left: 8px;
+      --v68-m-back-width: 699px;
       --v68-m-back-top: 29.2svh;
       --v68-m-back-height: 58.5svh;
     }

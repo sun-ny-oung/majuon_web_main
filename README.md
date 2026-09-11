@@ -18,3 +18,18 @@ Production-style separated source package.
 - `MAJU:ON` is right-aligned beneath the hero wordmark, uses a lighter 400 weight, and sits closer to the SVG.
 - Google Fonts and `<model-viewer>` remain CDN dependencies.
 - `story.html` and `store.html` links are kept as existing navigation targets; those pages are not included because they have not been built in this source.
+
+## v80 mobile scroll geometry
+- roll left: -108px
+- roll width: 175px
+- roll height: 78.5svh
+- roll top: 20.5svh
+- visible roll width: 67px
+- paper left: 0px
+- paper width: 404px
+- paper top: 31.2svh
+- paper height: 54.8svh
+- backplate left: 8px
+- backplate width: 699px
+- backplate top: 29.2svh
+- backplate height: 58.5svh
