@@ -4043,9 +4043,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 /* ===== v100: mobile-only page3 tuning GUI; desktop untouched ===== */
 :root {
-  --u24-gui-art-scale: 1.19;
+  --u24-gui-art-scale: 1.15;
   --u24-gui-left-mask-strength: 1.00;
-  --u24-gui-bottom-mask-strength: 0.87;
+  --u24-gui-bottom-mask-strength: 1.00;
 }
 
 .u24-tune-gui { display: none !important; }
@@ -4220,3 +4220,19 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 /* v103: bottom/left fade metrics use the visible clipped artwork frame.
    No copy/layout values changed. */
+
+
+/* ===== v104: apply new mobile tuning defaults + raise hwadam/seolhan artwork ===== */
+@media (max-width: 720px) {
+  /* keep global scale for all blends */
+  #byeongpung .u24-art {
+    transform-origin: right top !important;
+    transform: scale(var(--u24-gui-art-scale)) !important;
+  }
+
+  /* Hwadam + Seolhan only: move artwork up by ~10px and crop the top naturally */
+  #byeongpung .u24-blend.spring .u24-art,
+  #byeongpung .u24-blend.winter .u24-art {
+    transform: translateY(-10px) scale(var(--u24-gui-art-scale)) !important;
+  }
+}

@@ -998,7 +998,7 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   const copyBtn = document.getElementById('u24TuneCopy');
   const storageKey = 'majuon-u24-gui-v100';
 
-  const defaults = { artScale: 1.19, leftMask: 1.00, bottomMask: 0.87, collapsed: false };
+  const defaults = { artScale: 1.15, leftMask: 1.00, bottomMask: 1.00, collapsed: false };
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
   function readState() {

@@ -135,3 +135,9 @@ Production-style separated source package.
 - Fixed the bottom mask using the same artwork-frame approach as the left mask.
 - The important difference: metrics now use the visible intersection of the scaled image and its clipped wrapper, so the bottom fade does not get positioned below the visible image.
 - Copy/layout values are unchanged.
+
+
+## v104 update
+- Applied new mobile defaults: illustration scale 1.15x, left mask 1.00, bottom mask 1.00.
+- Raised Hwadam and Seolhan artwork by about 10px on mobile page 3 while preserving aspect ratio.
+- The upward move naturally crops the top edge by the same amount, as requested.
