@@ -56,3 +56,8 @@ Production-style separated source package.
 
 ## v85 update
 - Page 3 headline copy now breaks after “블렌드 커피.”
+
+
+## v86 update
+- Mobile Page 3 illustrations now preserve the original aspect ratio with no cropping.
+- Artwork is anchored to the top-left edge of the scroll paper; any extra space remains on the right/bottom instead of cropping.

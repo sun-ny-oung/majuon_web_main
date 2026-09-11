@@ -3130,3 +3130,29 @@ html, body { scroll-snap-type: y mandatory !important; }
     grid-template-rows: 64% 36% !important;
   }
 }
+
+
+/* ===== v86: mobile illustration preserve-ratio / no-crop top-left fit ===== */
+@media (max-width: 720px) {
+  #byeongpung .u24-blend-image {
+    padding: 0 !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #byeongpung .u24-art {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: left top !important;
+    transform: none !important;
+    transform-origin: left top !important;
+  }
+}
