@@ -4216,3 +4216,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     ) !important;
   }
 }
+
+
+/* v103: bottom/left fade metrics use the visible clipped artwork frame.
+   No copy/layout values changed. */

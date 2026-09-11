@@ -1121,10 +1121,21 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
       if (!img) return;
       const wrapRect = wrap.getBoundingClientRect();
       const imgRect = img.getBoundingClientRect();
-      const left = Math.max(0, imgRect.left - wrapRect.left);
-      const top = Math.max(0, imgRect.top - wrapRect.top);
-      const width = Math.max(0, imgRect.width);
-      const height = Math.max(0, imgRect.height);
+
+      /* The image is scaled from the top-right and the wrapper has overflow:hidden.
+         getBoundingClientRect() returns the full transformed image, including the part
+         clipped below/left of the wrapper. Use the visible intersection instead so
+         both left and bottom fades sit on the pixels the user can actually see. */
+      const visibleLeft = Math.max(wrapRect.left, imgRect.left);
+      const visibleTop = Math.max(wrapRect.top, imgRect.top);
+      const visibleRight = Math.min(wrapRect.right, imgRect.right);
+      const visibleBottom = Math.min(wrapRect.bottom, imgRect.bottom);
+
+      const left = Math.max(0, visibleLeft - wrapRect.left);
+      const top = Math.max(0, visibleTop - wrapRect.top);
+      const width = Math.max(0, visibleRight - visibleLeft);
+      const height = Math.max(0, visibleBottom - visibleTop);
+
       wrap.style.setProperty('--u24-art-left-offset', `${left}px`);
       wrap.style.setProperty('--u24-art-top-offset', `${top}px`);
       wrap.style.setProperty('--u24-art-rendered-width', `${width}px`);
