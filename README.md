@@ -46,3 +46,13 @@ Production-style separated source package.
 ## v83 update
 - Mobile page 3 opens the scroll automatically on scroll-snap arrival via IntersectionObserver + scrollend/touchend fallback.
 - Mobile hamburger color switches to the page 3 dark tone as soon as page 3 crosses the viewport midpoint.
+
+
+## v84 update
+- Mobile Page 3 illustration enlarged to meet the paper top/left seam more naturally.
+- Horizontal swipe now moves both directions and loops Spring ↔ Winter in either direction.
+- Vertical swipes are left for page scrolling; season changes require a horizontal gesture.
+
+
+## v85 update
+- Page 3 headline copy now breaks after “블렌드 커피.”

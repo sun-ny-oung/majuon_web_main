@@ -453,6 +453,17 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     track.insertBefore(springClone, track.firstElementChild);
   }
 
+  /* Add a winter clone after the real spring as well.
+     This gives us one off-screen slide on each side, so swiping left/right
+     can loop naturally in both directions. */
+  const realWinter = springClone?.nextElementSibling || track.firstElementChild;
+  const winterClone = realWinter?.cloneNode(true);
+  if (winterClone) {
+    winterClone.setAttribute('aria-hidden', 'true');
+    winterClone.setAttribute('data-clone', 'winter-tail');
+    track.appendChild(winterClone);
+  }
+
   const slides = Array.from(track.children);
   const logicalCount = 4;
   const totalSlides = slides.length;
@@ -589,6 +600,26 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     return true;
   }
 
+  function wrapToEnd(direction = -1) {
+    if (!entered || locked) return false;
+    locked = true;
+    setTone(logicalCount - 1);
+    setSpinTarget(spinTarget + direction * -45);
+
+    /* From real spring, move one panel further to the tail winter clone.
+       Then snap invisibly back to the real winter position. */
+    applyOffset((logicalCount + 1) * slidePct, true);
+
+    window.setTimeout(() => {
+      index = logicalCount - 1;
+      applyOffset(getOffsetForIndex(index), false);
+      track.style.transition = TRANSITION;
+      locked = false;
+      wheelAccum = 0;
+    }, WRAP_MS);
+    return true;
+  }
+
   function introReveal() {
     if (entered || locked) return;
     locked = true;
@@ -626,8 +657,8 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
       return true;
     }
 
+    if (index <= 0) return wrapToEnd(direction);
     const next = index + direction;
-    if (next < 0) return false;
     updateState(next, direction);
     return true;
   }
@@ -672,7 +703,7 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     const primary = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (Math.abs(primary) < 2) return;
     const direction = primary > 0 ? 1 : -1;
-    const shouldCapture = !entered || direction > 0 || (direction < 0 && index > 0);
+    const shouldCapture = !entered || entered;
     if (!shouldCapture) return;
 
     e.preventDefault();
@@ -695,13 +726,12 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     const y = e.touches[0]?.clientY ?? touchY;
     const dx = touchX - x;
     const dy = touchY - y;
-    const primary = Math.abs(dx) > Math.abs(dy) ? dx : dy;
-    if (Math.abs(primary) < 50) return;
 
-    const direction = primary > 0 ? 1 : -1;
-    const shouldCapture = !entered || direction > 0 || (direction < 0 && index > 0);
-    if (!shouldCapture) return;
+    /* Page navigation remains vertical; season navigation is explicitly horizontal.
+       Require a clearly horizontal gesture so a normal vertical page swipe is not stolen. */
+    if (Math.abs(dx) <= Math.abs(dy) * 1.08 || Math.abs(dx) < 42) return;
 
+    const direction = dx > 0 ? 1 : -1;
     e.preventDefault();
     step(direction);
     touchX = x;
