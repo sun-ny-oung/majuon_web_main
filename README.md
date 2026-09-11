@@ -148,7 +148,7 @@ Production-style separated source package.
 - The top is cropped by the same amount naturally, per request.
 
 
-## v106 update
-- Removed the floating mobile GUI from the final build.
-- Kept the confirmed final tuning values: illustration 1.15x, left mask 1.00, bottom mask 1.00.
-- Kept the Hwadam and Seolhan artwork shifted upward by 50px on mobile page 3.
+## v107 final cleanup
+- Completely removed the mobile tuning GUI markup, styles, controls, storage logic, and input listeners.
+- Final mobile values are hardcoded: illustration 1.15x, left fade 1.00, bottom fade 1.00.
+- Hwadam and Seolhan remain shifted upward by 50px on mobile.

@@ -4041,129 +4041,12 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v100: mobile-only page3 tuning GUI; desktop untouched ===== */
-:root {
-  --u24-gui-art-scale: 1.15;
-  --u24-gui-left-mask-strength: 1.00;
-  --u24-gui-bottom-mask-strength: 1.00;
-}
-
-.u24-tune-gui { display: none !important; }
-
-@media (max-width: 720px) {
-  .u24-tune-gui {
-    display: block !important;
-    position: fixed;
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    z-index: 9999;
-    border: 1px solid rgba(44, 35, 29, 0.12);
-    border-radius: 16px;
-    background: rgba(250, 247, 240, 0.96);
-    box-shadow: 0 14px 44px rgba(0,0,0,.16);
-    backdrop-filter: blur(10px);
-    color: #2c231d;
-    overflow: hidden;
-  }
-  .u24-tune-toggle {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px;
-    border: 0;
-    background: transparent;
-    font: 600 15px/1.2 inherit;
-    cursor: pointer;
-  }
-  .u24-tune-toggle span { font-size: 24px; line-height: 1; }
-  .u24-tune-panel { padding: 0 16px 16px; }
-  .u24-tune-row + .u24-tune-row { margin-top: 14px; }
-  .u24-tune-row label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(44,35,29,.78);
-  }
-  .u24-tune-control {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 10px;
-    align-items: center;
-  }
-  .u24-tune-control input[type="range"] { width: 100%; }
-  .u24-tune-control output {
-    min-width: 52px;
-    text-align: right;
-    font-size: 13px;
-    font-variant-numeric: tabular-nums;
-    color: rgba(44,35,29,.76);
-  }
-  .u24-tune-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 16px;
-  }
-  .u24-tune-actions button {
-    border: 1px solid rgba(44,35,29,.14);
-    border-radius: 12px;
-    background: #fff;
-    padding: 11px 12px;
-    font: 600 14px/1 inherit;
-    color: #2c231d;
-    cursor: pointer;
-  }
-  .u24-tune-readout {
-    margin: 14px 0 0;
-    padding: 12px 14px;
-    border-radius: 14px;
-    background: rgba(44,35,29,.05);
-    font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    white-space: pre-wrap;
-    color: rgba(44,35,29,.72);
-  }
-  .u24-tune-gui.is-collapsed .u24-tune-panel { display: none; }
-
-  /* mobile page 3 only */
-  #byeongpung .u24-art {
-    transform-origin: right top !important;
-    transform: scale(var(--u24-gui-art-scale)) !important;
-  }
-  #byeongpung .u24-blend-image::before {
-    background: linear-gradient(
-      to right,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-left-mask-strength) * 0.97)) 18%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-left-mask-strength) * 0.78)) 40%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-left-mask-strength) * 0.42)) 66%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-left-mask-strength) * 0.12)) 84%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
-  }
-  #byeongpung .u24-blend-image::after {
-    background: linear-gradient(
-      to top,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.97)) 18%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.76)) 40%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.40)) 66%,
-      rgba(var(--paper-rgb), calc(var(--u24-gui-bottom-mask-strength) * 0.10)) 84%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
-  }
-}
-
-
 /* ===== v102: mobile page 3 fade anchored to actual artwork frame ===== */
 @media (max-width: 720px) {
   /* Keep artwork scaling as requested; anchor remains top-right. */
   #byeongpung .u24-art {
     transform-origin: right top !important;
-    transform: scale(var(--u24-gui-art-scale)) !important;
+    transform: scale(1.15) !important;
   }
 
   /* Reason fix: the old fade was applied to the container, not the actual visible image.
@@ -4184,7 +4067,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend-image::before {
     left: var(--u24-art-left-offset, 0px) !important;
     top: var(--u24-art-top-offset, 0px) !important;
-    width: calc(var(--u24-art-rendered-width, 0px) * 0.18 * var(--u24-gui-left-mask-strength)) !important;
+    width: calc(var(--u24-art-rendered-width, 0px) * 0.18) !important;
     height: var(--u24-art-rendered-height, 0px) !important;
     right: auto !important;
     bottom: auto !important;
@@ -4201,9 +4084,9 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* bottom fade: now sits on the real lower edge of the artwork */
   #byeongpung .u24-blend-image::after {
     left: var(--u24-art-left-offset, 0px) !important;
-    top: calc(var(--u24-art-top-offset, 0px) + var(--u24-art-rendered-height, 0px) - (var(--u24-art-rendered-height, 0px) * 0.14 * var(--u24-gui-bottom-mask-strength))) !important;
+    top: calc(var(--u24-art-top-offset, 0px) + var(--u24-art-rendered-height, 0px) - (var(--u24-art-rendered-height, 0px) * 0.14 * 1)) !important;
     width: var(--u24-art-rendered-width, 0px) !important;
-    height: calc(var(--u24-art-rendered-height, 0px) * 0.14 * var(--u24-gui-bottom-mask-strength)) !important;
+    height: calc(var(--u24-art-rendered-height, 0px) * 0.14) !important;
     right: auto !important;
     bottom: auto !important;
     background: linear-gradient(
@@ -4227,12 +4110,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* keep global scale for all blends */
   #byeongpung .u24-art {
     transform-origin: right top !important;
-    transform: scale(var(--u24-gui-art-scale)) !important;
+    transform: scale(1.15) !important;
   }
 
   /* Hwadam + Seolhan only: move artwork up by ~10px and crop the top naturally */
   #byeongpung .u24-blend.spring .u24-art,
   #byeongpung .u24-blend.winter .u24-art {
-    transform: translateY(-50px) scale(var(--u24-gui-art-scale)) !important;
+    transform: translateY(-50px) scale(1.15) !important;
   }
 }
