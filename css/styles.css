@@ -920,17 +920,21 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-model-wrap model-viewer { width:100%; height:100%; background:transparent; --poster-color:transparent; pointer-events:none !important; filter:drop-shadow(0 18px 20px rgba(0,0,0,.30)); }
 /* Warm spotlight pool behind the scroll roller so its dark material still reads
    against the dark stage background — moves with the wrap during the entry slide,
-   and shifts tone with --u24-rgb to match the active season, same as .u24-glow. */
+   and shifts tone with --u24-rgb to match the active season, same as .u24-glow.
+   Tall ellipse (not a centered circle): the roller's top cap already catches an
+   environment-light highlight and reads fine on its own, but the bottom cap gets
+   no such highlight and was disappearing into the dark backdrop, so this stretches
+   down to cover almost the whole wrap height instead of just the middle. */
 #byeongpung .u24-model-glow {
   position:absolute;
   z-index:-1;
   left:50%;
-  top:55%;
-  width:34vh;
-  height:34vh;
+  top:54%;
+  width:26vh;
+  height:56vh;
   transform:translate(-50%,-50%);
   border-radius:50%;
-  background:radial-gradient(circle, rgba(var(--u24-rgb),.34) 0%, rgba(var(--u24-rgb),.13) 45%, transparent 75%);
+  background:radial-gradient(ellipse, rgba(var(--u24-rgb),.42) 0%, rgba(var(--u24-rgb),.20) 45%, transparent 75%);
   filter:blur(22px);
   pointer-events:none;
   transition:background .65s ease;
