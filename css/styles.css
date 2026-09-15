@@ -2563,25 +2563,38 @@ html, body { scroll-snap-type: y mandatory !important; }
 #hero.gw-hero .gw-hero-signature-sub { display:block;width:100%;margin-top:4px;padding-right:0;font-family:"Helvetica Neue","SF Pro Display",Arial,sans-serif;font-size:clamp(30px,2.25vw,48px);font-weight:400;letter-spacing:.14em;line-height:1;color:#e2daca;text-align:right;white-space:nowrap; }
 @keyframes gwTouchPulse { 0%,100%{box-shadow:0 0 0 5px rgba(238,227,189,.04)} 50%{box-shadow:0 0 0 12px rgba(238,227,189,.015)} }
 
-/* ===== hero mood-lamp accent (desktop only, loaded after critical content) ===== */
+/* ===== hero mood-lamp accent (desktop only, loaded after critical content) =====
+   Grounded at the bottom-left edge of the frame, bleeding slightly off-screen so it
+   reads as an object sitting just inside the scene rather than a centered thumbnail.
+   The model itself carries a real warm glow baked into its eyes/base (emissive
+   texture); the CSS glow underneath is an ambient bloom that grounds it into the photo. */
 #hero.gw-hero .gw-hero-lamp {
   position: absolute;
   z-index: 2;
-  left: 4%;
-  bottom: 20%;
-  width: clamp(110px, 11vw, 180px);
+  left: -3%;
+  bottom: 0;
+  width: clamp(150px, 15vw, 230px);
   aspect-ratio: 3 / 4;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1.4s ease;
+  transition: opacity 1.6s ease;
 }
-#hero.gw-hero .gw-hero-lamp.is-loaded { opacity: .78; }
+#hero.gw-hero .gw-hero-lamp.is-loaded { opacity: 1; }
 #hero.gw-hero .gw-hero-lamp-glow {
   position: absolute;
-  inset: -35%;
-  background: radial-gradient(closest-side, rgba(232,182,120,.32), rgba(232,182,120,0) 72%);
-  filter: blur(8px);
+  left: 50%;
+  bottom: 4%;
+  width: 210%;
+  height: 62%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(255,178,92,.55), rgba(255,178,92,.16) 48%, rgba(255,178,92,0) 76%);
+  filter: blur(16px);
   pointer-events: none;
+  animation: gwLampFlicker 5.5s ease-in-out infinite;
+}
+@keyframes gwLampFlicker { 0%,100% { opacity: .82; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #hero.gw-hero .gw-hero-lamp-glow { animation: none; opacity: .92; }
 }
 #hero.gw-hero .gw-hero-lamp model-viewer {
   position: relative;
@@ -2589,7 +2602,8 @@ html, body { scroll-snap-type: y mandatory !important; }
   width: 100%;
   height: 100%;
   --poster-color: transparent;
-  filter: drop-shadow(0 14px 24px rgba(0,0,0,.45));
+  -webkit-mask-image: radial-gradient(ellipse 74% 90% at 50% 60%, #000 48%, transparent 100%);
+  mask-image: radial-gradient(ellipse 74% 90% at 50% 60%, #000 48%, transparent 100%);
 }
 @media (max-width: 720px) {
   #hero.gw-hero .gw-hero-lamp { display: none; }
