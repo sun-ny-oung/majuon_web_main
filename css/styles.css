@@ -867,8 +867,13 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-index { margin-top:28px; font-size:9px; letter-spacing:.14em; color:rgba(23,18,14,.34); }
 /* Elongated octagon CTA — same chamfered-corner + holographic gradient language as the
    page-2 CTA marks. This is the only clickable target inside a season card, so a
-   swipe/drag gesture on the rest of the card never gets mistaken for a tap-through. */
+   swipe/drag gesture on the rest of the card never gets mistaken for a tap-through.
+   Outlined by default; the gradient reveals as a fill on hover/focus. The outline
+   is a double clip-path trick: the badge's own background IS the gradient, and a
+   paper-colored inset pseudo-element covers everything but a ~1.5px rim of it. */
 #byeongpung .u24-detail-badge {
+  position: relative;
+  z-index: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -884,7 +889,19 @@ html, body { scroll-snap-type: y mandatory !important; }
   clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
   transition: transform .25s ease;
 }
-#byeongpung .u24-detail-badge:hover { transform: translateY(-1px); }
+#byeongpung .u24-detail-badge::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 1.5px;
+  background: rgb(var(--paper-rgb));
+  clip-path: polygon(12.5px 0, calc(100% - 12.5px) 0, 100% 12.5px, 100% calc(100% - 12.5px), calc(100% - 12.5px) 100%, 12.5px 100%, 0 calc(100% - 12.5px), 0 12.5px);
+  transition: opacity .3s ease;
+}
+#byeongpung .u24-detail-badge:hover,
+#byeongpung .u24-detail-badge:focus-visible { transform: translateY(-1px); }
+#byeongpung .u24-detail-badge:hover::before,
+#byeongpung .u24-detail-badge:focus-visible::before { opacity: 0; }
 #byeongpung .u24-detail-badge:focus-visible { outline: 2px solid #171310; outline-offset: 3px; }
 #byeongpung .u24-model-wrap {
   position:absolute;
