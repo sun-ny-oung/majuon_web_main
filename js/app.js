@@ -420,25 +420,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   reduceMotion.addEventListener?.('change',surfacePreference); surfacePreference();
 })();
 
-// ---------- 히어로 무드등 3D 오브젝트 (데스크탑 전용, 핵심 콘텐츠 로드 후 지연 로딩) ----------
-(() => {
-  const lampWrap = document.getElementById('gwHeroLamp');
-  const lampModel = document.getElementById('gwHeroLampModel');
-  if (!lampWrap || !lampModel) return;
-
-  const isDesktop = window.matchMedia('(min-width: 721px)').matches;
-  const saveData = navigator.connection?.saveData;
-  if (!isDesktop || saveData) return;
-
-  function loadLamp() {
-    lampModel.addEventListener('load', () => lampWrap.classList.add('is-loaded'), { once: true });
-    lampModel.src = 'assets/models/majuon-seosu-lamp.glb';
-  }
-
-  if (document.readyState === 'complete') loadLamp();
-  else window.addEventListener('load', loadLamp, { once: true });
-})();
-
 (() => {
   const section = document.getElementById('byeongpung');
   const stage = document.getElementById('u24Stage');
