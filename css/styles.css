@@ -1,4 +1,3 @@
-/* ===== inlined: css/styles.css ===== */
 *, *::before, *::after { box-sizing: border-box; }
   html, body, a, button, .frame {
     cursor: none;
@@ -550,7 +549,6 @@
     .bp-note { opacity:1; transform:none; }
   }
 
-  /* ===== v10: desktop 병풍 유지 / mobile만 가로 스크롤 ===== */
   
 
   /* 3페이지의 제목+설명+병풍 전체를 함께 살짝 아래로 */
@@ -663,7 +661,6 @@
     .bp-screen.is-folded .bp-panel { flex-basis:82vw; width:82vw; min-width:82vw; }
   }
 
-/* ===== v24: 실제 GLB 족자 고정 + 오른쪽 화폭 + 세로휠→가로 스냅 ===== */
 html, body { scroll-snap-type: y mandatory !important; }
 #hero, #quote, #byeongpung { scroll-snap-align: start !important; scroll-snap-stop: always !important; }
 #byeongpung.scroll3d-section {
@@ -903,7 +900,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-stage { padding-top: env(safe-area-inset-top, 0px); }
   header.site-header { z-index: 40; }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-model-final-left: 14px;
     --u24-model-start-shift: 70vw;
@@ -920,7 +917,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend { padding:20px 22px 22px 20px; grid-template-columns:minmax(0,53%) minmax(0,47%); }
   #byeongpung .u24-blend-copy { padding-left:18px; }
 }
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-model-final-left: 10px;
     --u24-model-start-shift: 62vw;
@@ -945,7 +942,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-index { display:none; }
 }
 
-/* ===== v34 FINAL OVERRIDE: 올바른 롤 축 + 축소된 족자/화폭 + 원래 멘트 복원 ===== */
 #byeongpung.scroll3d-section {
   /* 최종 족자 위치/크기 */
   --u24-roll-final-left: 9.5vw;
@@ -1083,7 +1079,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   transform:none !important;
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-roll-final-left:7vw;
     --u24-roll-start-x:65vw;
@@ -1101,7 +1097,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-model-wrap { top:23vh !important; }
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-roll-final-left:2.5vw;
     --u24-roll-start-x:70vw;
@@ -1129,7 +1125,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-notes { font-size:8px; }
 }
 
-/* ===== v35 MICRO PATCH ONLY: 언롤 타이밍 + 종이 경계 + 전체 2.2vh 하향 ===== */
 #byeongpung.scroll3d-section {
   /* 종이의 오른쪽 끝은 초기 롤러 오른쪽 끝과 같고,
      펼쳐진 뒤 왼쪽 끝은 최종 롤러 오른쪽 끝에 정확히 닿는다. */
@@ -1155,7 +1150,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   transition:clip-path 1.58s cubic-bezier(.18,.78,.18,1) .12s !important;
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-back-top:30.3vh;
     --u24-paper-top:33.3vh;
@@ -1163,7 +1158,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-model-wrap { top:24.3vh !important; }
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-back-top:31.3vh;
     --u24-paper-top:34.3vh;
@@ -1172,7 +1167,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-head { top:11.8vh !important; }
 }
 
-/* ===== v37 FINAL MICRO PATCH ONLY: 그룹 하향 + 헤드 5px 하향 + 언롤 속도 재정렬 + 종이 끝 정리 ===== */
 #byeongpung.scroll3d-section {
   /* paper가 최종 롤러 오른쪽 끝을 절대 넘지 않게 살짝 안쪽에서 시작 */
   --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width) + .14vw);
@@ -1200,7 +1194,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   transition:clip-path 1.56s cubic-bezier(.2,.78,.2,1) .08s !important;
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-back-top:31.9vh;
     --u24-paper-top:34.9vh;
@@ -1208,7 +1202,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-model-wrap { top:25.9vh !important; }
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-back-top:32.9vh;
     --u24-paper-top:35.9vh;
@@ -1217,7 +1211,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-head { top: calc(10.7vh + 5px) !important; }
 }
 
-/* ===== v39 FINAL OVERRIDE: 족자 고정 / 족자 기준 오른쪽 펼침 / 전체 그룹 확실히 하향 ===== */
 #byeongpung.scroll3d-section {
   /* 크기/가로 배치는 유지. 족자·화폭·받침만 눈에 띄게 아래로 내린다. */
   --u24-back-left: 17.4vw;
@@ -1271,7 +1264,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   transition: opacity .34s ease .30s !important;
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-back-left: 16.3vw;
     --u24-back-width: 71.2vw;
@@ -1284,7 +1277,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung.is-u24-entered .u24-model-wrap { top:33vh !important; }
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-back-left: 18.8vw;
     --u24-back-width: 75.2vw;
@@ -1298,7 +1291,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-head { top: calc(10.7vh + 10px) !important; }
 }
 
-/* ===== v42 PATCH ONLY: 1페이지 배경색 적용 + 화폭 오른쪽 끝 오프스크린 ===== */
 #byeongpung.scroll3d-section {
   background:
     radial-gradient(circle at 17% 10%, rgba(255,255,255,.78), transparent 28%),
@@ -1321,21 +1313,20 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-head p:last-child { color: rgba(71,58,43,.72) !important; }
 #byeongpung .u24-instruction { color: rgba(71,58,43,.58) !important; }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-back-width: calc(100vw - var(--u24-back-left) + 12vw);
     --u24-paper-width: calc(100vw - var(--u24-paper-left) + 10vw);
   }
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-back-width: calc(100vw - var(--u24-back-left) + 14vw);
     --u24-paper-width: calc(100vw - var(--u24-paper-left) + 12vw);
   }
 }
 
-/* ===== v44 PATCH ONLY: 화담부터 시작 + 오른쪽 이동 유지 + 족자 그림자/일러스트 보정 ===== */
 #byeongpung .u24-stage {
   overflow: visible !important;
 }
@@ -1351,7 +1342,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   object-fit: contain !important;
 }
 
-/* ===== v45 PATCH ONLY: 사계 헤드 정리 + 일러스트/설명/종이 3단 레이어 ===== */
 
 /* 상단 사계 소개를 한 덩어리처럼 정돈 */
 #byeongpung .u24-head {
@@ -1479,7 +1469,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v47 PATCH ONLY: 족자 크기 복원 + 상하 잘림은 유지 해결 ===== */
 #byeongpung.scroll3d-section {
   --u24-model-width: 13.0vh;
   --u24-model-height: 57vh;
@@ -1487,7 +1476,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-model-wrap {
   top: calc(var(--u24-paper-top) - 4.6vh) !important;
 }
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 11.2vh;
     --u24-model-height: 53vh;
@@ -1496,7 +1485,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     top: calc(var(--u24-paper-top) - 4.4vh) !important;
   }
 }
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 9.7vh;
     --u24-model-height: 43vh;
@@ -1506,9 +1495,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v48 PATCH ONLY: 봉 잘림 실제 원인 보정 =====
-   사각형 레이어가 덮는 문제가 아니라 model-viewer 카메라 프레이밍 문제라서
-   카메라를 아주 살짝 뒤로 보내고, 모델 슬롯은 키워서 체감 크기는 유지한다. */
 #byeongpung.scroll3d-section {
   --u24-model-width: 13.9vh;
   --u24-model-height: 61.5vh;
@@ -1521,7 +1507,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-model-wrap model-viewer {
   overflow: visible !important;
 }
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 12.1vh;
     --u24-model-height: 57vh;
@@ -1531,7 +1517,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     top: calc(var(--u24-paper-top) - 5.4vh) !important;
   }
 }
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 10.2vh;
     --u24-model-height: 46vh;
@@ -1542,7 +1528,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v50 PATCH: 카메라는 v48 그대로 / 족자 표시 영역만 확대 ===== */
 #byeongpung.scroll3d-section {
   --u24-model-width: 15.2vh;
   --u24-model-height: 67.5vh;
@@ -1551,7 +1536,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung.is-u24-entered .u24-model-wrap {
   top: calc(var(--u24-paper-top) - 8.2vh) !important;
 }
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 13.2vh;
     --u24-model-height: 62.5vh;
@@ -1561,7 +1546,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     top: calc(var(--u24-paper-top) - 7.2vh) !important;
   }
 }
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     --u24-model-width: 11.1vh;
     --u24-model-height: 50vh;
@@ -1572,8 +1557,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v52 FINAL PATCH: 사용자가 확정한 족자 영역 수치 + 좌우 블렌드 배경 통일 ===== */
-@media (min-width:721px) {
+@media (min-width: 721px) {
   /* GUI 확정값 그대로 적용. 카메라(FOV 28° / Orbit 0.98m)는 건드리지 않음. */
   #byeongpung .u24-model-wrap,
   #byeongpung.is-u24-entered .u24-model-wrap {
@@ -1604,20 +1588,19 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v54 PATCH ONLY: '마주온의 사계' 하단 설명글 가독성 확대 ===== */
 #byeongpung .u24-head p:last-child {
   font-size: clamp(13px, .95vw, 15px) !important;
   line-height: 1.78 !important;
   max-width: 650px !important;
   color: rgba(71,58,43,.76) !important;
 }
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   #byeongpung .u24-head p:last-child {
     font-size: 12.5px !important;
     line-height: 1.75 !important;
   }
 }
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #byeongpung .u24-head p:last-child {
     font-size: 12px !important;
     line-height: 1.72 !important;
@@ -1790,7 +1773,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== inlined: css/mobile.css ===== */
 /* MAJUON mobile final overrides — loaded after styles.css */
 @media (max-width: 720px) {
   html, body {
@@ -2078,7 +2060,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== inlined: css/mobile-gui.css ===== */
 /* Temporary mobile tuning GUI. Remove this file before production. */
 
 /* Final desktop/mobile split */
@@ -2177,7 +2158,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-/* ===== v63 MOBILE FINAL: page 3 alignment + animated full-screen menu ===== */
 @media (max-width: 720px) {
   /* Hamburger menu: background and links enter as one sheet. */
   .site-header {
@@ -2372,9 +2352,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v66: MOBILE COMMON PROPORTION SYSTEM (iOS + Android) =====
-   One geometry source for roller → paper → artwork → copy.
-   This final block intentionally overrides all older mobile Page 3 patches. */
 @media (max-width: 720px) {
   #byeongpung.scroll3d-section {
     /* Roller: preserves the approved 390px-wide look, scales gently on smaller phones. */
@@ -2550,7 +2527,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 
 
-/* ===== v67: Got Work-inspired page 1 only. Page 2+ remains the existing MAJUON build. ===== */
 #hero.gw-hero {
   position: relative !important;
   isolation: isolate;
@@ -2587,13 +2563,45 @@ html, body { scroll-snap-type: y mandatory !important; }
 #hero.gw-hero .gw-hero-signature-sub { display:block;width:100%;margin-top:4px;padding-right:0;font-family:"Helvetica Neue","SF Pro Display",Arial,sans-serif;font-size:clamp(30px,2.25vw,48px);font-weight:400;letter-spacing:.14em;line-height:1;color:#e2daca;text-align:right;white-space:nowrap; }
 @keyframes gwTouchPulse { 0%,100%{box-shadow:0 0 0 5px rgba(238,227,189,.04)} 50%{box-shadow:0 0 0 12px rgba(238,227,189,.015)} }
 
+/* ===== hero mood-lamp accent (desktop only, loaded after critical content) ===== */
+#hero.gw-hero .gw-hero-lamp {
+  position: absolute;
+  z-index: 2;
+  left: 4%;
+  bottom: 20%;
+  width: clamp(110px, 11vw, 180px);
+  aspect-ratio: 3 / 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+#hero.gw-hero .gw-hero-lamp.is-loaded { opacity: .78; }
+#hero.gw-hero .gw-hero-lamp-glow {
+  position: absolute;
+  inset: -35%;
+  background: radial-gradient(closest-side, rgba(232,182,120,.32), rgba(232,182,120,0) 72%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+#hero.gw-hero .gw-hero-lamp model-viewer {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  --poster-color: transparent;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,.45));
+}
+@media (max-width: 720px) {
+  #hero.gw-hero .gw-hero-lamp { display: none; }
+}
+
 /* Header contrast for the photographic hero and the existing dark page 2. */
 .site-header.visible { opacity:1 !important; transform:none !important; pointer-events:auto !important; }
 .site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.36),rgba(12,13,11,0)) !important;border-bottom-color:rgba(255,255,255,.12) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important; }
 .site-header.on-dark .site-logo img { filter:grayscale(1) brightness(0) invert(1); opacity:.94; }
 .site-header:not(.on-dark) .site-logo img { filter:none; }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   #hero.gw-hero { height:100svh !important; min-height:700px !important; max-height:1000px !important; }
   #hero.gw-hero .gw-hero-picture img { object-position:65% 50%; }
   #hero.gw-hero .gw-hero-shade { background:linear-gradient(90deg,rgba(17,18,15,.89),rgba(17,18,15,.34) 68%,rgba(17,18,15,.12)),linear-gradient(0deg,rgba(17,18,15,.78),transparent 52%); }
@@ -2609,19 +2617,18 @@ html, body { scroll-snap-type: y mandatory !important; }
   #hero.gw-hero .gw-journey-link svg { width:13px;height:29px; }
   .site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.50),rgba(12,13,11,0)) !important; }
 }
-@media (max-width:390px) {
+@media (max-width: 390px) {
   #hero.gw-hero .gw-hero-copy { left:8%;gap:20px; }
   #hero.gw-hero h1 { font-size:29px; }
   #hero.gw-hero .gw-touch-invitation { display:none; }
   #hero.gw-hero .gw-hero-signature { width:230px;bottom:21%; }
 }
-@media (prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion: reduce) {
   #hero.gw-hero .gw-touch-dot { animation:none; }
   #hero.gw-hero .gw-coffee-surface { display:none; }
 }
 
 
-/* ===== v77 final overrides ===== */
 .site-header .site-logo img,
 .site-header.on-dark .site-logo img,
 .site-header.menu-open .site-logo img,
@@ -2637,7 +2644,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 
 
-/* ===== separated from inline build ===== */
 
 
   .site-header .site-logo { position: relative; }
@@ -2655,7 +2661,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #hero.gw-hero .gw-journey-mark { display:inline-flex; align-items:center; }
   #hero.gw-hero .gw-journey-mark img { display:block; width:auto; height:22px; }
   #hero.gw-hero .gw-journey-link:hover svg { transform:translateY(5px); }
-  @media (max-width:720px) {
+  @media (max-width: 720px) {
     .site-header .site-logo img { height: 36px; }
     #hero.gw-hero .gw-journey-mark img { height:18px; }
   }
@@ -2664,7 +2670,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend-copy { z-index:2 !important; }
   #byeongpung .u24-blend-image, #byeongpung .u24-art { z-index:3 !important; }
 
-  @media (min-width:721px) {
+  @media (min-width: 721px) {
     #byeongpung {
       --v68-d-roll-left: -0.6vw;
       --v68-d-roll-width: 17.8vh;
@@ -2699,7 +2705,7 @@ html, body { scroll-snap-type: y mandatory !important; }
       height: var(--v68-d-back-height) !important;
     }
   }
-  @media (max-width:720px) {
+  @media (max-width: 720px) {
     #byeongpung {
       --v68-m-roll-left: -108px;
       --v68-m-roll-width: 175px;
@@ -2735,10 +2741,10 @@ html, body { scroll-snap-type: y mandatory !important; }
     }
   }
 
-  @media (max-width:720px) {
+  @media (max-width: 720px) {
   }
 
-  @media (max-width:720px) {
+  @media (max-width: 720px) {
     #quote .quote-block {
       right: 22px !important;
       top: 22svh !important;
@@ -2757,10 +2763,9 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
 
-/* ===== separated from inline build ===== */
 
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   /* v71: header itself is always transparent. Only logo + hamburger float above the page. */
   .site-header,
   .site-header.visible,
@@ -2829,10 +2834,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== separated from inline build ===== */
 
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   /* No persistent rectangle: header chrome stays transparent on every page. */
   #siteHeader,
   #siteHeader.visible,
@@ -2893,10 +2897,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== separated from inline build ===== */
 
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   /* 로고 색상은 페이지/메뉴 상태와 무관하게 원본 그대로 고정 */
   .site-header .site-logo .logo-default,
   .site-header.on-dark .site-logo .logo-default,
@@ -2915,7 +2918,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== separated from inline build ===== */
 
 
 /* v76 FINAL: the logo never changes. Only hamburger color follows the section. */
@@ -2935,7 +2937,7 @@ html, body { scroll-snap-type: y mandatory !important; }
 .site-header .site-logo .logo-default,
 .site-header .site-logo .logo-on-dark { display:none !important; }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   /* No persistent bar/rectangle on mobile. */
   #siteHeader,
   #siteHeader.visible,
@@ -3055,7 +3057,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v81: mobile scroll illustration scale-up ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     grid-template-rows: 61.5% 38.5% !important;
@@ -3094,7 +3095,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v84: mobile illustration edge-fit + horizontal gesture polish ===== */
 @media (max-width: 720px) {
   /* Give the illustration a little more vertical room without crushing the copy. */
   #byeongpung .u24-blend {
@@ -3132,7 +3132,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v86: mobile illustration preserve-ratio / no-crop top-left fit ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend-image {
     padding: 0 !important;
@@ -3158,7 +3157,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v87: mobile page-3 illustration + copy layout refinement ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     grid-template-rows: 53.5% 46.5% !important;
@@ -3253,7 +3251,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v88: mobile page 3 layout reworked to match guide ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     position: relative !important;
@@ -3388,7 +3385,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v89: mobile page 3 final paper-blend refinement ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     position: relative !important;
@@ -3522,7 +3518,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v90: mobile page 3 cleanup after review ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     position: relative !important;
@@ -3661,7 +3656,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v91: mobile page 3 corrected after failed v90 ===== */
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
     position: relative !important;
@@ -3806,7 +3800,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v92: mobile page 3 mask fix ===== */
 @media (max-width: 720px) {
   /* keep text placement from v91; only refine the image blend */
   #byeongpung .u24-blend-image {
@@ -3849,7 +3842,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v96: mobile page 3 image + edge mask FINAL FIX ===== */
 @media (max-width: 720px) {
   /* Always use the real <img>; do not convert it to a background image. */
   #byeongpung .u24-blend-image {
@@ -3965,7 +3957,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v97: mobile page 3 image larger + stronger paper blend (text untouched) ===== */
 @media (max-width: 720px) {
   /* enlarge only the artwork area, keeping the approved text block untouched */
   #byeongpung .u24-blend-image {
@@ -4041,7 +4032,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 
-/* ===== v102: mobile page 3 fade anchored to actual artwork frame ===== */
 @media (max-width: 720px) {
   /* Keep artwork scaling as requested; anchor remains top-right. */
   #byeongpung .u24-art {
@@ -4105,7 +4095,6 @@ html, body { scroll-snap-type: y mandatory !important; }
    No copy/layout values changed. */
 
 
-/* ===== v104: apply new mobile tuning defaults + raise hwadam/seolhan artwork ===== */
 @media (max-width: 720px) {
   /* keep global scale for all blends */
   #byeongpung .u24-art {
@@ -4117,5 +4106,57 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend.spring .u24-art,
   #byeongpung .u24-blend.winter .u24-art {
     transform: translateY(-50px) scale(1.15) !important;
+  }
+}
+
+/* ===== page 3 manual controls: prev/next + autoplay pause ===== */
+#byeongpung .u24-controls {
+  position: absolute;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+}
+#byeongpung .u24-arrow,
+#byeongpung .u24-playpause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+  background: rgba(20,17,14,.4);
+  color: #f4f1e8;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: background .25s ease, border-color .25s ease;
+}
+#byeongpung .u24-arrow svg,
+#byeongpung .u24-playpause svg { width: 18px; height: 18px; }
+#byeongpung .u24-arrow:hover,
+#byeongpung .u24-playpause:hover {
+  background: rgba(20,17,14,.6);
+  border-color: rgba(255,255,255,.6);
+}
+#byeongpung .u24-arrow:focus-visible,
+#byeongpung .u24-playpause:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media (max-width: 720px) {
+  #byeongpung .u24-controls {
+    bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+  }
+  #byeongpung .u24-arrow,
+  #byeongpung .u24-playpause {
+    width: 40px;
+    height: 40px;
   }
 }

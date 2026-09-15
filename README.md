@@ -11,6 +11,19 @@ Production-style separated source package.
 - `assets/logos/` — original logo/wordmarks
 - `assets/models/` — scroll 3D model
 
+`majuon-logo.svg` (549KB, embeds 10 raster gradient fills) and `hero-coffee.png` (2MB) are kept as edit-source masters but are no longer linked from `index.html`. The page loads `assets/logos/majuon-logo.webp` (30KB, rasterized+cropped at retina size for the 49px-tall header logo) and `assets/images/hero-coffee.webp` (116KB, quality-82 WebP) instead. If the source SVG or hero photo changes, regenerate the `.webp` the same way and keep the reference in `index.html` pointed at it.
+
+## Build
+
+`index.html` loads `css/styles.min.css` and `js/app.min.js` (minified with esbuild) for production. `css/styles.css` and `js/app.js` are the editable sources — after changing either, regenerate the minified file:
+
+```
+esbuild css/styles.css --minify --charset=utf8 --outfile=css/styles.min.css
+esbuild js/app.js --minify --charset=utf8 --outfile=js/app.min.js
+```
+
+(Install esbuild once with `brew install esbuild` if it's not already on your machine.)
+
 ## Notes
 
 - The page 3 adjustment GUI and its JavaScript were removed.

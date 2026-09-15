@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js" type="module"></script>
-<link href="css/styles.css" rel="stylesheet"/></head>
+<link href="css/styles.min.css" rel="stylesheet"/></head>
 <body>
 <div id="customCursor">
 <svg height="43" viewbox="0 0 48 48" width="43">
@@ -19,7 +19,7 @@
 </div>
 <header class="site-header" id="siteHeader">
 <div class="site-header-inner">
-<a class="site-logo" href="index.html"><img alt="마주온 로고" class="logo-original" fetchpriority="high" src="assets/logos/majuon-logo.svg"/></a>
+<a class="site-logo" href="index.html"><img alt="마주온 로고" class="logo-original" fetchpriority="high" src="assets/logos/majuon-logo.webp"/></a>
 <nav class="site-nav">
 <a href="story.html">마주온 이야기</a>
 <span class="dot">·</span>
@@ -39,10 +39,14 @@
 </header>
 <section aria-labelledby="gwHeroTitle" class="gw-hero" id="hero">
 <div aria-hidden="true" class="gw-hero-picture">
-<img alt="" fetchpriority="high" height="1024" src="assets/images/hero-coffee.png" width="1536"/>
+<img alt="" fetchpriority="high" height="1024" src="assets/images/hero-coffee.webp" width="1536"/>
 </div>
 <canvas aria-label="커피 표면에 파문 만들기. 클릭하거나 터치해보세요." class="gw-coffee-surface" id="gwCoffeeSurface" role="button" tabindex="0"></canvas>
 <div aria-hidden="true" class="gw-hero-shade"></div>
+<div aria-hidden="true" class="gw-hero-lamp" id="gwHeroLamp">
+<div class="gw-hero-lamp-glow"></div>
+<model-viewer alt="" aria-hidden="true" camera-orbit="-30deg 78deg 105%" disable-zoom="" environment-image="neutral" exposure="0.85" field-of-view="28deg" id="gwHeroLampModel" interaction-prompt="none" shadow-intensity="0.5" shadow-softness="1"></model-viewer>
+</div>
 <p class="gw-touch-invitation" id="gwTouchInvitation"><span aria-hidden="true" class="gw-touch-dot"></span><span>손끝으로 커피를 만나보세요</span></p>
 <div class="gw-hero-copy">
 <p class="gw-vertical gw-hero-note">한국의 사계와 풍류를 담은 커피</p>
@@ -163,6 +167,11 @@
 <model-viewer alt="마주온 족자 3D 모델" camera-controls="false" camera-orbit="0deg 90deg 0.98m" camera-target="0m -0.01m 0m" environment-image="neutral" exposure="1.03" field-of-view="28deg" id="u24Model" interaction-prompt="none" loading="eager" orientation="0deg 0deg 0deg" reveal="auto" shadow-intensity="0.35" shadow-softness="0.9" src="assets/models/majuon-scroll.glb"></model-viewer>
 <span class="u24-loading">족자 불러오는 중</span>
 </div>
+<div class="u24-controls" id="u24Controls">
+<button aria-label="이전 계절" class="u24-arrow u24-arrow-prev" id="u24Prev" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<button aria-label="자동 재생 정지" aria-pressed="false" class="u24-playpause" id="u24PlayPause" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z" fill="currentColor" id="u24PlayPauseIcon"></path></svg></button>
+<button aria-label="다음 계절" class="u24-arrow u24-arrow-next" id="u24Next" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+</div>
 </div>
 </section>
 
@@ -175,5 +184,5 @@
 
 
 
-<script src="js/app.js"></script></body>
+<script src="js/app.min.js"></script></body>
 </html>

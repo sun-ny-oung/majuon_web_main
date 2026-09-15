@@ -1,5 +1,3 @@
-/* source block: main */
-/* ===== inlined: js/app.js ===== */
 // ---------- 커서를 따라다니는 커스텀 팔각형 (mix-blend-mode로 배경색과 상관없이 항상 보이게) ----------
 const customCursor = document.getElementById('customCursor');
 if (customCursor) {
@@ -231,7 +229,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
 
 
-/* ===== v65: mobile page 2 hard visibility fix — width is the only mobile criterion ===== */
 @media (max-width: 720px) {
   #quote {
     display: block !important;
@@ -423,7 +420,25 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   reduceMotion.addEventListener?.('change',surfacePreference); surfacePreference();
 })();
 
-// ===== v56: 자동 루프 추가 — 1초 간격으로 화담→청류→풍연→설한→화담 반복 =====
+// ---------- 히어로 무드등 3D 오브젝트 (데스크탑 전용, 핵심 콘텐츠 로드 후 지연 로딩) ----------
+(() => {
+  const lampWrap = document.getElementById('gwHeroLamp');
+  const lampModel = document.getElementById('gwHeroLampModel');
+  if (!lampWrap || !lampModel) return;
+
+  const isDesktop = window.matchMedia('(min-width: 721px)').matches;
+  const saveData = navigator.connection?.saveData;
+  if (!isDesktop || saveData) return;
+
+  function loadLamp() {
+    lampModel.addEventListener('load', () => lampWrap.classList.add('is-loaded'), { once: true });
+    lampModel.src = 'assets/models/majuon-seosu-lamp.glb';
+  }
+
+  if (document.readyState === 'complete') loadLamp();
+  else window.addEventListener('load', loadLamp, { once: true });
+})();
+
 (() => {
   const section = document.getElementById('byeongpung');
   const stage = document.getElementById('u24Stage');
@@ -486,6 +501,14 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   let touchX = null;
   let touchY = null;
   let autoTimer = null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let userPaused = reduceMotion.matches;
+  const prevBtn = document.getElementById('u24Prev');
+  const nextBtn = document.getElementById('u24Next');
+  const playPauseBtn = document.getElementById('u24PlayPause');
+  const playPauseIcon = document.getElementById('u24PlayPauseIcon');
+  const PAUSE_ICON_D = 'M8 5h3v14H8zM13 5h3v14h-3z';
+  const PLAY_ICON_D = 'M8 5v14l11-7-11-7z';
 
   const vh = () => window.innerHeight || document.documentElement.clientHeight;
   const isSectionActive = () => {
@@ -541,8 +564,16 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     }
   }
 
+  function updatePlayPauseUI() {
+    if (!playPauseBtn || !playPauseIcon) return;
+    playPauseBtn.setAttribute('aria-pressed', String(userPaused));
+    playPauseBtn.setAttribute('aria-label', userPaused ? '자동 재생 시작' : '자동 재생 정지');
+    playPauseIcon.setAttribute('d', userPaused ? PLAY_ICON_D : PAUSE_ICON_D);
+  }
+
   function scheduleAuto(delay = HOLD_MS) {
     clearAuto();
+    if (userPaused) return;
     autoTimer = window.setTimeout(() => {
       autoTimer = null;
       if (document.hidden || !isSectionActive()) return;
@@ -772,13 +803,33 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     else handleVisibility();
   });
 
+  prevBtn?.addEventListener('click', () => {
+    step(-1);
+    scheduleAuto(MANUAL_RESUME_MS);
+  });
+  nextBtn?.addEventListener('click', () => {
+    step(1);
+    scheduleAuto(MANUAL_RESUME_MS);
+  });
+  playPauseBtn?.addEventListener('click', () => {
+    userPaused = !userPaused;
+    updatePlayPauseUI();
+    if (userPaused) clearAuto();
+    else if (isSectionActive()) scheduleAuto(HOLD_MS);
+  });
+  reduceMotion.addEventListener?.('change', () => {
+    userPaused = reduceMotion.matches;
+    updatePlayPauseUI();
+    if (userPaused) clearAuto();
+  });
+
   setTone(0);
   updateState(0, 0);
   setEntered(false);
+  updatePlayPauseUI();
   handleVisibility();
 })();
 
-/* source block: v71-mobile-header-reset */
 (() => {
   const header = document.getElementById('siteHeader');
   const nav = document.getElementById('mobileNav');
@@ -819,7 +870,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   requestAnimationFrame(syncMobileHeaderTheme);
 })();
 
-/* source block: v72-mobile-header-section-sync */
 (() => {
   const header = document.getElementById('siteHeader');
   const nav = document.getElementById('mobileNav');
@@ -880,7 +930,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   requestSync();
 })();
 
-/* source block: v76-mobile-menu-final */
 (() => {
   const header = document.getElementById('siteHeader');
   const oldBtn = document.getElementById('hamburgerBtn');
@@ -978,7 +1027,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 })();
 
 
-/* ===== v102: measure actual mobile artwork frame so fades hit the image, not empty paper ===== */
 (() => {
   const mq = window.matchMedia('(max-width: 720px)');
   const containers = Array.from(document.querySelectorAll('#byeongpung .u24-blend-image'));
