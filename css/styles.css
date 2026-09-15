@@ -930,12 +930,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   z-index:-1;
   left:50%;
   top:54%;
-  width:26vh;
-  height:56vh;
+  width:30vh;
+  height:58vh;
   transform:translate(-50%,-50%);
   border-radius:50%;
-  background:radial-gradient(ellipse, rgba(var(--u24-rgb),.42) 0%, rgba(var(--u24-rgb),.20) 45%, transparent 75%);
-  filter:blur(22px);
+  background:radial-gradient(ellipse, rgba(var(--u24-rgb),.62) 0%, rgba(var(--u24-rgb),.34) 45%, transparent 75%);
+  filter:blur(18px);
   pointer-events:none;
   transition:background .65s ease;
 }
