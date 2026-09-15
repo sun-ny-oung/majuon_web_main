@@ -677,7 +677,7 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
   model.addEventListener('load', () => {
     modelWrap?.classList.add('is-loaded');
-    model.setAttribute('camera-orbit', '0deg 90deg 0.98m');
+    model.setAttribute('camera-orbit', '0deg 90deg 105%');
     model.setAttribute('field-of-view', '28deg');
     model.setAttribute('camera-target', '0m -0.01m 0m');
     model.setAttribute('orientation', '0deg 0deg 0deg');
