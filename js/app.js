@@ -148,7 +148,7 @@ function updateScrollEffect() {
     rect.bottom > vh * .5 ? 'hero' :
     (quoteRect.top < vh * .5 && quoteRect.bottom > vh * .5 ? 'quote' : 'byeongpung')
   );
-  siteHeader.classList.toggle('on-dark', headerSection === 'hero' || headerSection === 'quote');
+  siteHeader.classList.toggle('on-dark', headerSection === 'hero' || headerSection === 'quote' || headerSection === 'byeongpung');
   ticking = false;
 }
 window.addEventListener('scroll', () => {
