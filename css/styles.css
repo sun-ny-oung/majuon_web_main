@@ -2261,8 +2261,7 @@ html, body { scroll-snap-type: y mandatory !important; }
       visibility 0s linear 0s !important;
   }
 
-  #mobileNav.mobile-nav a,
-  #siteHeader.on-dark #mobileNav.mobile-nav a {
+  #mobileNav.mobile-nav a {
     display: flex !important;
     align-items: center !important;
     min-height: 70px !important;
