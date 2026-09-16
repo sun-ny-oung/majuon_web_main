@@ -4214,11 +4214,45 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-.site-footer {
-  padding: 22px 20px;
-  text-align: center;
-  background: #0e0d0c;
-  color: rgba(243,238,229,.5);
-  font-size: 12px;
+/* Desktop-only: sits in the empty strip below the paper (paper ends ~85vh) and
+   clear of the roller column (9.5–18vw), so it doesn't need its own page/snap
+   stop or any of page 3's fragile vh math. Hidden on mobile — that layout is a
+   different system entirely and this corner isn't guaranteed empty there. */
+#byeongpung .u24-footer-copy {
+  position: absolute;
+  right: 4vw;
+  bottom: 3vh;
+  z-index: 15;
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: rgba(243,238,229,.32);
+  pointer-events: none;
 }
-.site-footer p { margin: 0; }
+@media (max-width: 720px) {
+  #byeongpung .u24-footer-copy { display: none; }
+}
+
+/* Mobile-only footer: page 3's own bottom strip is already fought over (head,
+   roll, card copy, controls all bottom-anchored there — this is exactly where
+   the "자세히 보기" badge overlap happened before), so there's no safe empty
+   corner to reuse like on desktop. Given a real 4th scroll-snap stop instead —
+   short, not a full 100vh page — rather than cramming it into page 3. */
+.site-footer {
+  display: none;
+}
+@media (max-width: 720px) {
+  .site-footer {
+    display: block;
+    scroll-snap-align: start;
+    padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+    background: #0e0d0c;
+  }
+  .site-footer p {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: rgba(243,238,229,.4);
+  }
+}
