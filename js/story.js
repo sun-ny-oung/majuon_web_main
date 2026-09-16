@@ -8,3 +8,14 @@
  document.addEventListener('click',event=>{if(!event.target.closest('.story-header'))setOpen(false);});
  matchMedia('(min-width:641px)').addEventListener('change',event=>{if(event.matches)setOpen(false);});
 })();
+
+// ---------- 카카오톡 인앱 브라우저에서 스마트스토어가 로그인을 요구하는 문제 우회 ----------
+(()=>{
+ if(!/KAKAOTALK/i.test(navigator.userAgent))return;
+ document.querySelectorAll('a[href*="smartstore.naver.com"]').forEach(link=>{
+  link.addEventListener('click',event=>{
+   event.preventDefault();
+   location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(link.href);
+  });
+ });
+})();
