@@ -4168,3 +4168,21 @@ html, body { scroll-snap-type: y mandatory !important; }
     height: 40px;
   }
 }
+
+/* Mobile-only: .u24-blend-copy is absolutely positioned and anchored from the
+   bottom on this breakpoint (auto height growing upward), and that box was
+   already tuned tightly per season. The badge is brand new with no legacy rules
+   fighting it, so this can just be a plain override — no !important needed. */
+@media (max-width: 720px) {
+  #byeongpung .u24-detail-badge {
+    margin: 8px 0 0;
+    padding: 6px 14px;
+    min-height: 0;
+    gap: 4px;
+    font-size: 9px;
+    clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+  }
+  #byeongpung .u24-detail-badge::before {
+    clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+  }
+}
