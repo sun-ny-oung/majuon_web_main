@@ -1871,8 +1871,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 /* Header contrast for the photographic hero and the existing dark page 2. */
 .site-header.visible { opacity:1 !important; transform:none !important; pointer-events:auto !important; }
 .site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.36),rgba(12,13,11,0)) !important;border-bottom-color:rgba(255,255,255,.12) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important; }
-.site-header.on-dark .site-logo img { filter:grayscale(1) brightness(0) invert(1); opacity:.94; }
-.site-header:not(.on-dark) .site-logo img { filter:none; }
 
 @media (max-width: 720px) {
   #hero.gw-hero { height:100svh !important; min-height:700px !important; max-height:1000px !important; }
@@ -1888,7 +1886,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #hero.gw-hero .gw-hero-footer p { font-size:12px;line-height:1.9; }
   #hero.gw-hero .gw-journey-link { font-size:12px;gap:15px; }
   #hero.gw-hero .gw-journey-link svg { width:13px;height:29px; }
-  .site-header.on-dark { background:linear-gradient(to bottom,rgba(12,13,11,.50),rgba(12,13,11,0)) !important; }
 }
 @media (max-width: 390px) {
   #hero.gw-hero .gw-hero-copy { left:8%;gap:20px; }
@@ -1914,9 +1911,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 
   .site-header .site-logo { position: relative; }
   .site-header .site-logo img { height: 49px; width: auto; display: block; filter: none !important; opacity: 1 !important; }
-  .site-header .site-logo .logo-on-dark { display: none; }
-  .site-header.on-dark .site-logo .logo-default { display: none; }
-  .site-header.on-dark .site-logo .logo-on-dark { display: block; }
   .site-header.on-dark .site-nav a, .site-header.on-dark .site-nav .dot { color: rgba(243,237,223,.95) !important; }
 
   #hero.gw-hero .gw-touch-invitation,
@@ -2028,141 +2022,9 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
 @media (max-width: 720px) {
-  /* v71: header itself is always transparent. Only logo + hamburger float above the page. */
-  .site-header,
-  .site-header.visible,
-  .site-header.on-dark,
-  .site-header:not(.on-dark) {
-    opacity: 1 !important;
-    transform: none !important;
-    pointer-events: auto !important;
-    background: transparent !important;
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-
-  .site-header-inner {
-    background: transparent !important;
-  }
-
-  /* Page 1 + 2 = dark scene, Page 3 = light scene. */
-  .site-header.on-dark .hamburger span {
-    background: #f3eddf !important;
-  }
-  .site-header:not(.on-dark) .hamburger span {
-    background: #171310 !important;
-  }
-
-  .site-header.on-dark .logo-default {
-    display: none !important;
-  }
-  .site-header.on-dark .logo-on-dark {
-    display: block !important;
-  }
-  .site-header:not(.on-dark) .logo-default {
-    display: block !important;
-  }
-  .site-header:not(.on-dark) .logo-on-dark {
-    display: none !important;
-  }
-
-  /* The sheet appears only while the hamburger menu is open. */
-  .site-header.menu-open,
-  .site-header.on-dark.menu-open {
-    background: transparent !important;
-    border: 0 !important;
-  }
-
-  /* Menu sheet is light, so force dark logo + close icon while open. */
-  .site-header.menu-open .logo-default,
-  .site-header.on-dark.menu-open .logo-default {
-    display: block !important;
-  }
-  .site-header.menu-open .logo-on-dark,
-  .site-header.on-dark.menu-open .logo-on-dark {
-    display: none !important;
-  }
-  .site-header.menu-open .hamburger span,
-  .site-header.on-dark.menu-open .hamburger span {
-    background: #171310 !important;
-  }
-
   /* Keep the top controls touchable without creating a full-width visual bar. */
   .site-header-inner {
     padding-top: max(11px, env(safe-area-inset-top, 0px)) !important;
-  }
-}
-
-@media (max-width: 720px) {
-  /* No persistent rectangle: header chrome stays transparent on every page. */
-  #siteHeader,
-  #siteHeader.visible,
-  #siteHeader.on-dark,
-  #siteHeader:not(.on-dark) {
-    background: transparent !important;
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-
-  /* Page-specific hamburger tones. */
-  #siteHeader[data-mobile-section="hero"] .hamburger span {
-    background: #e2daca !important;
-  }
-  #siteHeader[data-mobile-section="quote"] .hamburger span {
-    background: #f7f1e6 !important;
-  }
-
-  /* Page-specific logo tone. Hero/quote use the light mark, page 3 uses the dark mark. */
-  #siteHeader[data-mobile-section="hero"] .logo-default,
-  #siteHeader[data-mobile-section="quote"] .logo-default {
-    display: none !important;
-  }
-  #siteHeader[data-mobile-section="hero"] .logo-on-dark,
-  #siteHeader[data-mobile-section="quote"] .logo-on-dark {
-    display: block !important;
-  }
-  #siteHeader[data-mobile-section="byeongpung"] .logo-default {
-    display: none !important;
-  }
-  #siteHeader[data-mobile-section="byeongpung"] .logo-on-dark {
-    display: block !important;
-  }
-
-  /* When the menu opens, the animated .mobile-nav sheet is the only background. */
-  #siteHeader.menu-open,
-  #siteHeader.on-dark.menu-open {
-    background: transparent !important;
-    border: 0 !important;
-  }
-  #siteHeader.menu-open .logo-default,
-  #siteHeader.on-dark.menu-open .logo-default {
-    display: block !important;
-  }
-  #siteHeader.menu-open .logo-on-dark,
-  #siteHeader.on-dark.menu-open .logo-on-dark {
-    display: none !important;
-  }
-}
-
-@media (max-width: 720px) {
-  /* 로고 색상은 페이지/메뉴 상태와 무관하게 원본 그대로 고정 */
-  .site-header .site-logo .logo-default,
-  .site-header.on-dark .site-logo .logo-default,
-  .site-header.menu-open .site-logo .logo-default,
-  .site-header.on-dark.menu-open .site-logo .logo-default {
-    display:block !important;
-    filter:none !important;
-    opacity:1 !important;
-  }
-  .site-header .site-logo .logo-on-dark,
-  .site-header.on-dark .site-logo .logo-on-dark,
-  .site-header.menu-open .site-logo .logo-on-dark,
-  .site-header.on-dark.menu-open .site-logo .logo-on-dark {
-    display:none !important;
   }
 }
 
@@ -2180,8 +2042,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   mix-blend-mode: normal !important;
   transform: none !important;
 }
-.site-header .site-logo .logo-default,
-.site-header .site-logo .logo-on-dark { display:none !important; }
 
 @media (max-width: 720px) {
   /* No persistent bar/rectangle on mobile. */
