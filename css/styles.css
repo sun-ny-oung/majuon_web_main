@@ -319,10 +319,15 @@
   }
   .site-nav a {
     position: relative;
+    display: inline-block;
     text-decoration: none;
     font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
     font-size: 13px; letter-spacing: 0.05em;
+    transform: scale(1);
+    transition: transform .3s cubic-bezier(.22,.72,.16,1), color .3s ease, letter-spacing .3s cubic-bezier(.22,.72,.16,1);
   }
+  .site-nav a:hover,
+  .site-nav a:focus-visible { transform: scale(1.2); letter-spacing: 0.14em; }
   .site-nav a::after {
     content: "";
     position: absolute;
