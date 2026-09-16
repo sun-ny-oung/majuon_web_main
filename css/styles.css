@@ -318,10 +318,26 @@
     color: #ffffff;
   }
   .site-nav a {
+    position: relative;
     text-decoration: none;
     font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
     font-size: 13px; letter-spacing: 0.05em;
   }
+  .site-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1.5px;
+    background: linear-gradient(90deg, #2fadcf 0%, #d1bada 20%, #a2c3e7 40%, #f9d2dc 55%, #bcbcd7 70%, #94bfe6 85%, #a691be 100%);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .4s cubic-bezier(.22,.72,.16,1);
+    pointer-events: none;
+  }
+  .site-nav a:hover::after,
+  .site-nav a:focus-visible::after { transform: scaleX(1); }
   .site-nav .dot { font-size: 10px; }
   .hamburger {
     display: none; flex-direction: column; justify-content: center; gap: 5px;
@@ -4197,3 +4213,12 @@ html, body { scroll-snap-type: y mandatory !important; }
     mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
   }
 }
+
+.site-footer {
+  padding: 22px 20px;
+  text-align: center;
+  background: #0e0d0c;
+  color: rgba(243,238,229,.5);
+  font-size: 12px;
+}
+.site-footer p { margin: 0; }
