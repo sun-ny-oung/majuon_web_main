@@ -2598,41 +2598,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 #hero.gw-hero .gw-journey-link { color:#f3eddf;text-decoration:none;display:flex;align-items:center;gap:26px;font-size:14px;letter-spacing:.03em; }
 #hero.gw-hero .gw-journey-link svg { width:18px;height:36px;fill:none;stroke:currentColor;stroke-width:1.2;transition:transform .3s; }
 #hero.gw-hero .gw-journey-link:hover svg { transform:translateY(5px); }
-#hero.gw-hero .gw-hero-signature { position:absolute;z-index:3;right:5.1%;bottom:15.5%;width:clamp(330px,36vw,650px);opacity:.88;pointer-events:none;text-align:right; }
+#hero.gw-hero .gw-hero-signature { position:absolute;z-index:3;right:5.1%;bottom:15.5%;width:clamp(150px,12.9vw,280px);opacity:.88;pointer-events:none;text-align:right; }
 #hero.gw-hero .gw-hero-signature img { display:block;width:100%;height:auto; }
 #hero.gw-hero .gw-hero-signature-sub { display:block;width:100%;margin-top:4px;padding-right:0;font-family:"Helvetica Neue","SF Pro Display",Arial,sans-serif;font-size:clamp(30px,2.25vw,48px);font-weight:400;letter-spacing:.14em;line-height:1;color:#e2daca;text-align:right;white-space:nowrap; }
-/* ===== TEMP dev tool: drag-resize the hero signature to eyeball a final size =====
-   Remove this whole block (+ the handle/readout markup + JS) once a value is picked.
-   Bottom-right is already the fixed anchor (right/bottom positioning), so dragging
-   only changes width and the box grows/shrinks toward the top-left naturally. */
-#hero.gw-hero .gw-sig-resize-handle {
-  position:absolute;
-  top:-10px;
-  left:-10px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#ff3b30;
-  border:2px solid #fff;
-  box-shadow:0 0 0 2px rgba(0,0,0,.4);
-  cursor:nwse-resize;
-  pointer-events:auto;
-  z-index:10;
-}
-#hero.gw-hero .gw-sig-resize-readout {
-  position:absolute;
-  top:-36px;
-  left:0;
-  white-space:nowrap;
-  font-family:-apple-system,sans-serif;
-  font-size:12px;
-  font-weight:600;
-  color:#fff;
-  background:rgba(0,0,0,.72);
-  padding:3px 8px;
-  border-radius:4px;
-  pointer-events:none;
-}
 @keyframes gwTouchPulse { 0%,100%{box-shadow:0 0 0 5px rgba(238,227,189,.04)} 50%{box-shadow:0 0 0 12px rgba(238,227,189,.015)} }
 
 /* Header contrast for the photographic hero and the existing dark page 2. */
