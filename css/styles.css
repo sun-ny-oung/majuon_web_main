@@ -2886,7 +2886,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     background: #f7f1e6 !important;
   }
   #siteHeader[data-mobile-section="byeongpung"] .hamburger span {
-    background: #2d241b !important;
+    background: #e2daca !important;
   }
 
   /* Page-specific logo tone. Hero/quote use the light mark, page 3 uses the dark mark. */
@@ -2899,10 +2899,10 @@ html, body { scroll-snap-type: y mandatory !important; }
     display: block !important;
   }
   #siteHeader[data-mobile-section="byeongpung"] .logo-default {
-    display: block !important;
+    display: none !important;
   }
   #siteHeader[data-mobile-section="byeongpung"] .logo-on-dark {
-    display: none !important;
+    display: block !important;
   }
 
   /* When the menu opens, the animated .mobile-nav sheet is the only background. */
@@ -3000,7 +3000,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     background: #f3eddf !important;
   }
   #siteHeader[data-mobile-section="byeongpung"] .hamburger span {
-    background: #171310 !important;
+    background: #f3eddf !important;
   }
 
   /* Full-screen paper sheet exists only while the menu is open. */

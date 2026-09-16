@@ -169,31 +169,6 @@ window.addEventListener('scroll', () => {
   }, 120);
 }, { passive: true });
 updateScrollEffect();
-// ---------- 모바일 햄버거 메뉴 ----------
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const mobileNav = document.getElementById('mobileNav');
-const siteHeaderEl = document.getElementById('siteHeader');
-
-function setMobileMenu(open) {
-  mobileNav.classList.toggle('open', open);
-  siteHeaderEl?.classList.toggle('menu-open', open);
-  document.body.classList.toggle('mobile-menu-open', open);
-  hamburgerBtn.setAttribute('aria-expanded', String(open));
-  hamburgerBtn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
-}
-
-hamburgerBtn.addEventListener('click', () => {
-  setMobileMenu(!mobileNav.classList.contains('open'));
-});
-mobileNav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => setMobileMenu(false));
-});
-window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && mobileNav.classList.contains('open')) setMobileMenu(false);
-});
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 720 && mobileNav.classList.contains('open')) setMobileMenu(false);
-}, { passive: true });
 
 // ---------- 리플/크레마 (ripple-hero.html과 동일) ----------
 const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
@@ -811,153 +786,15 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   handleVisibility();
 })();
 
+// ---------- 모바일 헤더: 섹션별 톤 전환 + 햄버거 메뉴 (단일 구현으로 통합) ----------
 (() => {
   const header = document.getElementById('siteHeader');
   const nav = document.getElementById('mobileNav');
   const btn = document.getElementById('hamburgerBtn');
-  if (!header || !nav || !btn) return;
-
-  const mq = window.matchMedia('(max-width: 720px)');
-
-  function closeStaleMobileMenu() {
-    if (!mq.matches) return;
-    nav.classList.remove('open');
-    header.classList.remove('menu-open');
-    document.body.classList.remove('mobile-menu-open');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', '메뉴 열기');
-  }
-
-  function syncMobileHeaderTheme() {
-    if (!mq.matches || nav.classList.contains('open')) return;
-    const y = Math.max(1, (window.innerHeight || document.documentElement.clientHeight) * 0.5);
-    const x = Math.max(1, window.innerWidth * 0.5);
-    const el = document.elementFromPoint(x, y);
-    const section = el?.closest?.('section');
-    const id = section?.id;
-    header.classList.toggle('on-dark', id === 'hero' || id === 'quote');
-  }
-
-  /* Safari bfcache can restore an old menu/header class state. Reset it on every page show. */
-  window.addEventListener('pageshow', () => {
-    closeStaleMobileMenu();
-    requestAnimationFrame(syncMobileHeaderTheme);
-  });
-
-  window.addEventListener('scroll', () => requestAnimationFrame(syncMobileHeaderTheme), { passive: true });
-  window.addEventListener('resize', () => requestAnimationFrame(syncMobileHeaderTheme), { passive: true });
-
-  closeStaleMobileMenu();
-  requestAnimationFrame(syncMobileHeaderTheme);
-})();
-
-(() => {
-  const header = document.getElementById('siteHeader');
-  const nav = document.getElementById('mobileNav');
-  if (!header) return;
-  const mq = window.matchMedia('(max-width: 720px)');
-  let ticking = false;
-
-  function currentSectionId() {
-    const vh = window.innerHeight || document.documentElement.clientHeight || 1;
-    const probeY = Math.min(vh - 1, Math.max(1, vh * 0.42));
-    const probeX = Math.min(window.innerWidth - 1, Math.max(1, window.innerWidth * 0.5));
-    const el = document.elementFromPoint(probeX, probeY);
-    const direct = el && el.closest ? el.closest('section') : null;
-    if (direct && ['hero','quote','byeongpung'].includes(direct.id)) return direct.id;
-
-    const sections = ['hero','quote','byeongpung']
-      .map(id => document.getElementById(id))
-      .filter(Boolean);
-    let best = 'hero';
-    let bestDist = Infinity;
-    for (const section of sections) {
-      const r = section.getBoundingClientRect();
-      const center = r.top + r.height / 2;
-      const dist = Math.abs(center - vh * 0.5);
-      if (dist < bestDist) { bestDist = dist; best = section.id; }
-    }
-    return best;
-  }
-
-  function sync() {
-    ticking = false;
-    if (!mq.matches) {
-      header.removeAttribute('data-mobile-section');
-      return;
-    }
-    const id = currentSectionId();
-    header.setAttribute('data-mobile-section', id);
-    header.classList.toggle('on-dark', id === 'hero' || id === 'quote');
-  }
-
-  function requestSync() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(sync);
-  }
-
-  window.addEventListener('scroll', requestSync, { passive: true });
-  window.addEventListener('resize', requestSync, { passive: true });
-  window.addEventListener('pageshow', requestSync);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) requestSync(); });
-
-  /* Closing the menu must immediately restore the page-specific icon colors. */
-  if (nav) {
-    const observer = new MutationObserver(requestSync);
-    observer.observe(nav, { attributes: true, attributeFilter: ['class'] });
-  }
-
-  requestSync();
-})();
-
-(() => {
-  const header = document.getElementById('siteHeader');
-  const oldBtn = document.getElementById('hamburgerBtn');
-  const nav = document.getElementById('mobileNav');
-  if (!header || !oldBtn || !nav) return;
-
-  /* Strip every accumulated old click listener from previous iterations. */
-  const btn = oldBtn.cloneNode(true);
-  oldBtn.replaceWith(btn);
-
-  function setOpen(open) {
-    nav.classList.toggle('open', open);
-    header.classList.toggle('menu-open', open);
-    document.body.classList.toggle('mobile-menu-open', open);
-    btn.setAttribute('aria-expanded', String(open));
-    btn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
-  }
-
-  btn.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setOpen(!nav.classList.contains('open'));
-  });
-
-  nav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => setOpen(false));
-  });
-
-  window.addEventListener('keydown', event => {
-    if (event.key === 'Escape') setOpen(false);
-  });
-
-  window.addEventListener('pageshow', () => setOpen(false));
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 720) setOpen(false);
-  }, { passive:true });
-})();
-
-
-/* v83 FINAL: deterministic mobile section + hamburger theme sync */
-(() => {
-  const header = document.getElementById('siteHeader');
   const hero = document.getElementById('hero');
   const quote = document.getElementById('quote');
   const page3 = document.getElementById('byeongpung');
-  const nav = document.getElementById('mobileNav');
-  if (!header || !hero || !quote || !page3) return;
+  if (!header || !nav || !btn || !hero || !quote || !page3) return;
 
   const mq = window.matchMedia('(max-width: 720px)');
   let raf = 0;
@@ -966,7 +803,6 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     const h = window.innerHeight || document.documentElement.clientHeight || 1;
     const r3 = page3.getBoundingClientRect();
     const rq = quote.getBoundingClientRect();
-
     /* Flip to page 3 as soon as it crosses the viewport midpoint.
        This also covers Safari's delayed scroll-snap settlement. */
     if (r3.top <= h * 0.52 && r3.bottom > h * 0.20) return 'byeongpung';
@@ -974,9 +810,9 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     return 'hero';
   }
 
-  function syncNow() {
+  function syncTheme() {
     raf = 0;
-    if (!mq.matches || nav?.classList.contains('open')) return;
+    if (!mq.matches || nav.classList.contains('open')) return;
     const id = resolveSection();
     header.setAttribute('data-mobile-section', id);
     header.classList.toggle('on-dark', id !== 'byeongpung');
@@ -984,21 +820,50 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
 
   function requestSync() {
     if (raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(syncNow);
+    raf = requestAnimationFrame(syncTheme);
   }
 
-  window.addEventListener('scroll', requestSync, { passive:true });
-  window.addEventListener('scrollend', requestSync, { passive:true });
-  window.addEventListener('resize', requestSync, { passive:true });
-  window.addEventListener('pageshow', requestSync);
+  function setOpen(open) {
+    nav.classList.toggle('open', open);
+    header.classList.toggle('menu-open', open);
+    document.body.classList.toggle('mobile-menu-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    if (!open) requestSync();
+  }
+
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    setOpen(!nav.classList.contains('open'));
+  });
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav.classList.contains('open')) setOpen(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 720 && nav.classList.contains('open')) setOpen(false);
+  }, { passive: true });
+
+  /* Safari bfcache can restore an old menu/header class state. Reset it on every page show. */
+  window.addEventListener('pageshow', () => {
+    setOpen(false);
+    requestSync();
+  });
+  window.addEventListener('scroll', requestSync, { passive: true });
+  window.addEventListener('scrollend', requestSync, { passive: true });
+  window.addEventListener('resize', requestSync, { passive: true });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) requestSync(); });
+  /* iOS Safari sometimes finishes scroll-snap without a useful trailing scroll event. */
   document.addEventListener('touchend', () => {
     requestSync();
     setTimeout(requestSync, 70);
     setTimeout(requestSync, 220);
-  }, { passive:true });
+  }, { passive: true });
 
   const observer = new IntersectionObserver(() => requestSync(), {
-    threshold:[0.20,0.35,0.50,0.65]
+    threshold: [0.20, 0.35, 0.50, 0.65]
   });
   observer.observe(hero);
   observer.observe(quote);
