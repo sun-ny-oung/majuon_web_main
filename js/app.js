@@ -420,6 +420,48 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   reduceMotion.addEventListener?.('change',surfacePreference); surfacePreference();
 })();
 
+// ---------- TEMP dev tool: drag-resize the hero signature to eyeball a final size ----------
+// Remove this whole block + the handle/readout markup + CSS once a value is picked.
+(() => {
+  const sig = document.getElementById('gwHeroSignature');
+  const handle = document.getElementById('gwSigResizeHandle');
+  const readout = document.getElementById('gwSigResizeReadout');
+  if (!sig || !handle || !readout) return;
+
+  const MIN_WIDTH = 80;
+  const MAX_WIDTH = 900;
+
+  function updateReadout(widthPx) {
+    const vw = (widthPx / window.innerWidth * 100).toFixed(1);
+    readout.textContent = `${Math.round(widthPx)}px  (${vw}vw)`;
+  }
+
+  updateReadout(sig.getBoundingClientRect().width);
+
+  let dragging = false;
+  let startX = 0;
+  let startWidth = 0;
+
+  handle.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    startX = e.clientX;
+    startWidth = sig.getBoundingClientRect().width;
+    handle.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  handle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const delta = startX - e.clientX;
+    const newWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + delta));
+    sig.style.width = `${newWidth}px`;
+    updateReadout(newWidth);
+  });
+  handle.addEventListener('pointerup', (e) => {
+    dragging = false;
+    handle.releasePointerCapture(e.pointerId);
+  });
+})();
+
 (() => {
   const section = document.getElementById('byeongpung');
   const stage = document.getElementById('u24Stage');
