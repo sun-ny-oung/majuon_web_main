@@ -4186,3 +4186,14 @@ html, body { scroll-snap-type: y mandatory !important; }
     clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
   }
 }
+
+/* Desktop-only: fade the illustration's left/right edges into the card's paper
+   background so it doesn't read as a hard-edged cutout. Top/bottom stay sharp —
+   only the side edges blend. No background of its own on .u24-art, so the mask's
+   transparent edges reveal the card's rgb(var(--paper-rgb)) sitting behind it. */
+@media (min-width: 721px) {
+  #byeongpung .u24-art {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
+}
