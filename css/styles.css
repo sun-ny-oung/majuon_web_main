@@ -25,8 +25,7 @@
   body { scroll-snap-type: y mandatory; }
 
   /* ---------- 히어로: 스크롤하면 자연스럽게 사라지는 섹션 (핀 고정 없음) ---------- */
-  #hero {
-    height: 100vh; height: 100svh; display: flex; flex-direction: column;
+  #hero { height: 100svh; display: flex; flex-direction: column;
     will-change: opacity;
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -109,8 +108,7 @@
     100% { opacity: 0;   transform: translateY(5px); }
   }
 
-  #quote {
-    height: 100vh; height: 100svh; display: flex; align-items: flex-start; justify-content: flex-end;
+  #quote { height: 100svh; display: flex; align-items: flex-start; justify-content: flex-end;
     padding: 64px 12% 60px 20px;
     background: #f4f1e9;
     position: relative;
@@ -195,8 +193,6 @@
     transform: translateY(-50%);
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    display: flex;
-    gap: 34px;
     height: auto;
     max-height: none;
   }
@@ -301,7 +297,6 @@
     opacity: 0; transform: translateY(-6px); pointer-events: none;
     transition: opacity 0.45s ease, transform 0.45s ease;
   }
-  .site-header.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
   .site-header-inner {
     max-width: 1160px; margin: 0 auto;
     display: flex; align-items: center; justify-content: space-between;
@@ -313,9 +308,6 @@
   .site-nav a, .site-nav .dot {
     color: #171310;
     transition: color 0.3s ease;
-  }
-  .site-header.on-dark .site-nav a, .site-header.on-dark .site-nav .dot {
-    color: #ffffff;
   }
   .site-nav a {
     position: relative;
@@ -384,8 +376,6 @@
   .mobile-nav.open a:nth-child(4) { transition-delay: 0.2s; }
 
   @media (max-width: 720px) {
-    .site-nav { display: none; }
-    .hamburger { display: flex; }
     /* 모바일에서만 스냅을 완화 — 일부 브라우저가 스크롤 위치를 확 건너뛰면서
        원 리빌 애니메이션이 튀는 문제를 줄이기 위함. 데스크탑은 원래의 mandatory 유지 */
     html { scroll-snap-type: y mandatory; }
@@ -399,19 +389,13 @@
   }
   /* 모바일(햄버거 드롭다운이 뜨는 폭)에서만 위쪽 여백을 더 넉넉히 둬서, 드롭다운이 열려도
      문구가 겹치지 않게 함 — 정렬 방식은 안 바뀌고 여백 수치만 다름 */
-  @media (max-width: 720px) {
-    #quote { padding-top: 100px; }
-  }
+  
   @media (max-width: 720px) {
     .hero-culture-note { display: none; }
-    .gallery-caption { font-size: 10px; margin-top: 16px; }
-    .scroll-hint { margin-top: 26px; }
   }
 
   /* ---------- 사계 병풍 / FOUR SEASONS ---------- */
-  #byeongpung {
-    min-height: 100vh; min-height: 100svh;
-    padding: 112px 32px 122px;
+  #byeongpung { min-height: 100svh;
     position: relative; overflow: hidden;
     background:
       radial-gradient(circle at 12% 0%, rgba(255,255,255,.72), transparent 31%),
@@ -461,8 +445,7 @@
     .bp-screen { min-height: 58vh; }
   }
   @media (max-width: 720px) {
-    .bp-screen { display:grid; grid-template-columns:1fr 1fr; gap:10px; min-height:auto; }
-    .bp-panel, .bp-screen.is-folded .bp-panel { min-height:52vh; transform:none; margin-left:0; border:1px solid rgba(23,19,16,.13); }
+    .bp-screen { grid-template-columns:1fr 1fr; }
     .bp-panel:hover { flex:1; }
     .bp-name { font-size:28px; }
   }
@@ -478,7 +461,6 @@
   .quote-brand {
     position:absolute; left:9.2%; top:52%; z-index:5;
     width:min(650px, 48vw);
-    transform:translateY(-50%) translateY(14px);
     color:#f2ece0;
     opacity:0; transform:translateY(12px);
     transition:opacity .7s ease, transform .8s cubic-bezier(.22,.72,.18,1);
@@ -555,19 +537,8 @@
     .quote-brand { left:7%; width:52vw; }
   }
   @media (max-width: 720px) {
-    .quote-brand { position:absolute; left:26px; right:26px; top:auto; bottom:25%; width:auto; transform:translateY(12px); }
-    .quote-block { right:22px; top:44%; transform:translateY(-50%); }
-    .quote-brand-copy { font-size:12px; line-height:1.78; }
-    .quote-brand-product { margin:12px 0 14px; font-size:10px; }
-    .quote-blends span { font-size:14px; }
-    .quote-blends small { display:none; }
-    .quote-blends a { padding:10px 5px; justify-content:center; }
-    .quote-blends a + a { padding-left:5px; }
-    .quote-cta { bottom:7%; }
+    .quote-brand { position:absolute; }
     .quote-haze::before { width:120vw; height:120vw; left:-40vw; top:28vh; }
-    #byeongpung { padding:86px 20px 72px; }
-    .bp-screen { height:auto; }
-    .bp-note { opacity:1; transform:none; }
   }
 
   
@@ -592,14 +563,12 @@
       border-bottom:1px solid rgba(23,19,16,.08);
     }
     .site-header.on-dark {
-      background:rgba(14,13,12,.90);
       border-bottom-color:rgba(255,255,255,.08);
     }
     .site-header-inner { padding:11px 18px; }
     .site-logo img { height:36px; }
     .site-nav { display:none; }
     .hamburger { display:flex; width:28px; height:28px; }
-    .mobile-nav { padding:0 18px 14px; background:transparent; }
     .mobile-nav a { color:rgba(23,19,16,.72); }
     .site-header.on-dark .mobile-nav a {
       color:rgba(255,255,255,.82);
@@ -611,29 +580,23 @@
     #quote { padding-top:82px; }
 
     /* 2페이지: 왼쪽 소개와 오른쪽 세로 카피의 칼럼을 강제로 분리 */
-    .quote-block {
-      right:20px; top:37%; transform:translateY(-50%);
+    .quote-block { transform:translateY(-50%);
     }
-    .quote-block p {
-      font-size:11px; line-height:1.5; letter-spacing:.045em;
+    .quote-block p { letter-spacing:.045em;
     }
-    .quote-brand {
-      left:22px; right:112px; top:53%; bottom:auto; width:auto;
+    .quote-brand { bottom:auto; width:auto;
       transform:translateY(12px);
     }
     .quote-brand.visible { transform:translateY(-50%); }
     .quote-brand-kicker { font-size:9px; margin-bottom:10px; }
-    .quote-brand-copy { max-width:none; font-size:12px; line-height:1.78; }
-    .quote-brand-product { margin:12px 0 12px; font-size:9px; line-height:1.6; }
+    .quote-brand-copy { max-width:none; }
+    .quote-brand-product { margin:12px 0 12px; line-height:1.6; }
     .quote-blends { grid-template-columns:repeat(2,1fr); }
     .quote-blends a { padding:9px 6px; justify-content:flex-start; }
     .quote-blends a + a { padding-left:8px; }
     .quote-blends a:nth-child(3) { border-left:0; border-top:1px solid rgba(242,236,224,.12); }
     .quote-blends a:nth-child(4) { border-top:1px solid rgba(242,236,224,.12); }
-    .quote-blends span { font-size:13px; }
     .quote-blends small { display:inline; font-size:8px; }
-    .quote-cta { right:22px; bottom:6%; }
-    .quote-cta a { font-size:13px; }
     .quote-cta-eyebrow { font-size:9px; }
 
     /* 3페이지는 모바일에서만 가로 스크롤 카드로 전환 */
@@ -675,8 +638,6 @@
   }
 
   @media (max-width: 390px) {
-    .quote-brand { right:104px; }
-    .quote-brand-copy { font-size:11px; }
     .quote-block { right:16px; }
     .bp-panel,
     .bp-screen.is-folded .bp-panel { flex-basis:82vw; width:82vw; min-width:82vw; }
@@ -696,18 +657,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   --u24-rgb: 216,164,161;
   --u24-model-final-left: 3.2vw;
   --u24-model-start-shift: 77vw;
-  --u24-model-width: 12.4vh;
-  --u24-model-height: 54vh;
-  --u24-paper-top: 30.5vh;
-  --u24-paper-height: 52.5vh;
   --u24-paper-right: 4.2vw;
-  --u24-paper-left: calc(var(--u24-model-final-left) + 7.5vh);
 }
 #byeongpung .u24-stage {
   position: relative;
   width:100%;
   height:100%;
-  overflow:hidden;
   isolation:isolate;
   touch-action: pan-y;
   overscroll-behavior: contain;
@@ -733,22 +688,14 @@ html, body { scroll-snap-type: y mandatory !important; }
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(var(--u24-rgb),.14) 0%, rgba(var(--u24-rgb),.055) 31%, transparent 68%);
   filter:blur(54px);
-  opacity:.84;
   transition:background .65s ease;
 }
 #byeongpung .u24-head {
   position:absolute;
   z-index:15;
-  left:7vw;
-  right:7vw;
-  top:10.5vh;
-  display:flex;
-  align-items:flex-end;
   justify-content:space-between;
   gap:24px;
-  pointer-events:none;
 }
-#byeongpung .u24-head-copy { max-width: 620px; }
 #byeongpung .u24-kicker {
   margin:0 0 10px;
   font-size:10px;
@@ -758,40 +705,23 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-head h2 {
   margin:0;
   font-family:"Noto Serif KR","Batang",serif;
-  font-size:clamp(30px,2.7vw,42px);
   font-weight:400;
   letter-spacing:-.03em;
   color:#f4efe7;
 }
 #byeongpung .u24-head p:last-child {
   margin:10px 0 0;
-  font-size:11px;
-  line-height:1.75;
   color:rgba(243,238,229,.48);
 }
 #byeongpung .u24-instruction {
   margin:0 0 2px !important;
-  font-size:10px !important;
   letter-spacing:.08em;
   color:rgba(243,238,229,.31) !important;
-  white-space:nowrap;
 }
 #byeongpung .u24-paper {
   position:absolute;
-  z-index:4;
-  left:var(--u24-paper-left);
-  right:var(--u24-paper-right);
-  top:var(--u24-paper-top);
-  height:var(--u24-paper-height);
   overflow:hidden;
-  background:linear-gradient(180deg, #efe5d4 0%, #f6edde 48%, #ece0cc 100%);
-  box-shadow:0 24px 72px rgba(0,0,0,.27), inset 0 0 0 1px rgba(255,255,255,.22);
-  border:1px solid rgba(94,71,48,.22);
-  clip-path:inset(0 100% 0 0);
-  transition:clip-path 1.2s cubic-bezier(.18,.78,.18,1);
-  transform:translateZ(0);
 }
-#byeongpung.is-u24-entered .u24-paper { clip-path:inset(0 0 0 0); }
 #byeongpung .u24-paper::before {
   content:"";
   position:absolute;
@@ -808,13 +738,10 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-paper::after {
   content:"";
   position:absolute;
-  left:0;
   top:0;
   bottom:0;
-  width:28px;
   z-index:8;
   pointer-events:none;
-  background:linear-gradient(90deg, rgba(20,14,10,.18), rgba(255,255,255,.08) 45%, transparent 100%);
 }
 #byeongpung .u24-track {
   position:absolute;
@@ -833,9 +760,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   width:25%;
   height:100%;
   display:grid;
-  grid-template-columns:minmax(0,52%) minmax(0,48%);
   gap:0;
-  padding:28px 34px 30px 34px;
   box-sizing:border-box;
   background:rgb(var(--paper-rgb));
   color:#17120e;
@@ -846,12 +771,10 @@ html, body { scroll-snap-type: y mandatory !important; }
   position:relative;
   min-width:0;
   min-height:0;
-  padding:18px 14px 18px 14px;
   overflow:hidden;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(90deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
 }
 #byeongpung .u24-blend-image::after {
   content:"";
@@ -864,28 +787,21 @@ html, body { scroll-snap-type: y mandatory !important; }
   background:linear-gradient(90deg, transparent 0%, rgba(var(--paper-rgb),.18) 28%, rgba(var(--paper-rgb),.78) 74%, rgb(var(--paper-rgb)) 100%);
 }
 #byeongpung .u24-art {
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:var(--obj-pos,50% 50%);
   display:block;
 }
 #byeongpung .u24-blend-copy {
   position:relative;
-  z-index:2;
   min-width:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:flex-start;
-  padding: 6px 10px 6px 30px;
-  background:transparent;
 }
 #byeongpung .u24-season { font-size:10px; letter-spacing:.18em; color:rgba(23,18,14,.47); margin-bottom:13px; }
-#byeongpung .u24-name { margin:0; font-family:"Noto Serif KR","Batang",serif; font-size:clamp(40px,3.6vw,54px); line-height:1; font-weight:400; letter-spacing:-.035em; color:rgba(20,15,11,.95); }
-#byeongpung .u24-description { margin:18px 0 0; max-width:390px; font-family:"Noto Serif KR","Batang",serif; font-size:clamp(13px,1vw,16px); line-height:1.95; color:rgba(23,18,14,.70); }
+#byeongpung .u24-name { margin:0; font-family:"Noto Serif KR","Batang",serif; line-height:1; font-weight:400; letter-spacing:-.035em; color:rgba(20,15,11,.95); }
+#byeongpung .u24-description { margin:18px 0 0; max-width:390px; font-family:"Noto Serif KR","Batang",serif; line-height:1.95; color:rgba(23,18,14,.70); }
 #byeongpung .u24-notes { margin:23px 0 0; padding-top:14px; width:100%; border-top:1px solid rgba(23,18,14,.14); font-size:10px; line-height:1.7; letter-spacing:.05em; color:rgba(23,18,14,.48); }
-#byeongpung .u24-index { margin-top:28px; font-size:9px; letter-spacing:.14em; color:rgba(23,18,14,.34); }
+#byeongpung .u24-index { font-size:9px; letter-spacing:.14em; color:rgba(23,18,14,.34); }
 /* Elongated octagon CTA — same chamfered-corner + holographic gradient language as the
    page-2 CTA marks. This is the only clickable target inside a season card, so a
    swipe/drag gesture on the rest of the card never gets mistaken for a tap-through.
@@ -926,19 +842,9 @@ html, body { scroll-snap-type: y mandatory !important; }
 #byeongpung .u24-detail-badge:focus-visible { outline: 2px solid #171310; outline-offset: 3px; }
 #byeongpung .u24-model-wrap {
   position:absolute;
-  z-index:12;
-  left:var(--u24-model-final-left);
-  top:calc(var(--u24-paper-top) - 3.2vh);
-  width:var(--u24-model-width);
-  height:var(--u24-model-height);
-  transform:translate3d(var(--u24-model-start-shift), 0, 0);
-  transform-origin:50% 50%;
-  transition:transform 1.1s cubic-bezier(.18,.78,.18,1);
   pointer-events:none;
-  overflow:visible;
 }
-#byeongpung.is-u24-entered .u24-model-wrap { transform:translate3d(0, 0, 0); }
-#byeongpung .u24-model-wrap model-viewer { width:100%; height:100%; background:transparent; --poster-color:transparent; pointer-events:none !important; filter:drop-shadow(0 18px 20px rgba(0,0,0,.30)); }
+#byeongpung .u24-model-wrap model-viewer { background:transparent; --poster-color:transparent; pointer-events:none !important; filter:drop-shadow(0 18px 20px rgba(0,0,0,.30)); }
 /* Warm spotlight pool behind the scroll roller so its dark material still reads
    against the dark stage background — moves with the wrap during the entry slide,
    and shifts tone with --u24-rgb to match the active season, same as .u24-glow.
@@ -979,42 +885,13 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung.scroll3d-section {
     --u24-model-final-left: 14px;
     --u24-model-start-shift: 70vw;
-    --u24-model-width: 10.8vh;
-    --u24-model-height: 50vh;
-    --u24-paper-left: calc(14px + 6.8vh);
     --u24-paper-right: 18px;
-    --u24-paper-top: 31vh;
-    --u24-paper-height: 50vh;
   }
   #byeongpung .u24-head { left:22px; right:22px; top:11vh; }
   #byeongpung .u24-head-copy { max-width:500px; }
   #byeongpung .u24-instruction { display:none; }
   #byeongpung .u24-blend { padding:20px 22px 22px 20px; grid-template-columns:minmax(0,53%) minmax(0,47%); }
   #byeongpung .u24-blend-copy { padding-left:18px; }
-}
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-final-left: 10px;
-    --u24-model-start-shift: 62vw;
-    --u24-model-width: 9.2vh;
-    --u24-model-height: 40vh;
-    --u24-paper-left: calc(10px + 5.8vh);
-    --u24-paper-right: 12px;
-    --u24-paper-top: 24.5vh;
-    --u24-paper-height: 60vh;
-  }
-  #byeongpung .u24-head { top:9.5vh; }
-  #byeongpung .u24-head h2 { font-size:28px; }
-  #byeongpung .u24-head p:last-child { font-size:10px; }
-  #byeongpung .u24-blend { grid-template-columns:100%; padding:14px 14px 18px; }
-  #byeongpung .u24-blend-image { min-height:54%; padding:14px 14px 6px; }
-  #byeongpung .u24-art { object-position:var(--obj-pos-mobile, 50% 50%); }
-  #byeongpung .u24-blend-image::after { width:100%; height:28%; top:auto; bottom:0; right:0; background:linear-gradient(180deg, transparent 0%, rgba(var(--paper-rgb),.12) 28%, rgba(var(--paper-rgb),.86) 76%, rgb(var(--paper-rgb)) 100%); }
-  #byeongpung .u24-blend-copy { justify-content:flex-end; padding:12px 6px 0; }
-  #byeongpung .u24-name { font-size:32px; }
-  #byeongpung .u24-description { margin-top:10px; font-size:11px; line-height:1.72; max-width:100%; }
-  #byeongpung .u24-notes { margin-top:12px; padding-top:10px; font-size:9px; }
-  #byeongpung .u24-index { display:none; }
 }
 
 #byeongpung.scroll3d-section {
@@ -1023,57 +900,26 @@ html, body { scroll-snap-type: y mandatory !important; }
   --u24-roll-start-x: 63vw;
   --u24-roll-width: 8.5vw;
   --u24-roll-height: 60vh;
-
-  /* 레퍼런스의 청회색 받침 — 화면 전체가 아니라 족자 오브젝트 폭까지만 */
-  --u24-back-left: 8.5vw;
-  --u24-back-width: 74vw;
-  --u24-back-top: 28.5vh;
-  --u24-back-height: 49vh;
-
-  /* 실제 종이 — 오른쪽에서 시작한 롤의 위치까지만 펼쳐지도록 유한 폭 */
-  --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width));
-  --u24-paper-width: 65vw;
-  --u24-paper-top: 31.5vh;
-  --u24-paper-height: 43vh;
 }
 
 #byeongpung .u24-stage::after {
   content:"";
   position:absolute;
-  left:var(--u24-back-left);
   right:auto;
-  width:var(--u24-back-width);
-  top:var(--u24-back-top);
-  height:var(--u24-back-height);
   z-index:0;
   pointer-events:none;
   background:#788694;
-  clip-path:inset(0 0 0 100%);
-  transition:clip-path 1.55s cubic-bezier(.18,.78,.18,1);
   will-change:clip-path;
 }
-#byeongpung.is-u24-entered .u24-stage::after { clip-path:inset(0 0 0 0); }
 
 /* 기존에 숨겨졌던 사계 소개 문구를 다시 표시 */
 #byeongpung .u24-head {
   opacity:1 !important;
   pointer-events:none;
-  left:9.5vw;
-  right:9.5vw;
-  top:10.5vh;
-  align-items:flex-end;
 }
-#byeongpung .u24-head-copy { max-width:760px; }
-#byeongpung .u24-kicker { margin-bottom:8px; }
 #byeongpung .u24-head h2 {
   font-size:clamp(23px,2vw,31px);
   line-height:1.4;
-}
-#byeongpung .u24-head p:last-child {
-  margin-top:8px;
-  max-width:620px;
-  font-size:10px;
-  line-height:1.7;
 }
 #byeongpung .u24-instruction { font-size:9px !important; }
 #byeongpung .u24-glow { opacity:0 !important; }
@@ -1088,13 +934,8 @@ html, body { scroll-snap-type: y mandatory !important; }
   border:0;
   box-shadow:0 14px 42px rgba(0,0,0,.12);
   background:#f4eddc;
-
-  /* 종이는 오른쪽의 말린 족자 자리에서부터 왼쪽으로 생긴다. */
-  clip-path:inset(0 0 0 100%) !important;
-  transition:clip-path 1.55s cubic-bezier(.18,.78,.18,1) !important;
   transform:translateZ(0);
 }
-#byeongpung.is-u24-entered .u24-paper { clip-path:inset(0 0 0 0) !important; }
 
 #byeongpung .u24-paper::after {
   left:0;
@@ -1113,9 +954,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 #byeongpung .u24-blend-image::after { display:none; }
 #byeongpung .u24-art {
-  width:100%;
-  height:100%;
-  object-fit:cover !important;
   object-position:var(--obj-pos,50% 50%);
 }
 #byeongpung .u24-blend-copy {
@@ -1130,20 +968,14 @@ html, body { scroll-snap-type: y mandatory !important; }
 /* 펼쳐지는 도중 화담 내용이 먼저 떠 있지 않도록, 종이 뒤에서 같이 등장 */
 #byeongpung:not(.is-u24-entered) .u24-blend-copy,
 #byeongpung:not(.is-u24-entered) .u24-blend-image { opacity:0; }
-#byeongpung .u24-blend-copy,
-#byeongpung .u24-blend-image { transition:opacity .38s ease .52s; }
 
 #byeongpung .u24-model-wrap {
   left:var(--u24-roll-final-left) !important;
-  top:22vh !important;
   width:var(--u24-roll-width) !important;
   height:var(--u24-roll-height) !important;
   transform:translate3d(var(--u24-roll-start-x),0,0) !important;
-  transition:transform 1.55s cubic-bezier(.18,.78,.18,1) !important;
   transform-origin:50% 50%;
-  filter:drop-shadow(8px 14px 15px rgba(0,0,0,.24));
   z-index:12;
-  overflow:visible;
 }
 #byeongpung.is-u24-entered .u24-model-wrap { transform:translate3d(0,0,0) !important; }
 #byeongpung .u24-model-wrap model-viewer {
@@ -1158,142 +990,30 @@ html, body { scroll-snap-type: y mandatory !important; }
     --u24-roll-start-x:65vw;
     --u24-roll-width:10vw;
     --u24-roll-height:58vh;
-    --u24-back-left:5.5vw;
-    --u24-back-width:82vw;
-    --u24-back-top:29vh;
     --u24-back-height:48vh;
-    --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width));
-    --u24-paper-width:71vw;
-    --u24-paper-top:32vh;
     --u24-paper-height:42vh;
   }
-  #byeongpung .u24-model-wrap { top:23vh !important; }
 }
 
 @media (max-width: 720px) {
   #byeongpung.scroll3d-section {
-    --u24-roll-final-left:2.5vw;
     --u24-roll-start-x:70vw;
-    --u24-roll-width:18vw;
-    --u24-roll-height:54vh;
-    --u24-back-left:0;
-    --u24-back-width:94vw;
-    --u24-back-top:30vh;
-    --u24-back-height:48vh;
-    --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width));
-    --u24-paper-width:75vw;
-    --u24-paper-top:33vh;
-    --u24-paper-height:42vh;
   }
-  #byeongpung .u24-model-wrap { top:26vh !important; }
-  #byeongpung .u24-head { left:22px; right:22px; top:10.5vh; }
-  #byeongpung .u24-head h2 { font-size:22px; }
-  #byeongpung .u24-head p:last-child { font-size:9px; max-width:72vw; }
-  #byeongpung .u24-instruction { display:none; }
-  #byeongpung .u24-blend { grid-template-columns:minmax(0,58%) minmax(0,42%) !important; }
-  #byeongpung .u24-blend-image { min-height:0 !important; }
-  #byeongpung .u24-blend-copy { justify-content:center !important; padding:7% 7% 7% 9% !important; }
-  #byeongpung .u24-name { font-size:26px; }
-  #byeongpung .u24-description { font-size:9px; line-height:1.6; }
-  #byeongpung .u24-notes { font-size:8px; }
 }
-
-#byeongpung.scroll3d-section {
-  /* 종이의 오른쪽 끝은 초기 롤러 오른쪽 끝과 같고,
-     펼쳐진 뒤 왼쪽 끝은 최종 롤러 오른쪽 끝에 정확히 닿는다. */
-  --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width));
-  --u24-paper-width: calc(var(--u24-roll-start-x));
-
-  /* v34 레이아웃은 그대로 두고 세로 위치만 살짝 아래로 */
-  --u24-back-top: 29.8vh;
-  --u24-paper-top: 32.8vh;
-}
-
-#byeongpung .u24-head { top:11.8vh !important; }
-
-/* 롤러가 아주 조금 먼저 출발하고, 종이가 0.12초 뒤 따라오며 같은 시점에 도착 */
-#byeongpung .u24-model-wrap {
-  top:23.3vh !important;
-  transition:transform 1.70s cubic-bezier(.18,.78,.18,1) 0s !important;
-}
-#byeongpung .u24-paper {
-  transition:clip-path 1.58s cubic-bezier(.18,.78,.18,1) .12s !important;
-}
-#byeongpung .u24-stage::after {
-  transition:clip-path 1.58s cubic-bezier(.18,.78,.18,1) .12s !important;
-}
-
-@media (max-width: 1024px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-top:30.3vh;
-    --u24-paper-top:33.3vh;
-  }
-  #byeongpung .u24-model-wrap { top:24.3vh !important; }
-}
-
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-top:31.3vh;
-    --u24-paper-top:34.3vh;
-  }
-  #byeongpung .u24-model-wrap { top:27.3vh !important; }
-  #byeongpung .u24-head { top:11.8vh !important; }
-}
-
-#byeongpung.scroll3d-section {
-  /* paper가 최종 롤러 오른쪽 끝을 절대 넘지 않게 살짝 안쪽에서 시작 */
-  --u24-paper-left: calc(var(--u24-roll-final-left) + var(--u24-roll-width) + .14vw);
-  --u24-paper-width: calc(var(--u24-roll-start-x) - .14vw);
-
-  /* 족자 + 이미지 + 받침 전체 그룹을 더 아래로 */
-  --u24-back-top: 31.4vh;
-  --u24-paper-top: 34.4vh;
-}
-
-/* “마주온의 사계” 헤드만 아주 살짝 5px 하향 */
-#byeongpung .u24-head { top: calc(11.8vh + 5px) !important; }
-
-/* 족자/이미지 그룹 하향 */
-#byeongpung .u24-model-wrap { top:24.9vh !important; }
 
 /* 롤러가 아주 미세하게 먼저 출발하고, 종이/배경이 거의 동시에 따라오며 같은 시점에 맞춰 끝나도록 재정렬 */
 #byeongpung .u24-model-wrap {
   transition:transform 1.64s cubic-bezier(.2,.78,.2,1) 0s !important;
 }
-#byeongpung .u24-paper {
-  transition:clip-path 1.56s cubic-bezier(.2,.78,.2,1) .08s !important;
-}
-#byeongpung .u24-stage::after {
-  transition:clip-path 1.56s cubic-bezier(.2,.78,.2,1) .08s !important;
-}
-
-@media (max-width: 1024px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-top:31.9vh;
-    --u24-paper-top:34.9vh;
-  }
-  #byeongpung .u24-model-wrap { top:25.9vh !important; }
-}
-
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-top:32.9vh;
-    --u24-paper-top:35.9vh;
-  }
-  #byeongpung .u24-model-wrap { top:28.9vh !important; }
-  #byeongpung .u24-head { top: calc(10.7vh + 5px) !important; }
-}
 
 #byeongpung.scroll3d-section {
   /* 크기/가로 배치는 유지. 족자·화폭·받침만 눈에 띄게 아래로 내린다. */
   --u24-back-left: 17.4vw;
-  --u24-back-width: 65.6vw;
   --u24-back-top: 39vh;
   --u24-back-height: 49vh;
 
   /* 종이는 족자 뒤에 살짝 겹쳐 시작해 왼쪽으로 절대 튀어나오지 않는다. */
   --u24-paper-left: 17.4vw;
-  --u24-paper-width: 63.6vw;
   --u24-paper-top: 42vh;
   --u24-paper-height: 43vh;
 }
@@ -1304,7 +1024,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 /* 족자는 처음부터 최종 위치에 고정. 이동/회전 애니메이션 없음. */
 #byeongpung .u24-model-wrap,
 #byeongpung.is-u24-entered .u24-model-wrap {
-  top: 32.5vh !important;
   transform: translate3d(0,0,0) !important;
   transition: none !important;
 }
@@ -1340,28 +1059,10 @@ html, body { scroll-snap-type: y mandatory !important; }
 @media (max-width: 1024px) {
   #byeongpung.scroll3d-section {
     --u24-back-left: 16.3vw;
-    --u24-back-width: 71.2vw;
     --u24-back-top: 39.5vh;
     --u24-paper-left: 16.3vw;
-    --u24-paper-width: 69.7vw;
     --u24-paper-top: 42.5vh;
   }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap { top:33vh !important; }
-}
-
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-left: 18.8vw;
-    --u24-back-width: 75.2vw;
-    --u24-back-top: 38vh;
-    --u24-paper-left: 18.8vw;
-    --u24-paper-width: 73.2vw;
-    --u24-paper-top: 41vh;
-  }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap { top:34vh !important; }
-  #byeongpung .u24-head { top: calc(10.7vh + 10px) !important; }
 }
 
 #byeongpung.scroll3d-section {
@@ -1382,13 +1083,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-width: calc(100vw - var(--u24-back-left) + 14vw);
-    --u24-paper-width: calc(100vw - var(--u24-paper-left) + 12vw);
-  }
-}
-
 #byeongpung .u24-stage {
   overflow: visible !important;
 }
@@ -1403,7 +1097,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   max-height: 100% !important;
   object-fit: contain !important;
 }
-
 
 /* 상단 사계 소개를 한 덩어리처럼 정돈 */
 #byeongpung .u24-head {
@@ -1421,9 +1114,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   margin-bottom: 9px !important;
 }
 #byeongpung .u24-head p:last-child {
-  max-width: 510px !important;
   margin-top: 7px !important;
-  line-height: 1.65 !important;
 }
 #byeongpung .u24-instruction {
   justify-self: end !important;
@@ -1458,7 +1149,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* 중간: 블렌드 설명 배경. 위아래/오른쪽 끝까지 꽉 채움 */
   #byeongpung .u24-blend-copy {
     position: absolute !important;
-    z-index: 2 !important;
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
@@ -1530,64 +1220,25 @@ html, body { scroll-snap-type: y mandatory !important; }
     width: 51.5% !important;
   }
 }
-
-#byeongpung.scroll3d-section {
-  --u24-model-width: 13.0vh;
-  --u24-model-height: 57vh;
-}
 #byeongpung .u24-model-wrap {
   top: calc(var(--u24-paper-top) - 4.6vh) !important;
 }
 @media (max-width: 1024px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-width: 11.2vh;
-    --u24-model-height: 53vh;
-  }
   #byeongpung .u24-model-wrap {
     top: calc(var(--u24-paper-top) - 4.4vh) !important;
   }
 }
 @media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-width: 9.7vh;
-    --u24-model-height: 43vh;
-  }
   #byeongpung .u24-model-wrap {
     top: calc(var(--u24-paper-top) - 4.1vh) !important;
   }
 }
-
-#byeongpung.scroll3d-section {
-  --u24-model-width: 13.9vh;
-  --u24-model-height: 61.5vh;
-}
 #byeongpung .u24-model-wrap,
 #byeongpung.is-u24-entered .u24-model-wrap {
-  top: calc(var(--u24-paper-top) - 5.9vh) !important;
   z-index: 20 !important;
 }
 #byeongpung .u24-model-wrap model-viewer {
   overflow: visible !important;
-}
-@media (max-width: 1024px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-width: 12.1vh;
-    --u24-model-height: 57vh;
-  }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    top: calc(var(--u24-paper-top) - 5.4vh) !important;
-  }
-}
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-width: 10.2vh;
-    --u24-model-height: 46vh;
-  }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    top: calc(var(--u24-paper-top) - 4.8vh) !important;
-  }
 }
 
 #byeongpung.scroll3d-section {
@@ -1608,26 +1259,8 @@ html, body { scroll-snap-type: y mandatory !important; }
     top: calc(var(--u24-paper-top) - 7.2vh) !important;
   }
 }
-@media (max-width: 720px) {
-  #byeongpung.scroll3d-section {
-    --u24-model-width: 11.1vh;
-    --u24-model-height: 50vh;
-  }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    top: calc(var(--u24-paper-top) - 5.9vh) !important;
-  }
-}
 
 @media (min-width: 721px) {
-  /* GUI 확정값 그대로 적용. 카메라(FOV 28° / Orbit 0.98m)는 건드리지 않음. */
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    width: 16.9vh !important;
-    height: 67.5vh !important;
-    top: 31vh !important;
-    left: 9.5vw !important;
-  }
 
   /* 레이어: 일러스트(3) > 블렌드 설명색 배경(2) > 족자 종이(0).
      설명 배경색을 슬라이드 전체에 깔아 일러스트 왼쪽 여백도 오른쪽과 같은 색으로 통일. */
@@ -1659,13 +1292,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-head p:last-child {
     font-size: 12.5px !important;
     line-height: 1.75 !important;
-  }
-}
-@media (max-width: 720px) {
-  #byeongpung .u24-head p:last-child {
-    font-size: 12px !important;
-    line-height: 1.72 !important;
-    max-width: 82vw !important;
   }
 }
 
@@ -1728,87 +1354,23 @@ html, body { scroll-snap-type: y mandatory !important; }
     --u24-model-start-shift: 56vw;
     --u24-model-width: 10.2vh;
     --u24-model-height: 46vh;
-    --u24-paper-left: calc(8px + 5.6vh);
     --u24-paper-right: 10px;
-    --u24-paper-top: 24.5svh;
-    --u24-paper-height: 61svh;
   }
   #byeongpung .u24-head {
-    left: 18px;
-    right: 18px;
-    top: 10svh;
     gap: 8px;
-    align-items: flex-start;
     flex-direction: column;
   }
   #byeongpung .u24-kicker {
     margin-bottom: 8px;
-    font-size: 9px;
-  }
-  #byeongpung .u24-head h2 {
-    font-size: 34px;
-    line-height: 1.08;
-  }
-  #byeongpung .u24-head p:last-child {
-    font-size: 13px !important;
-    line-height: 1.8 !important;
-    max-width: none !important;
-  }
-  #byeongpung .u24-paper {
-    box-shadow: 0 16px 44px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.18);
-  }
-  #byeongpung .u24-blend {
-    grid-template-columns: 100%;
-    padding: 14px 14px 18px;
-  }
-  #byeongpung .u24-blend::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: rgb(var(--paper-rgb));
-    pointer-events: none;
-  }
-  #byeongpung .u24-blend-copy {
-    z-index: 2;
-    justify-content: flex-start;
-    padding: 12px 6px 0;
   }
   #byeongpung .u24-blend-image,
   #byeongpung .u24-art {
     z-index: 3;
   }
-  #byeongpung .u24-blend-image {
-    min-height: 45%;
-    padding: 10px 8px 2px;
-    align-items: flex-start;
-  }
-  #byeongpung .u24-art {
-    object-fit: contain;
-    object-position: var(--obj-pos-mobile, 50% 46%);
-  }
-  #byeongpung .u24-season {
-    margin-bottom: 10px;
-    font-size: 10px;
-  }
-  #byeongpung .u24-name {
-    font-size: 38px;
-  }
   #byeongpung .u24-description {
-    margin-top: 12px;
-    max-width: 100%;
-    font-size: 13px;
-    line-height: 1.82;
     color: rgba(23,18,14,.74);
   }
-  #byeongpung .u24-notes {
-    margin-top: 14px;
-    padding-top: 11px;
-    font-size: 10px;
-    line-height: 1.72;
-  }
   #byeongpung .u24-index {
-    display: block;
     margin-top: 16px;
     font-size: 9px;
     color: rgba(23,18,14,.36);
@@ -1822,17 +1384,7 @@ html, body { scroll-snap-type: y mandatory !important; }
   .quote-brand-copy {
     font-size: 11.5px;
   }
-  #byeongpung .u24-head h2 {
-    font-size: 31px;
-  }
-  #byeongpung .u24-description {
-    font-size: 12.5px;
-  }
-  #byeongpung .u24-name {
-    font-size: 35px;
-  }
 }
-
 
 /* MAJUON mobile final overrides — loaded after styles.css */
 @media (max-width: 720px) {
@@ -1848,26 +1400,11 @@ html, body { scroll-snap-type: y mandatory !important; }
     --u24-roll-final-left: 8px;
     --u24-roll-width: 72px;
     --u24-roll-height: 62svh;
-    --u24-back-left: 44px;
-    --u24-back-width: calc(100vw - 44px + 20px);
-    --u24-back-top: 29svh;
-    --u24-back-height: 58svh;
-    --u24-paper-left: 54px;
-    --u24-paper-width: calc(100vw - 54px + 20px);
-    --u24-paper-top: 31svh;
-    --u24-paper-height: 54svh;
   }
 
   #byeongpung .u24-stage {
     overflow: hidden !important;
     touch-action: pan-y !important;
-  }
-
-  #byeongpung .u24-stage::after {
-    left: var(--u24-back-left) !important;
-    top: var(--u24-back-top) !important;
-    width: var(--u24-back-width) !important;
-    height: var(--u24-back-height) !important;
   }
 
   #byeongpung .u24-head {
@@ -1909,11 +1446,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
   #byeongpung .u24-paper {
-    left: var(--u24-paper-left) !important;
-    right: auto !important;
-    top: var(--u24-paper-top) !important;
-    width: var(--u24-paper-width) !important;
-    height: var(--u24-paper-height) !important;
     overflow: hidden !important;
     box-shadow: 0 15px 42px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.18) !important;
   }
@@ -1927,20 +1459,13 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
   #byeongpung .u24-blend {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    grid-template-rows: 57% 43% !important;
     gap: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    background: transparent !important;
   }
   #byeongpung .u24-blend::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: #f4eddc;
     pointer-events: none;
   }
   #byeongpung .u24-blend::after {
@@ -1951,92 +1476,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     background: rgb(var(--paper-rgb)) !important;
     pointer-events: none !important;
   }
-
-  #byeongpung .u24-blend-image {
-    position: relative !important;
-    z-index: 3 !important;
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    padding: 6px 8px 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-    background: transparent !important;
-  }
-  #byeongpung .u24-blend-image::after {
-    display: none !important;
-  }
-  #byeongpung .u24-art {
-    position: relative !important;
-    z-index: 3 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: var(--obj-pos-mobile, 50% 50%) !important;
-    display: block !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    position: relative !important;
-    z-index: 2 !important;
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    padding: 12px 40px 14px 30px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-    background: rgb(var(--paper-rgb)) !important;
-  }
-  #byeongpung .u24-season {
-    margin: 0 0 7px !important;
-    font-size: 9px !important;
-    line-height: 1.3 !important;
-    letter-spacing: .16em !important;
-  }
-  #byeongpung .u24-name {
-    margin: 0 !important;
-    font-size: 34px !important;
-    line-height: 1 !important;
-  }
-  #byeongpung .u24-description {
-    margin: 10px 0 0 !important;
-    max-width: 100% !important;
-    font-size: 12px !important;
-    line-height: 1.66 !important;
-  }
-  #byeongpung .u24-notes {
-    margin: 11px 0 0 !important;
-    padding-top: 9px !important;
-    width: 100% !important;
-    font-size: 9px !important;
-    line-height: 1.55 !important;
-  }
-  #byeongpung .u24-index {
-    display: none !important;
-  }
-
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    left: 6px !important;
-    top: 26.5svh !important;
-    width: 74px !important;
-    height: 62svh !important;
-    z-index: 20 !important;
-    overflow: visible !important;
-  }
   #byeongpung .u24-model-wrap model-viewer {
     width: 100% !important;
     height: 100% !important;
@@ -2045,12 +1484,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 @media (max-width: 390px) {
-  #byeongpung.scroll3d-section {
-    --u24-back-left: 40px;
-    --u24-paper-left: 49px;
-    --u24-paper-width: calc(100vw - 49px + 18px);
-    --u24-back-width: calc(100vw - 40px + 18px);
-  }
   #byeongpung .u24-head {
     left: 18px !important;
     right: 18px !important;
@@ -2067,16 +1500,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung.is-u24-entered .u24-model-wrap {
     left: 4px !important;
     width: 70px !important;
-  }
-  #byeongpung .u24-blend-copy {
-    padding-left: 32px !important;
-    padding-right: 34px !important;
-  }
-  #byeongpung .u24-name {
-    font-size: 32px !important;
-  }
-  #byeongpung .u24-description {
-    font-size: 11.5px !important;
   }
 }
 
@@ -2120,22 +1543,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
 /* Temporary mobile tuning GUI. Remove this file before production. */
 
 /* Final desktop/mobile split */
 /* v61: desktop / mobile 값을 완전히 분리. 모바일 족자값은 coarse pointer + 720px 이하에서만 적용 */
 
 /* 데스크톱 기준값 복원 */
-@media (min-width: 721px) {
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    width: 16.9vh !important;
-    height: 67.5vh !important;
-    top: 31vh !important;
-    left: 9.5vw !important;
-  }
-}
 
 /* 실제 모바일 전용 */
 @media (max-width: 720px) {
@@ -2170,19 +1583,12 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* 사용자 확정 모바일 족자값 */
   #byeongpung .u24-model-wrap,
   #byeongpung.is-u24-entered .u24-model-wrap {
-    width: 175px !important;
-    height: 78.5svh !important;
-    top: 20.5svh !important;
-    left: -96px !important;
     z-index: 20 !important;
     overflow: visible !important;
   }
 
   /* 모바일 설명 영역 우측 정렬 */
   #byeongpung .u24-blend-copy {
-    align-items: flex-end !important;
-    text-align: right !important;
-    justify-content: flex-start !important;
     padding-left: 92px !important;
     padding-right: 16px !important;
   }
@@ -2209,10 +1615,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 
 /* Small-phone finishing rule (recovered from an accidental SVG-template insertion) */
 @media (max-width: 390px) {
-  #byeongpung .u24-blend-copy {
-    padding-left: 104px !important;
-    padding-right: 20px !important;
-  }
   #byeongpung .u24-description,
   #byeongpung .u24-notes {
     max-width: 260px !important;
@@ -2284,14 +1686,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
-  .site-header.menu-open .hamburger span,
-  .site-header.on-dark.menu-open .hamburger span {
-    background: #171310 !important;
-  }
-  body.mobile-menu-open {
-    overflow: hidden !important;
-    overscroll-behavior: none;
-  }
 
   /* Page 3: roller is the user's fixed mobile size. The paper is derived from its visible edge. */
   #byeongpung.scroll3d-section {
@@ -2305,27 +1699,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     --u24-paper-top: 31.2svh !important;
     --u24-paper-height: 54.8svh !important;
   }
-  #byeongpung .u24-stage::after {
-    left: var(--u24-back-left) !important;
-    width: var(--u24-back-width) !important;
-    top: var(--u24-back-top) !important;
-    height: var(--u24-back-height) !important;
-  }
-  #byeongpung .u24-paper {
-    left: var(--u24-paper-left) !important;
-    right: auto !important;
-    width: var(--u24-paper-width) !important;
-    top: var(--u24-paper-top) !important;
-    height: var(--u24-paper-height) !important;
-    box-sizing: border-box !important;
-  }
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    width: 175px !important;
-    height: 78.5svh !important;
-    top: 20.5svh !important;
-    left: -96px !important;
-  }
 
   /* Image and copy now share the same usable paper width; no off-screen right edge. */
   #byeongpung .u24-blend {
@@ -2335,58 +1708,8 @@ html, body { scroll-snap-type: y mandatory !important; }
     height: 100% !important;
     box-sizing: border-box !important;
   }
-  #byeongpung .u24-blend-image {
-    box-sizing: border-box !important;
-    padding: 10px 14px 2px 12px !important;
-    overflow: hidden !important;
-  }
   #byeongpung .u24-art {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 94% !important;
-    max-height: 100% !important;
-    margin-left: auto !important;
     margin-right: auto !important;
-    object-fit: contain !important;
-    object-position: var(--obj-pos-mobile, 50% 50%) !important;
-  }
-
-  /* Right-aligned copy with a real safe area. */
-  #byeongpung .u24-blend-copy {
-    box-sizing: border-box !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 9px max(22px, env(safe-area-inset-right, 0px)) 12px 14px !important;
-    align-items: flex-end !important;
-    text-align: right !important;
-    overflow: hidden !important;
-  }
-  #byeongpung .u24-season,
-  #byeongpung .u24-name,
-  #byeongpung .u24-description,
-  #byeongpung .u24-notes {
-    box-sizing: border-box !important;
-    max-width: min(255px, calc(100vw - 118px)) !important;
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    text-align: right !important;
-    word-break: keep-all !important;
-    overflow-wrap: break-word !important;
-  }
-  #byeongpung .u24-name {
-    font-size: clamp(29px, 8.2vw, 34px) !important;
-  }
-  #byeongpung .u24-description {
-    margin-top: 8px !important;
-    font-size: clamp(10.5px, 3vw, 12px) !important;
-    line-height: 1.62 !important;
-  }
-  #byeongpung .u24-notes {
-    width: min(255px, calc(100vw - 118px)) !important;
-    margin-top: 9px !important;
-    padding-top: 8px !important;
-    font-size: 8.5px !important;
-    line-height: 1.5 !important;
   }
 }
 
@@ -2411,7 +1734,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     width: min(235px, calc(100vw - 112px)) !important;
   }
 }
-
 
 @media (max-width: 720px) {
   #byeongpung.scroll3d-section {
@@ -2438,28 +1760,11 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
   #byeongpung .u24-stage::after {
-    left: var(--m-back-left) !important;
     right: var(--m-back-right) !important;
-    width: auto !important;
-    top: var(--m-back-top) !important;
-    height: var(--m-back-height) !important;
   }
 
   #byeongpung .u24-paper {
-    left: var(--m-paper-left) !important;
-    right: var(--m-paper-right) !important;
-    width: auto !important;
-    top: var(--m-paper-top) !important;
-    height: var(--m-paper-height) !important;
     box-sizing: border-box !important;
-  }
-
-  #byeongpung .u24-model-wrap,
-  #byeongpung.is-u24-entered .u24-model-wrap {
-    left: var(--m-roll-left) !important;
-    top: var(--m-roll-top) !important;
-    width: var(--m-roll-width) !important;
-    height: var(--m-roll-height) !important;
   }
 
   /* The copy owns only the height it needs; the illustration gets all remaining paper height. */
@@ -2479,52 +1784,14 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend-image {
     grid-column: 1 !important;
     grid-row: 1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
     box-sizing: border-box !important;
-    padding: clamp(8px, 1.3svh, 12px) clamp(10px, 3.4vw, 14px) 2px !important;
-    overflow: hidden !important;
-    display: flex !important;
-    align-items: stretch !important;
-    justify-content: center !important;
-  }
-
-  #byeongpung .u24-art {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
-    margin: 0 auto !important;
-    object-fit: contain !important;
-    object-position: var(--obj-pos-mobile, 50% 50%) !important;
   }
 
   #byeongpung .u24-blend-copy {
     grid-column: 1 !important;
     grid-row: 2 !important;
-    position: relative !important;
-    width: 100% !important;
-    min-width: 0 !important;
     max-width: none !important;
-    min-height: 0 !important;
-    height: auto !important;
     box-sizing: border-box !important;
-    padding:
-      clamp(6px, 1svh, 9px)
-      max(20px, calc(env(safe-area-inset-right, 0px) + 8px))
-      clamp(10px, 1.5svh, 14px)
-      14px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-end !important;
-    align-items: flex-end !important;
-    text-align: right !important;
-    overflow: visible !important;
   }
 
   #byeongpung .u24-season,
@@ -2541,28 +1808,8 @@ html, body { scroll-snap-type: y mandatory !important; }
     overflow-wrap: normal !important;
   }
 
-  #byeongpung .u24-season {
-    font-size: clamp(9px, 2.45vw, 10px) !important;
-    line-height: 1.35 !important;
-  }
-
   #byeongpung .u24-name {
     margin-top: clamp(1px, .35svh, 3px) !important;
-    font-size: clamp(28px, 8.2vw, 34px) !important;
-    line-height: 1.08 !important;
-  }
-
-  #byeongpung .u24-description {
-    margin-top: clamp(5px, .9svh, 8px) !important;
-    font-size: clamp(10px, 2.95vw, 12px) !important;
-    line-height: 1.58 !important;
-  }
-
-  #byeongpung .u24-notes {
-    margin-top: clamp(6px, 1svh, 9px) !important;
-    padding-top: clamp(6px, .9svh, 8px) !important;
-    font-size: clamp(8px, 2.15vw, 8.5px) !important;
-    line-height: 1.45 !important;
   }
 
   /* Prevent legacy narrow-device patches from changing the Page 3 geometry again. */
@@ -2585,8 +1832,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-description { font-size: clamp(9.5px, 2.75vw, 11px) !important; line-height: 1.5 !important; }
   #byeongpung .u24-notes { margin-top: 5px !important; padding-top: 5px !important; }
 }
-
-
 
 #hero.gw-hero {
   position: relative !important;
@@ -2614,11 +1859,10 @@ html, body { scroll-snap-type: y mandatory !important; }
 #hero.gw-hero .gw-touch-invitation { position:absolute;z-index:3;right:8%;top:27%;margin:0;color:#dfd3bc;font-size:13px;display:flex;gap:11px;align-items:center;transition:opacity .7s;pointer-events:none; }
 #hero.gw-hero.has-touched .gw-touch-invitation { opacity:.65; }
 #hero.gw-hero .gw-touch-dot { width:7px;height:7px;border:1px solid currentColor;border-radius:50%;box-shadow:0 0 0 6px rgba(238,227,189,.06);animation:gwTouchPulse 3s infinite; }
-#hero.gw-hero .gw-hero-footer { position:absolute;z-index:3;left:5.4%;right:5.4%;bottom:6%;display:flex;justify-content:space-between;align-items:flex-end; }
+#hero.gw-hero .gw-hero-footer { position:absolute;z-index:3;left:5.4%;right:5.4%;bottom:6%;display:flex;align-items:flex-end; }
 #hero.gw-hero .gw-hero-footer p { margin:0;font-family:"Noto Serif KR","Nanum Myeongjo",serif;font-size:14px;line-height:1.9;color:#e3dccf; }
-#hero.gw-hero .gw-journey-link { color:#f3eddf;text-decoration:none;display:flex;align-items:center;gap:26px;font-size:14px;letter-spacing:.03em; }
+#hero.gw-hero .gw-journey-link {text-decoration:none;display:flex;align-items:center;font-size:14px;letter-spacing:.03em; }
 #hero.gw-hero .gw-journey-link svg { width:18px;height:36px;fill:none;stroke:currentColor;stroke-width:1.2;transition:transform .3s; }
-#hero.gw-hero .gw-journey-link:hover svg { transform:translateY(5px); }
 #hero.gw-hero .gw-hero-signature { position:absolute;z-index:3;right:5.1%;bottom:15.5%;width:clamp(150px,12.9vw,280px);opacity:.88;pointer-events:none;text-align:right; }
 #hero.gw-hero .gw-hero-signature img { display:block;width:100%;height:auto; }
 #hero.gw-hero .gw-hero-signature-sub { display:block;width:100%;margin-top:4px;padding-right:0;font-family:"Helvetica Neue","SF Pro Display",Arial,sans-serif;font-size:clamp(30px,2.25vw,48px);font-weight:400;letter-spacing:.14em;line-height:1;color:#e2daca;text-align:right;white-space:nowrap; }
@@ -2657,7 +1901,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   #hero.gw-hero .gw-coffee-surface { display:none; }
 }
 
-
 .site-header .site-logo img,
 .site-header.on-dark .site-logo img,
 .site-header.menu-open .site-logo img,
@@ -2665,15 +1908,9 @@ html, body { scroll-snap-type: y mandatory !important; }
   filter:none !important;
   opacity:1 !important;
 }
-.site-header .site-logo .logo-default,
-.site-header .site-logo .logo-on-dark { display:none !important; }
 .site-header .site-logo .logo-original { display:block !important; }
 #mobileNav.mobile-nav { pointer-events:none; }
 #mobileNav.mobile-nav.open { pointer-events:auto; }
-
-
-
-
 
   .site-header .site-logo { position: relative; }
   .site-header .site-logo img { height: 49px; width: auto; display: block; filter: none !important; opacity: 1 !important; }
@@ -2770,8 +2007,7 @@ html, body { scroll-snap-type: y mandatory !important; }
     }
   }
 
-  @media (max-width: 720px) {
-  }
+  
 
   @media (max-width: 720px) {
     #quote .quote-block {
@@ -2790,9 +2026,6 @@ html, body { scroll-snap-type: y mandatory !important; }
       white-space: normal !important;
     }
   }
-
-
-
 
 @media (max-width: 720px) {
   /* v71: header itself is always transparent. Only logo + hamburger float above the page. */
@@ -2862,9 +2095,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
-
-
 @media (max-width: 720px) {
   /* No persistent rectangle: header chrome stays transparent on every page. */
   #siteHeader,
@@ -2884,9 +2114,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
   #siteHeader[data-mobile-section="quote"] .hamburger span {
     background: #f7f1e6 !important;
-  }
-  #siteHeader[data-mobile-section="byeongpung"] .hamburger span {
-    background: #e2daca !important;
   }
 
   /* Page-specific logo tone. Hero/quote use the light mark, page 3 uses the dark mark. */
@@ -2911,10 +2138,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     background: transparent !important;
     border: 0 !important;
   }
-  #siteHeader.menu-open .hamburger span,
-  #siteHeader.on-dark.menu-open .hamburger span {
-    background: #171310 !important;
-  }
   #siteHeader.menu-open .logo-default,
   #siteHeader.on-dark.menu-open .logo-default {
     display: block !important;
@@ -2924,9 +2147,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     display: none !important;
   }
 }
-
-
-
 
 @media (max-width: 720px) {
   /* 로고 색상은 페이지/메뉴 상태와 무관하게 원본 그대로 고정 */
@@ -2945,9 +2165,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     display:none !important;
   }
 }
-
-
-
 
 /* v76 FINAL: the logo never changes. Only hamburger color follows the section. */
 .site-header .site-logo .logo-original,
@@ -3085,72 +2302,18 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
-@media (max-width: 720px) {
-  #byeongpung .u24-blend {
-    grid-template-rows: 61.5% 38.5% !important;
-  }
-
-  #byeongpung .u24-blend-image {
-    padding: 4px 8px 0 0 !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-  }
-
-  #byeongpung .u24-art {
-    width: 108% !important;
-    height: 108% !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: contain !important;
-    object-position: var(--obj-pos-mobile, 50% 45%) !important;
-    transform: translateY(-1.5%) scale(1.04) !important;
-    transform-origin: top center !important;
-    display: block !important;
-  }
-}
-
 @media (max-width: 390px) {
-  #byeongpung .u24-blend {
-    grid-template-rows: 60.5% 39.5% !important;
-  }
 
   #byeongpung .u24-art {
-    width: 110% !important;
     height: 110% !important;
     transform: translateY(-2%) scale(1.05) !important;
   }
 }
 
-
 @media (max-width: 720px) {
-  /* Give the illustration a little more vertical room without crushing the copy. */
-  #byeongpung .u24-blend {
-    grid-template-rows: 67% 33% !important;
-  }
-
-  /* Artwork starts directly on the paper edge and sits underneath the visible roller seam. */
-  #byeongpung .u24-blend-image {
-    padding: 0 !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-  }
 
   #byeongpung .u24-art {
     flex: 0 0 auto !important;
-    width: calc(100% + 14px) !important;
-    height: auto !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
-    margin: 0 !important;
-    object-fit: contain !important;
-    object-position: left top !important;
-    transform: translate3d(-6px, -2px, 0) !important;
-    transform-origin: left top !important;
   }
 }
 
@@ -3160,94 +2323,18 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
 @media (max-width: 720px) {
-  #byeongpung .u24-blend-image {
-    padding: 0 !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
-    overflow: hidden !important;
-  }
-
-  #byeongpung .u24-art {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    object-fit: contain !important;
-    object-position: left top !important;
-    transform: none !important;
-    transform-origin: left top !important;
-  }
-}
-
-
-@media (max-width: 720px) {
-  #byeongpung .u24-blend {
-    grid-template-rows: 53.5% 46.5% !important;
-  }
-
-  #byeongpung .u24-blend-image {
-    padding: 0 16px 0 0 !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-  }
-
-  #byeongpung .u24-art {
-    width: calc(100% - 16px) !important;
-    height: auto !important;
-    max-width: calc(100% - 16px) !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: left top !important;
-    display: block !important;
-    margin: 0 !important;
-    transform: none !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    padding: 16px 24px 14px 28px !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    text-align: left !important;
-    background: rgb(var(--paper-rgb)) !important;
-  }
-
-  #byeongpung .u24-season,
-  #byeongpung .u24-name,
-  #byeongpung .u24-description,
-  #byeongpung .u24-notes,
-  #byeongpung .u24-index {
-    text-align: left !important;
-    align-self: stretch !important;
-  }
 
   #byeongpung .u24-season {
     margin-bottom: 8px !important;
-    font-size: 9px !important;
-  }
-
-  #byeongpung .u24-name {
-    font-size: 33px !important;
-    line-height: 1.02 !important;
   }
 
   #byeongpung .u24-description {
     margin-top: 12px !important;
-    font-size: 12.5px !important;
-    line-height: 1.72 !important;
   }
 
   #byeongpung .u24-notes {
     margin-top: 13px !important;
-    padding-top: 10px !important;
-    font-size: 9px !important;
-    line-height: 1.6 !important;
   }
 }
 
@@ -3268,27 +2355,13 @@ html, body { scroll-snap-type: y mandatory !important; }
   #byeongpung .u24-blend-copy {
     padding: 14px 20px 12px 24px !important;
   }
-
-  #byeongpung .u24-name {
-    font-size: 31px !important;
-  }
-
-  #byeongpung .u24-description {
-    font-size: 11.5px !important;
-    line-height: 1.66 !important;
-  }
 }
-
 
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
-    position: relative !important;
-    display: block !important;
     grid-template-columns: none !important;
     grid-template-rows: none !important;
     padding: 0 !important;
-    overflow: hidden !important;
-    background: rgb(var(--paper-rgb)) !important;
   }
 
   #byeongpung .u24-blend::before {
@@ -3300,154 +2373,27 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
   #byeongpung .u24-blend-image {
-    position: absolute !important;
-    top: 12px !important;
-    left: 19% !important;
-    right: 10px !important;
-    height: 58% !important;
-    width: auto !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: flex-start !important;
-    overflow: hidden !important;
-    background: transparent !important;
-    z-index: 3 !important;
-  }
-
-  #byeongpung .u24-art {
-    width: auto !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-    display: block !important;
-    margin: 0 !important;
-    transform: none !important;
-    filter: none !important;
   }
 
   #byeongpung .u24-blend-copy {
-    position: absolute !important;
-    left: 28px !important;
-    right: 24px !important;
-    bottom: 18px !important;
     width: auto !important;
     height: auto !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
     overflow: visible !important;
-    background: transparent !important;
-    z-index: 4 !important;
-    text-align: left !important;
-  }
-
-  #byeongpung .u24-season,
-  #byeongpung .u24-name,
-  #byeongpung .u24-description,
-  #byeongpung .u24-notes,
-  #byeongpung .u24-index {
-    text-align: left !important;
-    align-self: stretch !important;
-  }
-
-  #byeongpung .u24-season {
-    margin: 0 0 10px !important;
-    font-size: 9px !important;
-    line-height: 1.35 !important;
-    letter-spacing: .16em !important;
-  }
-
-  #byeongpung .u24-name {
-    margin: 0 !important;
-    font-size: 36px !important;
-    line-height: 1 !important;
-  }
-
-  #byeongpung .u24-description {
-    margin: 14px 0 0 !important;
-    max-width: 94% !important;
-    font-size: 12px !important;
-    line-height: 1.72 !important;
-  }
-
-  #byeongpung .u24-notes {
-    margin: 15px 0 0 !important;
-    padding-top: 10px !important;
-    width: 100% !important;
-    font-size: 9px !important;
-    line-height: 1.58 !important;
   }
 }
 
 @media (max-width: 390px) {
   #byeongpung .u24-blend-image {
     top: 10px !important;
-    left: 18% !important;
     right: 8px !important;
-    height: 56.5% !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 24px !important;
-    right: 20px !important;
-    bottom: 16px !important;
-  }
-
-  #byeongpung .u24-name {
-    font-size: 34px !important;
-  }
-
-  #byeongpung .u24-description {
-    max-width: 96% !important;
-    font-size: 11.5px !important;
-    line-height: 1.66 !important;
   }
 }
 
-
 @media (max-width: 720px) {
-  #byeongpung .u24-blend {
-    position: relative !important;
-    overflow: hidden !important;
-    background: rgb(var(--paper-rgb)) !important;
-  }
-
-  /* Illustration: preserve ratio, touch the top and right edges of the paper area */
-  #byeongpung .u24-blend-image {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 14% !important;
-    height: 59% !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
-    overflow: hidden !important;
-    background: transparent !important;
-    z-index: 3 !important;
-  }
-
-  #byeongpung .u24-art {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-    margin: 0 !important;
-    transform: none !important;
-    display: block !important;
-  }
 
   /* Paper-style blend mask on the left and bottom */
   #byeongpung .u24-blend-image::after {
@@ -3456,234 +2402,8 @@ html, body { scroll-snap-type: y mandatory !important; }
     position: absolute !important;
     inset: 0 !important;
     pointer-events: none !important;
-    background:
-      linear-gradient(90deg,
-        rgb(var(--paper-rgb)) 0%,
-        rgba(var(--paper-rgb), .98) 9%,
-        rgba(var(--paper-rgb), .82) 16%,
-        rgba(var(--paper-rgb), .42) 24%,
-        rgba(var(--paper-rgb), 0) 33%),
-      linear-gradient(0deg,
-        rgb(var(--paper-rgb)) 0%,
-        rgba(var(--paper-rgb), .98) 8%,
-        rgba(var(--paper-rgb), .84) 16%,
-        rgba(var(--paper-rgb), .46) 24%,
-        rgba(var(--paper-rgb), 0) 34%) !important;
-    z-index: 4 !important;
-  }
-
-  /* Copy: move right so the roll never clips the text */
-  #byeongpung .u24-blend-copy {
-    position: absolute !important;
-    left: 96px !important;
-    right: 24px !important;
-    bottom: 18px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    z-index: 5 !important;
-    text-align: left !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
-  }
-
-  #byeongpung .u24-season,
-  #byeongpung .u24-name,
-  #byeongpung .u24-description,
-  #byeongpung .u24-notes,
-  #byeongpung .u24-index {
-    text-align: left !important;
-    align-self: stretch !important;
-  }
-
-  #byeongpung .u24-season {
-    margin: 0 0 10px !important;
-    font-size: 9px !important;
-    line-height: 1.35 !important;
-    letter-spacing: .16em !important;
-  }
-
-  #byeongpung .u24-name {
-    margin: 0 !important;
-    font-size: 35px !important;
-    line-height: 1 !important;
-  }
-
-  #byeongpung .u24-description {
-    margin: 14px 0 0 !important;
-    max-width: 100% !important;
-    font-size: 12px !important;
-    line-height: 1.72 !important;
-  }
-
-  #byeongpung .u24-notes {
-    margin: 14px 0 0 !important;
-    padding-top: 10px !important;
-    width: 100% !important;
-    font-size: 9px !important;
-    line-height: 1.58 !important;
   }
 }
-
-@media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 13% !important;
-    height: 57.5% !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 88px !important;
-    right: 20px !important;
-    bottom: 16px !important;
-  }
-
-  #byeongpung .u24-name {
-    font-size: 32px !important;
-  }
-
-  #byeongpung .u24-description {
-    font-size: 11.5px !important;
-    line-height: 1.66 !important;
-  }
-}
-
-
-@media (max-width: 720px) {
-  #byeongpung .u24-blend {
-    position: relative !important;
-    overflow: hidden !important;
-    background: rgb(var(--paper-rgb)) !important;
-  }
-
-  /* image zone */
-  #byeongpung .u24-blend-image {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 15% !important;
-    width: auto !important;
-    height: 58.5% !important;
-    padding: 0 !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: flex-start !important;
-    overflow: hidden !important;
-    background: transparent !important;
-    z-index: 3 !important;
-  }
-
-  #byeongpung .u24-blend-image::before,
-  #byeongpung .u24-blend-image::after {
-    content: "" !important;
-    position: absolute !important;
-    pointer-events: none !important;
-    z-index: 4 !important;
-    display: block !important;
-  }
-
-  /* left paper fade */
-  #byeongpung .u24-blend-image::before {
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 28% !important;
-    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .98) 18%, rgba(var(--paper-rgb), .74) 42%, rgba(var(--paper-rgb), .28) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
-  }
-
-  /* bottom paper fade */
-  #byeongpung .u24-blend-image::after {
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 24% !important;
-    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .98) 14%, rgba(var(--paper-rgb), .74) 40%, rgba(var(--paper-rgb), .26) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
-  }
-
-  #byeongpung .u24-art {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-    margin: 0 !important;
-    transform: none !important;
-    display: block !important;
-  }
-
-  /* copy block */
-  #byeongpung .u24-blend-copy {
-    position: absolute !important;
-    left: 72px !important;
-    right: 22px !important;
-    bottom: 18px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    z-index: 5 !important;
-    text-align: left !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
-  }
-
-  #byeongpung .u24-season,
-  #byeongpung .u24-name,
-  #byeongpung .u24-description,
-  #byeongpung .u24-notes,
-  #byeongpung .u24-index {
-    text-align: left !important;
-    align-self: stretch !important;
-  }
-
-  #byeongpung .u24-season {
-    margin: 0 0 10px !important;
-    font-size: 9px !important;
-    line-height: 1.35 !important;
-    letter-spacing: .16em !important;
-  }
-
-  #byeongpung .u24-name {
-    margin: 0 !important;
-    font-size: 35px !important;
-    line-height: 1 !important;
-  }
-
-  #byeongpung .u24-description {
-    margin: 14px 0 0 !important;
-    max-width: 100% !important;
-    font-size: 12px !important;
-    line-height: 1.72 !important;
-  }
-
-  #byeongpung .u24-notes {
-    margin: 14px 0 0 !important;
-    padding-top: 10px !important;
-    width: 100% !important;
-    font-size: 9px !important;
-    line-height: 1.58 !important;
-  }
-}
-
-@media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 14.5% !important;
-    height: 57% !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 66px !important;
-    right: 18px !important;
-    bottom: 16px !important;
-  }
-
-  #byeongpung .u24-name {
-    font-size: 32px !important;
-  }
-
-  #byeongpung .u24-description {
-    font-size: 11.5px !important;
-    line-height: 1.66 !important;
-  }
-}
-
 
 @media (max-width: 720px) {
   #byeongpung .u24-blend {
@@ -3696,10 +2416,6 @@ html, body { scroll-snap-type: y mandatory !important; }
   /* illustration area sits against top/right of the paper */
   #byeongpung .u24-blend-image {
     position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 17% !important;
-    height: 56.5% !important;
     width: auto !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -3712,54 +2428,23 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 
   #byeongpung .u24-art {
-    width: auto !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-    display: block !important;
     margin-left: auto !important;
-    transform: none !important;
-  }
-
-  /* soft paper blends only on the left and bottom */
-  #byeongpung .u24-blend-image::before,
-  #byeongpung .u24-blend-image::after {
-    content: "" !important;
-    position: absolute !important;
-    pointer-events: none !important;
-    display: block !important;
   }
 
   #byeongpung .u24-blend-image::before {
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 22% !important;
-    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .95) 26%, rgba(var(--paper-rgb), .55) 58%, rgba(var(--paper-rgb), 0) 100%) !important;
     z-index: 3 !important;
   }
 
   #byeongpung .u24-blend-image::after {
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 17% !important;
-    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .95) 22%, rgba(var(--paper-rgb), .55) 56%, rgba(var(--paper-rgb), 0) 100%) !important;
     z-index: 3 !important;
   }
 
   /* copy block: pulled back left, but kept clear of the roll */
   #byeongpung .u24-blend-copy {
     position: absolute !important;
-    left: 54px !important;
-    right: 20px !important;
-    bottom: 18px !important;
     padding: 0 !important;
     margin: 0 !important;
     background: transparent !important;
-    z-index: 4 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -3806,16 +2491,6 @@ html, body { scroll-snap-type: y mandatory !important; }
 }
 
 @media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 16.5% !important;
-    height: 55.5% !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 48px !important;
-    right: 18px !important;
-    bottom: 16px !important;
-  }
 
   #byeongpung .u24-name {
     font-size: 31px !important;
@@ -3828,48 +2503,13 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
 @media (max-width: 720px) {
   /* keep text placement from v91; only refine the image blend */
   #byeongpung .u24-blend-image {
     left: 16.5% !important;
     height: 58.5% !important;
   }
-
-  /* soften the fades and keep them tight to the actual edges */
-  #byeongpung .u24-blend-image::before {
-    width: 13% !important;
-    background: linear-gradient(to right, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .88) 34%, rgba(var(--paper-rgb), .38) 72%, rgba(var(--paper-rgb), 0) 100%) !important;
-  }
-
-  #byeongpung .u24-blend-image::after {
-    height: 8% !important;
-    background: linear-gradient(to top, rgb(var(--paper-rgb)) 0%, rgba(var(--paper-rgb), .88) 32%, rgba(var(--paper-rgb), .32) 70%, rgba(var(--paper-rgb), 0) 100%) !important;
-  }
-
-  #byeongpung .u24-art {
-    height: 100% !important;
-    width: auto !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-  }
 }
-
-@media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 16% !important;
-    height: 57.5% !important;
-  }
-
-  #byeongpung .u24-blend-image::before {
-    width: 12% !important;
-  }
-
-  #byeongpung .u24-blend-image::after {
-    height: 7% !important;
-  }
-}
-
 
 @media (max-width: 720px) {
   /* Always use the real <img>; do not convert it to a background image. */
@@ -3895,96 +2535,18 @@ html, body { scroll-snap-type: y mandatory !important; }
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
-    width: auto !important;
-    height: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
     margin: 0 0 0 auto !important;
-    object-fit: contain !important;
-    object-position: right top !important;
-    transform: none !important;
     filter: none !important;
     z-index: 3 !important;
   }
 
-  /* Critical fix: older rules left `inset:0 !important` on these pseudo-elements.
-     Reset inset completely, then anchor each fade to the intended edge only. */
-  #byeongpung .u24-blend-image::before,
-  #byeongpung .u24-blend-image::after {
-    content: "" !important;
-    position: absolute !important;
-    display: block !important;
-    pointer-events: none !important;
-    z-index: 4 !important;
-    inset: auto !important;
-  }
-
-  /* LEFT edge fade only */
-  #byeongpung .u24-blend-image::before {
-    left: 0 !important;
-    right: auto !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 12% !important;
-    height: auto !important;
-    background: linear-gradient(
-      to right,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), .84) 36%,
-      rgba(var(--paper-rgb), .26) 74%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
-  }
-
-  /* BOTTOM edge fade only — explicitly top:auto prevents the stripe appearing near the top. */
-  #byeongpung .u24-blend-image::after {
-    left: 0 !important;
-    right: 0 !important;
-    top: auto !important;
-    bottom: 0 !important;
-    width: auto !important;
-    height: 7% !important;
-    background: linear-gradient(
-      to top,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), .84) 34%,
-      rgba(var(--paper-rgb), .22) 72%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
-  }
-
   /* Keep the copy position the user approved. */
   #byeongpung .u24-blend-copy {
-    left: 54px !important;
-    right: 20px !important;
-    bottom: 18px !important;
     z-index: 5 !important;
   }
 }
-
-@media (max-width: 390px) {
-  #byeongpung .u24-blend-image {
-    left: 16% !important;
-    height: 57.5% !important;
-  }
-
-  #byeongpung .u24-blend-image::before {
-    width: 11% !important;
-  }
-
-  #byeongpung .u24-blend-image::after {
-    height: 6.5% !important;
-  }
-
-  #byeongpung .u24-blend-copy {
-    left: 48px !important;
-    right: 18px !important;
-    bottom: 16px !important;
-  }
-}
-
 
 @media (max-width: 720px) {
   /* enlarge only the artwork area, keeping the approved text block untouched */
@@ -4002,33 +2564,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     max-height: 100% !important;
     object-fit: contain !important;
     object-position: right top !important;
-  }
-
-  /* make the left/bottom paper fade much more visible so the image actually blends */
-  #byeongpung .u24-blend-image::before {
-    width: 17% !important;
-    background: linear-gradient(
-      to right,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), .97) 18%,
-      rgba(var(--paper-rgb), .78) 40%,
-      rgba(var(--paper-rgb), .42) 66%,
-      rgba(var(--paper-rgb), .12) 84%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
-  }
-
-  #byeongpung .u24-blend-image::after {
-    height: 14% !important;
-    background: linear-gradient(
-      to top,
-      rgb(var(--paper-rgb)) 0%,
-      rgba(var(--paper-rgb), .97) 18%,
-      rgba(var(--paper-rgb), .76) 40%,
-      rgba(var(--paper-rgb), .40) 66%,
-      rgba(var(--paper-rgb), .10) 84%,
-      rgba(var(--paper-rgb), 0) 100%
-    ) !important;
   }
 
   /* do not touch copy placement */
@@ -4059,7 +2594,6 @@ html, body { scroll-snap-type: y mandatory !important; }
     bottom: 16px !important;
   }
 }
-
 
 @media (max-width: 720px) {
   /* Keep artwork scaling as requested; anchor remains top-right. */
@@ -4119,10 +2653,8 @@ html, body { scroll-snap-type: y mandatory !important; }
   }
 }
 
-
 /* v103: bottom/left fade metrics use the visible clipped artwork frame.
    No copy/layout values changed. */
-
 
 @media (max-width: 720px) {
   /* keep global scale for all blends */
