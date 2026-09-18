@@ -784,6 +784,22 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
   setEntered(false);
   updatePlayPauseUI();
   handleVisibility();
+
+  /* Arriving directly at #byeongpung (link from a detail page, browser back/forward,
+     or bfcache restore) can land here before the browser finishes scrolling/snapping
+     to the anchor, so the single handleVisibility() call above sees the section as
+     not-yet-active and never schedules introReveal(). Retry a few times so the scroll
+     opens automatically just like a normal manual scroll-in would. */
+  function retryVisibility() {
+    window.setTimeout(handleVisibility, 60);
+    window.setTimeout(handleVisibility, 200);
+    window.setTimeout(handleVisibility, 500);
+    window.setTimeout(handleVisibility, 900);
+  }
+  if (location.hash === '#byeongpung') retryVisibility();
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted || location.hash === '#byeongpung') retryVisibility();
+  });
 })();
 
 // ---------- 모바일 헤더: 섹션별 톤 전환 + 햄버거 메뉴 (단일 구현으로 통합) ----------
