@@ -796,10 +796,13 @@ const LOGO_SVG_MARKUP = `<?xml version="1.0" encoding="UTF-8"?>
     window.setTimeout(handleVisibility, 500);
     window.setTimeout(handleVisibility, 900);
   }
-  if (location.hash === '#byeongpung') retryVisibility();
-  window.addEventListener('pageshow', (e) => {
-    if (e.persisted || location.hash === '#byeongpung') retryVisibility();
-  });
+  /* Scrolling into page 3 normally never changes the URL (no #byeongpung hash),
+     so a plain back-navigation to a bare index.html needs the same retry treatment
+     as an explicit #byeongpung link — gate on the hash only when present, but
+     always retry after load/pageshow since handleVisibility() is a cheap no-op
+     when the section isn't actually in view. */
+  retryVisibility();
+  window.addEventListener('pageshow', () => retryVisibility());
 })();
 
 // ---------- 모바일 헤더: 섹션별 톤 전환 + 햄버거 메뉴 (단일 구현으로 통합) ----------
