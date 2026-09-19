@@ -119,7 +119,8 @@
     ".room-panel-backdrop.open{opacity:1;pointer-events:auto}" +
     ".room-panel{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(175deg,#f7f0dc,#eee2c3);color:#2e2013;border-radius:14px 14px 0 0;padding:14px 22px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.72,.16,1);box-shadow:0 -16px 40px rgba(0,0,0,.5);border:1px solid #5b4028;border-bottom:0;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif}" +
     ".room-panel.open{transform:translateY(0)}" +
-    ".room-panel-handle{width:36px;height:4px;border-radius:999px;background:rgba(91,64,40,.35);margin:0 auto 16px;touch-action:none}" +
+    ".room-panel-handle{width:100%;height:28px;display:flex;align-items:center;justify-content:center;margin:-8px 0 8px;cursor:grab;touch-action:none}" +
+    ".room-panel-handle::after{content:'';width:44px;height:4px;border-radius:999px;background:rgba(91,64,40,.4)}" +
     ".room-panel-icon{font-size:28px;line-height:1}" +
     ".room-panel-title{font-size:18px;font-weight:600;margin:12px 0 7px;letter-spacing:.01em;color:#2e2013}" +
     ".room-panel-desc{font-size:14.5px;line-height:1.6;color:#4a3826;margin:0 0 16px}" +
@@ -130,7 +131,7 @@
        instead of the (desktop-hidden) icon-anchored drawer */
     ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;padding-top:34px;opacity:0;transition:transform .3s ease,opacity .3s ease,max-height .3s ease}" +
     ".room-panel.cinematic.open{transform:translateX(-50%) translateY(0);opacity:1}" +
-    ".room-panel.cinematic .room-panel-handle{display:block;cursor:grab;margin-bottom:14px}" +
+    ".room-panel.cinematic .room-panel-handle{margin:-14px 0 6px}" +
     ".room-panel.cinematic .room-panel-close{top:8px;right:10px}}" +
     ".room-panel.expanded .room-playlist{max-height:280px;overflow-y:auto}" +
     /* shared: action button + the live feature states (timer / blend / note),
