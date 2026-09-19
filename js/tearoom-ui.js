@@ -176,6 +176,7 @@
   var actionBtn = panel.querySelector(".room-action-btn");
   var closeBtn = panel.querySelector(".room-panel-close");
   var currentId = null;
+  var audioArriveGen = 0;
 
   /* ---- shared live-feature state, rendered into the panel's active view ---- */
   function renderInto(container, id) {
@@ -194,10 +195,12 @@
       container.appendChild(note);
       container.appendChild(link);
     } else if (id === "audio") {
+      var myGen = ++audioArriveGen;
       if (window.tearoomCamera) window.tearoomCamera.flyToAudio();
       window.addEventListener(
         "majuon:cam-arrived",
         function () {
+          if (myGen !== audioArriveGen) return;
           container.innerHTML = "";
           panel.classList.add("has-drag");
           var list = buildPlaylistEl();
@@ -278,6 +281,9 @@
   window.addEventListener("majuon:select", function (e) {
     var id = e.detail && e.detail.id;
     if (!id) return;
+    /* while the camera is away at the audio shot, ignore other hotspots so
+       their panel content never shows against the wrong camera framing */
+    if (id !== "audio" && window.tearoomCamera && window.tearoomCamera.isAway()) return;
     openPanel(id);
     /* clicking the object itself does exactly what "플레이리스트 보기" does */
     if (id === "audio") runAction(id, defaultView, activeView);
