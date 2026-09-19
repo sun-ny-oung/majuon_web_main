@@ -306,6 +306,9 @@
     var hs = window.roomHotspots;
     if (hs && hs.entries) hs.entries.forEach(blinkOutline);
     if (camHint) {
+      camHint.textContent = window.matchMedia("(min-width:721px)").matches
+        ? "마우스로 카메라를 움직여 보세요"
+        : "드래그해서 둘러보기 · 손가락 두 개로 확대·축소";
       camHint.classList.add("show");
       setTimeout(hideCamHint, 5000);
       window.addEventListener("pointerdown", hideCamHint, { once: true });
