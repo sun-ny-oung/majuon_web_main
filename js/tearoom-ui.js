@@ -372,9 +372,6 @@
   function blinkOutline(entry) {
     if (entry && entry.path) entry.path.classList.add("octagon-blink");
   }
-  function stopBlink(entry) {
-    if (entry && entry.path) entry.path.classList.remove("octagon-blink");
-  }
   window.addEventListener("majuon:enter", function () {
     roomEntered = true;
     playTrack(0);
@@ -400,8 +397,6 @@
       btn.dataset.uiReady = "1";
       var entry = findEntry(btn.dataset.model);
       if (roomEntered) blinkOutline(entry);
-      btn.addEventListener("mouseenter", function () { stopBlink(entry); }, { once: true });
-      btn.addEventListener("click", function () { stopBlink(entry); }, { once: true });
 
       var info = document.createElement("div");
       info.className = "room-hotspot-info";
