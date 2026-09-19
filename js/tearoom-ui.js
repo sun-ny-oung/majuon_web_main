@@ -1,6 +1,6 @@
 (function () {
   var CONTENT = {
-    audio: { icon: "🎵", label: "음악", title: "음악", desc: "다도실에 흐르는 배경 음악을 재생해요.", action: "재생하기" },
+    audio: { icon: "🎵", label: "음악", title: "음악", desc: "다도실에 흐르는 배경 음악이에요. 플레이리스트를 확인해보세요.", action: "플레이리스트 보기" },
     table: { icon: "⏱️", label: "타이머", title: "다도 타이머", desc: "커피를 내리는 시간을 재는 타이머예요.", action: "타이머 시작" },
     scroll: { icon: "☕", label: "원두 추천", title: "오늘의 커피", desc: "오늘 어울리는 마주온 블렌드를 추천해드려요.", action: "오늘의 커피 보기" }
   };
@@ -10,6 +10,43 @@
     { season: "가을", name: "풍연", href: "pungyeon.html" },
     { season: "겨울", name: "설한", href: "seolhan.html" }
   ];
+  /* 새 곡을 추가하려면 이 배열에 한 줄만 더하면 됩니다.
+     thumb 이미지가 아직 없으면 자동으로 음표 아이콘으로 대체됩니다. */
+  var PLAYLIST = [
+    { title: "Spring Reverie (Instrumental)", src: "assets/audio/tearoom/spring-reverie.mp3", thumb: "assets/audio/tearoom/thumbs/spring-reverie.jpg" }
+  ];
+  var currentTrack = 0;
+  function playTrack(idx) {
+    var t = PLAYLIST[idx];
+    var music = document.getElementById("roomMusic");
+    if (!t || !music) return;
+    currentTrack = idx;
+    if (music.getAttribute("src") !== t.src) music.src = t.src;
+    music.volume = 0.55;
+    music.play().catch(function () {});
+  }
+  function buildPlaylistEl() {
+    var list = document.createElement("div");
+    list.className = "room-playlist";
+    PLAYLIST.forEach(function (t, idx) {
+      var row = document.createElement("div");
+      row.className = "room-playlist-track" + (idx === currentTrack ? " playing" : "");
+      row.setAttribute("role", "button");
+      row.setAttribute("tabindex", "0");
+      row.innerHTML =
+        '<span class="track-thumb-wrap"><span class="track-thumb-fallback">🎵</span><img class="track-thumb" alt="" src="' + t.thumb + '" onerror="this.style.display=\'none\'"></span>' +
+        (idx === currentTrack ? '<span class="track-eq"><i></i><i></i><i></i></span>' : "") +
+        '<span class="track-name">' + t.title + "</span>";
+      onActivate(row, function () {
+        if (idx === currentTrack) return;
+        playTrack(idx);
+        var parent = list.parentNode;
+        if (parent) parent.replaceChild(buildPlaylistEl(), list);
+      });
+      list.appendChild(row);
+    });
+    return list;
+  }
   var isDesktop = function () {
     return window.matchMedia("(min-width:721px)").matches;
   };
@@ -66,6 +103,18 @@
     ".room-blend b{font-size:19px;color:#2e2013}" +
     ".room-blend span{font-size:12.5px;color:#7a6650}" +
     ".room-note{font-size:12.5px;color:#7a6650;margin:0 0 12px}" +
+    ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px}" +
+    ".room-playlist-track{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #5b4028;border-radius:6px;background:rgba(91,64,40,.04);cursor:pointer}" +
+    ".room-playlist-track.playing{background:rgba(91,64,40,.14)}" +
+    ".room-playlist-track .track-name{font-size:12.5px;color:#2e2013;flex:1;min-width:0;text-align:left}" +
+    ".track-thumb-wrap{position:relative;width:32px;height:32px;flex:none;border-radius:4px;overflow:hidden;background:#5b4028}" +
+    ".track-thumb-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px}" +
+    ".track-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}" +
+    ".track-eq{display:flex;align-items:flex-end;gap:2px;height:14px;flex:none}" +
+    ".track-eq i{display:block;width:3px;background:#5b4028;border-radius:1px;height:4px;animation:eq-bounce 1s ease-in-out infinite}" +
+    ".track-eq i:nth-child(2){animation-delay:.2s}" +
+    ".track-eq i:nth-child(3){animation-delay:.4s}" +
+    "@keyframes eq-bounce{0%,100%{height:4px}50%{height:14px}}" +
     "@media (max-width:720px){.room-hotspot-drawer{display:none}}";
   document.head.appendChild(style);
 
@@ -115,12 +164,28 @@
       container.appendChild(blendRow);
       container.appendChild(note);
       container.appendChild(link);
-    } else {
-      var audioNote = document.createElement("p");
-      audioNote.className = "room-note";
-      audioNote.style.margin = "0";
-      audioNote.textContent = "🎵 음악은 곧 준비될 예정이에요.";
-      container.appendChild(audioNote);
+    } else if (id === "audio") {
+      var approaching = document.createElement("p");
+      approaching.className = "room-note";
+      approaching.style.margin = "0";
+      approaching.textContent = "다가가는 중…";
+      container.appendChild(approaching);
+      if (window.tearoomCamera) window.tearoomCamera.flyToAudio();
+      window.addEventListener(
+        "majuon:cam-arrived",
+        function () {
+          container.innerHTML = "";
+          var list = buildPlaylistEl();
+          var back = fauxButton("room-action-btn", "뒤로가기");
+          onActivate(back, function () {
+            if (container === activeView) closePanel();
+            else closeDrawer();
+          });
+          container.appendChild(list);
+          container.appendChild(back);
+        },
+        { once: true }
+      );
     }
   }
   function runAction(id, defaultEl, activeEl) {
@@ -137,6 +202,7 @@
   function closePanel() {
     panel.classList.remove("open");
     backdrop.classList.remove("open");
+    if (window.tearoomCamera && window.tearoomCamera.isAway()) window.tearoomCamera.flyBack();
   }
   function openPanel(id) {
     var c = CONTENT[id];
@@ -164,6 +230,7 @@
     if (!openDrawer) return;
     openDrawer.classList.remove("open");
     openDrawer = null;
+    if (window.tearoomCamera && window.tearoomCamera.isAway()) window.tearoomCamera.flyBack();
   }
   function openDrawerFor(btn) {
     var drawer = btn.querySelector(".room-hotspot-drawer");
@@ -222,6 +289,7 @@
   }
   window.addEventListener("majuon:enter", function () {
     roomEntered = true;
+    playTrack(0);
     var hs = window.roomHotspots;
     if (hs && hs.entries) hs.entries.forEach(blinkOutline);
     if (camHint) {
