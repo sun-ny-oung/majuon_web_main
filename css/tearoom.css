@@ -11,3 +11,17 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 .loading-bar-fill{height:100%;width:0%;background:#e9ded0;border-radius:999px;transition:width .2s ease}
 .tearoom-back{position:fixed;top:16px;left:16px;z-index:3;color:#e9ded0;text-decoration:none;font:14px/1 -apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;letter-spacing:.02em;padding:10px 14px;background:rgba(23,20,17,.55);border:1px solid rgba(233,222,208,.25);border-radius:999px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .2s ease,background .2s ease}
 .tearoom-back:hover{background:rgba(23,20,17,.8)}
+#introOverlay{position:fixed;inset:0;z-index:20;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#171411;color:#f3ece1;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;transition:opacity .5s ease,visibility .5s ease}
+#introOverlay.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro-spacer-top{height:16vh}
+.intro-spacer-bottom{height:55vh}
+.intro-content{max-width:420px;margin:0 auto;padding:0 28px;text-align:center}
+.intro-eyebrow{margin:0 0 10px;font-size:13px;letter-spacing:.14em;color:#cdbfa8;text-transform:uppercase}
+.intro-title{margin:0 0 22px;font-size:24px;letter-spacing:.02em;color:#fff9f0;font-weight:600}
+.intro-body{margin:0;font-size:15px;line-height:1.9;color:#e6dfd1}
+.intro-scroll-hint{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#cdbfa8;font-size:12px;letter-spacing:.05em;animation:intro-bob 1.6s ease-in-out infinite}
+@keyframes intro-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+.intro-enter-btn{position:fixed;left:50%;bottom:7vh;transform:translateX(-50%);z-index:21;padding:14px 40px;border-radius:999px;border:1px solid rgba(233,222,208,.3);background:rgba(23,20,17,.5);color:#8f8477;font:14px/1 -apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;letter-spacing:.06em;cursor:not-allowed;opacity:1;transition:background .35s ease,color .35s ease,border-color .35s ease,transform .2s ease,opacity .5s ease}
+.intro-enter-btn.active{cursor:pointer;color:#171411;background:#f3ece1;border-color:#f3ece1}
+.intro-enter-btn.active:hover{transform:translateX(-50%) scale(1.04)}
+.intro-enter-btn.hide{opacity:0;pointer-events:none}
