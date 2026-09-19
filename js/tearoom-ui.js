@@ -1,8 +1,8 @@
 (function () {
   var CONTENT = {
-    audio: { icon: "🎵", label: "음악", title: "음악", desc: "다도실에 흐르는 배경 음악이에요. 플레이리스트를 확인해보세요.", action: "플레이리스트 보기" },
-    table: { icon: "⏱️", label: "타이머", title: "다도 타이머", desc: "커피를 내리는 시간을 재는 타이머예요.", action: "타이머 시작" },
-    scroll: { icon: "☕", label: "원두 추천", title: "오늘의 커피", desc: "오늘 어울리는 마주온 블렌드를 추천해드려요.", action: "오늘의 커피 보기" }
+    audio: { label: "음악", title: "음악", desc: "다도실에 흐르는 배경 음악이에요. 플레이리스트를 확인해보세요.", action: "플레이리스트 보기" },
+    table: { label: "타이머", title: "다도 타이머", desc: "커피를 내리는 시간을 재는 타이머예요.", action: "타이머 시작" },
+    scroll: { label: "원두 추천", title: "오늘의 커피", desc: "오늘 어울리는 마주온 블렌드를 추천해드려요.", action: "오늘의 커피 보기" }
   };
   var BLENDS = [
     { season: "봄", name: "화담", href: "hwadam.html" },
@@ -63,7 +63,7 @@
           ? '<span class="track-eq"><i></i><i></i><i></i></span>'
           : '<span class="track-playicon">▶</span>';
       row.innerHTML =
-        '<span class="track-thumb-wrap"><span class="track-thumb-fallback">🎵</span><img class="track-thumb" alt="" src="' + t.thumb + '" onerror="this.style.display=\'none\'"></span>' +
+        '<span class="track-thumb-wrap"><span class="track-thumb-fallback"></span><img class="track-thumb" alt="" src="' + t.thumb + '" onerror="this.style.display=\'none\'"></span>' +
         eqOrPlay +
         '<span class="track-name">' + t.title + "</span>";
       onActivate(row, function () {
@@ -79,9 +79,6 @@
     });
     return list;
   }
-  var isDesktop = function () {
-    return window.matchMedia("(min-width:721px)").matches;
-  };
   function todaysBlend() {
     var days = Math.floor(Date.now() / 86400000);
     return BLENDS[days % BLENDS.length];
@@ -109,33 +106,27 @@
     /* short always-on label under the hotspot icon */
     ".room-hotspot-info{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;display:flex;flex-direction:column;align-items:center;pointer-events:none}" +
     ".room-hotspot-label{color:#fffaf0;font:12px/1 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;letter-spacing:.02em;text-shadow:0 1px 4px rgba(0,0,0,.65);white-space:nowrap}" +
-    /* desktop: click slides a small hanji-paper drawer down from under the label */
-    ".room-hotspot-drawer{width:0;max-height:0;opacity:0;overflow:hidden;margin-top:0;pointer-events:none;transition:max-height .3s ease,opacity .22s ease,margin-top .3s ease,width 0s .3s}" +
-    ".room-hotspot-drawer.open{width:210px;max-height:220px;opacity:1;margin-top:8px;pointer-events:auto;transition:max-height .3s ease,opacity .22s ease,margin-top .3s ease}" +
-    ".room-hotspot-drawer-inner{position:relative;background:linear-gradient(175deg,#f7f0dc,#eee2c3);border:1px solid #5b4028;border-radius:4px;padding:14px 16px;box-shadow:0 10px 26px rgba(0,0,0,.5);text-align:left}" +
-    ".room-hotspot-drawer .drawer-desc{margin:0 0 12px;font-size:12.5px;line-height:1.6;color:#4a3826}" +
-    /* mobile bottom sheet */
+    /* shared panel (mobile bottom sheet / desktop centered card) */
     ".room-panel-backdrop{position:fixed;inset:0;background:rgba(10,8,6,.18);z-index:5;opacity:0;pointer-events:none;transition:opacity .25s ease}" +
     ".room-panel-backdrop.open{opacity:1;pointer-events:auto}" +
     ".room-panel{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(175deg,#f7f0dc,#eee2c3);color:#2e2013;border-radius:14px 14px 0 0;padding:14px 22px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.72,.16,1);box-shadow:0 -16px 40px rgba(0,0,0,.5);border:1px solid #5b4028;border-bottom:0;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif}" +
     ".room-panel.open{transform:translateY(0)}" +
-    ".room-panel-handle{width:100%;height:28px;display:flex;align-items:center;justify-content:center;margin:-8px 0 8px;cursor:grab;touch-action:none}" +
+    /* the drag handle only means anything once a playlist can be expanded */
+    ".room-panel-handle{display:none;width:100%;height:28px;align-items:center;justify-content:center;margin:-8px 0 8px;cursor:grab;touch-action:none}" +
+    ".room-panel.has-drag .room-panel-handle{display:flex}" +
     ".room-panel-handle::after{content:'';width:44px;height:4px;border-radius:999px;background:rgba(91,64,40,.4)}" +
-    ".room-panel-icon{font-size:28px;line-height:1}" +
     ".room-panel-title{font-size:18px;font-weight:600;margin:12px 0 7px;letter-spacing:.01em;color:#2e2013}" +
     ".room-panel-desc{font-size:14.5px;line-height:1.6;color:#4a3826;margin:0 0 16px}" +
     ".room-panel-close{position:absolute;top:12px;right:14px;background:rgba(91,64,40,.12);border:0;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#5b4028;font-size:14px;line-height:1;cursor:pointer;padding:0}" +
     "@media (min-width:721px){.room-panel,.room-panel-backdrop{display:none}" +
-    /* the audio/playlist panel is tied to a moving camera shot, not a fixed
-       hotspot icon, so on desktop it gets its own screen-centered card
-       instead of the (desktop-hidden) icon-anchored drawer */
+    /* on desktop the (mobile-hidden) bottom sheet is replaced by this
+       screen-centered card, always in the same spot for every hotspot */
     ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;padding-top:34px;opacity:0;transition:transform .3s ease,opacity .3s ease,max-height .3s ease}" +
     ".room-panel.cinematic.open{transform:translateX(-50%) translateY(0);opacity:1}" +
     ".room-panel.cinematic .room-panel-handle{margin:-14px 0 6px}" +
     ".room-panel.cinematic .room-panel-close{top:8px;right:10px}}" +
     ".room-panel.expanded .room-playlist{max-height:280px;overflow-y:auto}" +
-    /* shared: action button + the live feature states (timer / blend / note),
-       reused inside both the mobile sheet and the desktop drawer */
+    /* shared: action button + the live feature states (timer / blend / note) */
     ".room-action-btn{display:block;width:100%;padding:13px 0;border-radius:999px;border:1px solid #5b4028;background:#2e2013;color:#f7f0dc;font:14px/1 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;letter-spacing:.04em;cursor:pointer;text-align:center;box-sizing:border-box}" +
     ".room-action-btn:hover{opacity:.85}" +
     ".room-active{display:none}" +
@@ -156,8 +147,7 @@
     ".track-eq i:nth-child(2){animation-delay:.2s}" +
     ".track-eq i:nth-child(3){animation-delay:.4s}" +
     "@keyframes eq-bounce{0%,100%{height:4px}50%{height:14px}}" +
-    ".track-playicon{flex:none;font-size:11px;color:#5b4028;line-height:1}" +
-    "@media (max-width:720px){.room-hotspot-drawer{display:none}}";
+    ".track-playicon{flex:none;font-size:11px;color:#5b4028;line-height:1}";
   document.head.appendChild(style);
 
   /* ---- mobile bottom sheet (unchanged shell, contents now shared) ---- */
@@ -171,7 +161,6 @@
     '<div class="room-panel-handle"></div>' +
     '<button class="room-panel-close" aria-label="닫기" type="button">&times;</button>' +
     '<div class="room-panel-default">' +
-    '<div class="room-panel-icon"></div>' +
     '<div class="room-panel-title"></div>' +
     '<p class="room-panel-desc"></p>' +
     '<button class="room-action-btn" type="button"></button>' +
@@ -182,15 +171,13 @@
 
   var defaultView = panel.querySelector(".room-panel-default");
   var activeView = panel.querySelector(".room-active");
-  var iconEl = panel.querySelector(".room-panel-icon");
   var titleEl = panel.querySelector(".room-panel-title");
   var descEl = panel.querySelector(".room-panel-desc");
   var actionBtn = panel.querySelector(".room-action-btn");
   var closeBtn = panel.querySelector(".room-panel-close");
   var currentId = null;
 
-  /* ---- shared live-feature state, rendered into whichever container
-     (mobile sheet or a desktop drawer) last activated it ---- */
+  /* ---- shared live-feature state, rendered into the panel's active view ---- */
   function renderInto(container, id) {
     container.innerHTML = "";
     if (id === "scroll") {
@@ -217,12 +204,10 @@
         "majuon:cam-arrived",
         function () {
           container.innerHTML = "";
+          panel.classList.add("has-drag");
           var list = buildPlaylistEl();
           var back = fauxButton("room-action-btn", "뒤로가기");
-          onActivate(back, function () {
-            if (container === activeView) closePanel();
-            else closeDrawer();
-          });
+          onActivate(back, closePanel);
           container.appendChild(list);
           container.appendChild(back);
         },
@@ -244,6 +229,7 @@
   function closePanel() {
     panel.classList.remove("open");
     panel.classList.remove("expanded");
+    panel.classList.remove("has-drag");
     backdrop.classList.remove("open");
     if (window.tearoomCamera && window.tearoomCamera.isAway()) window.tearoomCamera.flyBack();
   }
@@ -251,14 +237,13 @@
     var c = CONTENT[id];
     if (!c) return;
     currentId = id;
-    iconEl.textContent = c.icon;
     titleEl.textContent = c.title;
     descEl.textContent = c.desc;
     actionBtn.textContent = c.action;
     activeView.classList.remove("show");
     defaultView.style.display = "";
-    panel.classList.toggle("cinematic", id === "audio");
-    backdrop.classList.toggle("cinematic", id === "audio");
+    panel.classList.remove("has-drag");
+    panel.classList.add("cinematic");
     panel.classList.add("open");
     backdrop.classList.add("open");
   }
@@ -289,58 +274,18 @@
   window.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
     closePanel();
-    closeDrawer();
     if (window.tearoomCamera) window.tearoomCamera.reset();
   });
-
-  /* ---- desktop inline drawer: one per hotspot, lives under its label ---- */
-  var openDrawer = null;
-  var justOpenedDrawer = false;
-  function closeDrawer() {
-    if (!openDrawer) return;
-    openDrawer.classList.remove("open");
-    openDrawer = null;
-    if (window.tearoomCamera && window.tearoomCamera.isAway()) window.tearoomCamera.flyBack();
-  }
-  function openDrawerFor(btn) {
-    var drawer = btn.querySelector(".room-hotspot-drawer");
-    if (!drawer) return;
-    if (openDrawer && openDrawer !== drawer) closeDrawer();
-    var drawerDefault = drawer.querySelector(".drawer-default");
-    var drawerActive = drawer.querySelector(".room-active");
-    drawerActive.classList.remove("show");
-    drawerDefault.style.display = "";
-    drawer.classList.add("open");
-    openDrawer = drawer;
-    /* a click directly on the 3D object (not the small icon) also opens the
-       drawer via majuon:select, synchronously, from inside this same click
-       event — skip the very next outside-click check so it isn't closed
-       again before the user even sees it */
-    justOpenedDrawer = true;
-  }
-  document.addEventListener("click", function (e) {
-    if (justOpenedDrawer) {
-      justOpenedDrawer = false;
-      return;
-    }
-    if (!openDrawer) return;
-    if (openDrawer.contains(e.target)) return;
-    if (e.target.closest && e.target.closest(".room-hotspot")) return;
-    closeDrawer();
-  });
+  /* double-click on the canvas is also how users back out of the
+     camera-fly-in shot (tearoom.js dispatches this when it happens) */
+  window.addEventListener("majuon:exit", closePanel);
 
   window.addEventListener("majuon:select", function (e) {
     var id = e.detail && e.detail.id;
     if (!id) return;
-    /* the audio hotspot's action moves the camera across the room, so its
-       panel can't be anchored to the (now stale-positioned) hotspot icon —
-       always use the screen-fixed panel for it, on desktop too */
-    if (id !== "audio" && isDesktop()) {
-      var btn = document.querySelector('.room-hotspot[data-model="' + id + '"]');
-      if (btn) openDrawerFor(btn);
-    } else {
-      openPanel(id);
-    }
+    openPanel(id);
+    /* clicking the object itself does exactly what "플레이리스트 보기" does */
+    if (id === "audio") runAction(id, defaultView, activeView);
   });
 
   /* --- first-time onboarding: nudge attention to the hotspots, and
@@ -391,27 +336,6 @@
       label.className = "room-hotspot-label";
       label.textContent = c.label;
       info.appendChild(label);
-
-      var drawer = document.createElement("div");
-      drawer.className = "room-hotspot-drawer";
-      drawer.innerHTML =
-        '<div class="room-hotspot-drawer-inner">' +
-        '<div class="drawer-default">' +
-        '<p class="drawer-desc"></p>' +
-        '<div class="room-action-btn" role="button" tabindex="0"></div>' +
-        "</div>" +
-        '<div class="room-active"></div>' +
-        "</div>";
-      drawer.querySelector(".drawer-desc").textContent = c.desc;
-      var drawerDefault = drawer.querySelector(".drawer-default");
-      var drawerActive = drawer.querySelector(".room-active");
-      var drawerActionEl = drawerDefault.querySelector(".room-action-btn");
-      drawerActionEl.textContent = c.action;
-      var modelId = btn.dataset.model;
-      onActivate(drawerActionEl, function () {
-        runAction(modelId, drawerDefault, drawerActive);
-      });
-      info.appendChild(drawer);
 
       btn.appendChild(info);
     });
