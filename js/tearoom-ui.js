@@ -261,11 +261,20 @@
   function hideCamHint() {
     if (camHint) camHint.classList.remove("show");
   }
+  function findEntry(key) {
+    var hs = window.roomHotspots;
+    return hs && hs.entries && hs.entries.find(function (en) { return en.key === key; });
+  }
+  function blinkOutline(entry) {
+    if (entry && entry.path) entry.path.classList.add("octagon-blink");
+  }
+  function stopBlink(entry) {
+    if (entry && entry.path) entry.path.classList.remove("octagon-blink");
+  }
   window.addEventListener("majuon:enter", function () {
     roomEntered = true;
-    document.querySelectorAll(".room-hotspot").forEach(function (btn) {
-      btn.classList.add("pulse");
-    });
+    var hs = window.roomHotspots;
+    if (hs && hs.entries) hs.entries.forEach(blinkOutline);
     if (camHint) {
       camHint.classList.add("show");
       setTimeout(hideCamHint, 5000);
@@ -281,9 +290,10 @@
       var c = CONTENT[btn.dataset.model];
       if (!c) return;
       btn.dataset.uiReady = "1";
-      if (roomEntered) btn.classList.add("pulse");
-      btn.addEventListener("mouseenter", function () { btn.classList.remove("pulse"); }, { once: true });
-      btn.addEventListener("click", function () { btn.classList.remove("pulse"); }, { once: true });
+      var entry = findEntry(btn.dataset.model);
+      if (roomEntered) blinkOutline(entry);
+      btn.addEventListener("mouseenter", function () { stopBlink(entry); }, { once: true });
+      btn.addEventListener("click", function () { stopBlink(entry); }, { once: true });
 
       var info = document.createElement("div");
       info.className = "room-hotspot-info";
