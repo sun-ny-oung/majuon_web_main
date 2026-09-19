@@ -2,7 +2,7 @@
   var CONTENT = {
     audio: { label: "음악", title: "음악", desc: "다도실에 흐르는 배경 음악이에요. 플레이리스트를 확인해보세요.", action: "플레이리스트 보기" },
     table: { label: "타이머", title: "다도 타이머", desc: "커피를 내리는 시간을 재는 타이머예요.", action: "타이머 시작" },
-    scroll: { label: "원두 추천", title: "오늘의 커피", desc: "오늘 어울리는 마주온 블렌드를 추천해드려요.", action: "오늘의 커피 보기" }
+    scroll: { label: "원두 추천", title: "오늘의 커피", desc: "기분이나 취향을 알려주면 어울리는 블렌드를 골라드려요.", action: "커피 추천받기" }
   };
   var BLENDS = [
     { season: "봄", name: "화담", href: "hwadam.html" },
@@ -10,6 +10,28 @@
     { season: "가을", name: "풍연", href: "pungyeon.html" },
     { season: "겨울", name: "설한", href: "seolhan.html" }
   ];
+  var BLEND_REASON = {
+    화담: "포근하고 부드러운 산미가 편안한 순간에 잘 어울려요.",
+    청류: "청량하고 깔끔한 여운이 산뜻한 기분과 잘 맞아요.",
+    풍연: "묵직하고 향긋한 바디감이 차분한 시간에 어울려요.",
+    설한: "진하고 따뜻한 여운이 쌀쌀한 기분을 감싸줘요."
+  };
+  /* TODO: 실제 백엔드(LLM API)가 준비되면 이 함수를 fetch 호출로 교체하면 됩니다.
+     지금은 UI 검증용 임시 채점 로직으로, 입력한 글자에 따라 점수가 달라지긴 하지만
+     실제 의미를 이해하는 건 아닙니다. */
+  function mockScoreBlends(text) {
+    var seed = 0;
+    for (var i = 0; i < text.length; i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
+    var scored = BLENDS.map(function (b, i) {
+      var s = seed || 7;
+      for (var j = 0; j < b.name.length; j++) s = (s * 33 + b.name.charCodeAt(j) + i * 17) >>> 0;
+      return { blend: b, raw: (s % 61) + 20 };
+    });
+    var total = scored.reduce(function (a, s) { return a + s.raw; }, 0);
+    scored.forEach(function (s) { s.score = Math.round((s.raw / total) * 100); });
+    scored.sort(function (a, b) { return b.score - a.score; });
+    return scored;
+  }
   /* 새 곡을 추가하려면 이 배열에 한 줄만 더하면 됩니다.
      thumb 이미지가 아직 없으면 자동으로 음표 아이콘으로 대체됩니다. */
   var PLAYLIST = [
@@ -79,10 +101,6 @@
     });
     return list;
   }
-  function todaysBlend() {
-    var days = Math.floor(Date.now() / 86400000);
-    return BLENDS[days % BLENDS.length];
-  }
   function fauxButton(cls, text) {
     var el = document.createElement("div");
     el.className = cls;
@@ -131,10 +149,22 @@
     ".room-action-btn:hover{opacity:.85}" +
     ".room-active{display:none}" +
     ".room-active.show{display:block}" +
-    ".room-blend{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}" +
-    ".room-blend b{font-size:19px;color:#2e2013}" +
-    ".room-blend span{font-size:12.5px;color:#7a6650}" +
     ".room-note{font-size:12.5px;color:#7a6650;margin:0 0 12px}" +
+    ".bean-input{display:block;width:100%;box-sizing:border-box;resize:none;border:1px solid #5b4028;border-radius:8px;background:rgba(255,255,255,.4);color:#2e2013;font:13px/1.5 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;padding:10px 12px;margin:0 0 10px}" +
+    ".bean-input:focus{outline:none;border-color:#2e2013}" +
+    ".bean-loading{position:relative}" +
+    ".bean-loading::after{content:'';display:inline-block;width:4px;height:4px;margin-left:4px;border-radius:50%;background:#7a6650;animation:bean-loading-dot 1s ease-in-out infinite}" +
+    "@keyframes bean-loading-dot{0%,100%{opacity:.25}50%{opacity:1}}" +
+    ".bean-rank{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}" +
+    ".bean-rank-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}" +
+    ".bean-rank-name{font-size:14px;font-weight:600;color:#2e2013}" +
+    ".bean-rank-pct{font-size:12px;color:#7a6650}" +
+    ".bean-score-bar{height:5px;border-radius:999px;background:rgba(91,64,40,.15);overflow:hidden}" +
+    ".bean-score-fill{height:100%;background:#a98a63;border-radius:999px;transition:width .6s ease}" +
+    ".bean-rank-row.top .bean-rank-name{font-size:15.5px}" +
+    ".bean-rank-row.top .bean-score-fill{background:#2e2013}" +
+    ".bean-reason{margin:5px 0 0;font-size:12px;line-height:1.5;color:#7a6650}" +
+    ".bean-retry{display:block;text-align:center;font-size:12.5px;color:#7a6650;text-decoration:underline;cursor:pointer;padding-top:2px}" +
     ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px;max-height:52px;overflow:hidden;transition:max-height .3s ease}" +
     ".room-playlist-track{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #5b4028;border-radius:6px;background:rgba(91,64,40,.04);cursor:pointer}" +
     ".room-playlist-track.playing{background:rgba(91,64,40,.14)}" +
@@ -182,18 +212,23 @@
   function renderInto(container, id) {
     container.innerHTML = "";
     if (id === "scroll") {
-      var b = todaysBlend();
-      var blendRow = document.createElement("div");
-      blendRow.className = "room-blend";
-      blendRow.innerHTML = "<b>" + b.name + "</b><span>" + b.season + " 블렌드</span>";
-      var note = document.createElement("p");
-      note.className = "room-note";
-      note.textContent = "오늘은 이 한 잔이 어울려요.";
-      var link = fauxButton("room-action-btn", "자세히 보기 →");
-      onActivate(link, function () { location.href = b.href; });
-      container.appendChild(blendRow);
-      container.appendChild(note);
-      container.appendChild(link);
+      var prompt = document.createElement("p");
+      prompt.className = "room-note";
+      prompt.style.margin = "0 0 10px";
+      prompt.textContent = "오늘 기분, 원하는 맛, 날씨, 먹고 싶은 디저트를 적어보세요.";
+      var textarea = document.createElement("textarea");
+      textarea.className = "bean-input";
+      textarea.rows = 3;
+      textarea.placeholder = "예: 쌀쌀하고 나른한 오후, 달콤한 디저트랑 같이";
+      var submit = fauxButton("room-action-btn", "추천받기");
+      container.appendChild(prompt);
+      container.appendChild(textarea);
+      container.appendChild(submit);
+      onActivate(submit, function () {
+        var text = textarea.value.trim();
+        if (!text) { textarea.focus(); return; }
+        renderBeanLoading(container, text);
+      });
     } else if (id === "audio") {
       var myGen = ++audioArriveGen;
       if (window.tearoomCamera) window.tearoomCamera.flyToAudio();
@@ -212,6 +247,40 @@
         { once: true }
       );
     }
+  }
+  function renderBeanLoading(container, text) {
+    container.innerHTML = "";
+    var loading = document.createElement("p");
+    loading.className = "room-note bean-loading";
+    loading.textContent = "취향을 살펴보는 중…";
+    container.appendChild(loading);
+    /* TODO: 실제 연동 시 이 setTimeout 대신 백엔드(fetch) 응답을 기다리면 됩니다. */
+    setTimeout(function () {
+      renderBeanResult(container, text);
+    }, 900);
+  }
+  function renderBeanResult(container, text) {
+    container.innerHTML = "";
+    var scored = mockScoreBlends(text);
+    var list = document.createElement("div");
+    list.className = "bean-rank";
+    scored.forEach(function (s, i) {
+      var row = document.createElement("div");
+      row.className = "bean-rank-row" + (i === 0 ? " top" : "");
+      row.innerHTML =
+        '<div class="bean-rank-head"><span class="bean-rank-name">' + s.blend.name + "</span>" +
+        '<span class="bean-rank-pct">' + s.score + '%</span></div>' +
+        '<div class="bean-score-bar"><div class="bean-score-fill" style="width:' + s.score + '%"></div></div>' +
+        '<p class="bean-reason">' + (BLEND_REASON[s.blend.name] || "") + "</p>";
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+    var link = fauxButton("room-action-btn", scored[0].blend.name + " 자세히 보기 →");
+    onActivate(link, function () { location.href = scored[0].blend.href; });
+    container.appendChild(link);
+    var retry = fauxButton("bean-retry", "다시 물어보기");
+    onActivate(retry, function () { renderInto(container, "scroll"); });
+    container.appendChild(retry);
   }
   function runAction(id, defaultEl, activeEl) {
     /* the real dripping timer lives on its own 3D page (own renderer/canvas) */
