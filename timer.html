@@ -108,10 +108,14 @@
 
   .tearoom-back{position:fixed;top:16px;left:16px;z-index:60;color:#e9ded0;text-decoration:none;font:14px/1 -apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;letter-spacing:.02em;padding:10px 14px;background:rgba(23,20,17,.55);border:1px solid rgba(233,222,208,.25);border-radius:999px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .2s ease,background .2s ease}
   .tearoom-back:hover{background:rgba(23,20,17,.8)}
+  @media (max-width:720px){
+    .tearoom-back{padding:10px 13px}
+    .tearoom-back-label{display:none}
+  }
 </style>
 </head>
 <body>
-<a class="tearoom-back" href="tearoom.html">← 다도실로 돌아가기</a>
+<a class="tearoom-back" href="tearoom.html">← <span class="tearoom-back-label">다도실로 돌아가기</span></a>
 <div id="loadingOverlay">타이머 불러오는 중...</div>
 <div id="touchPrompt">화면을 터치하세요</div>
 
