@@ -21,14 +21,15 @@
     ".room-panel-title{font-size:20px;font-weight:600;margin:14px 0 8px;letter-spacing:.01em;color:#fff9f0}" +
     ".room-panel-desc{font-size:15.5px;line-height:1.65;color:#e6dfd1;margin:0}" +
     ".room-panel-close{position:absolute;top:16px;right:18px;background:rgba(255,247,235,.12);border:0;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff9f0;font-size:20px;line-height:1;cursor:pointer;padding:0}" +
-    /* desktop callout bubble, anchored to each hotspot */
-    ".room-callout{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);display:none;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .16s ease,margin-bottom .16s ease;margin-bottom:-4px;z-index:7}" +
-    ".room-callout.show{opacity:1;margin-bottom:2px}" +
-    ".room-callout-box{order:1;position:relative;width:216px;background:linear-gradient(175deg,#f7f0dc,#eee2c3);border:1px solid #5b4028;border-radius:2px;padding:14px 16px;box-shadow:0 10px 26px rgba(0,0,0,.5);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;text-align:left}" +
+    /* desktop callout bubble — anchored, every frame, to the bottom edge of
+       the hotspot's own morphed silhouette outline (see tick() below) */
+    ".room-callout{position:fixed;left:0;top:0;transform:translateX(-50%);display:none;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:7}" +
+    ".room-callout.show{opacity:1}" +
+    ".room-callout-line{width:1.5px;height:18px;background:#5b4028}" +
+    ".room-callout-box{position:relative;width:216px;background:linear-gradient(175deg,#f7f0dc,#eee2c3);border:1px solid #5b4028;border-radius:2px;padding:14px 16px;box-shadow:0 10px 26px rgba(0,0,0,.5);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;text-align:left}" +
     ".room-callout-box::before,.room-callout-box::after{content:'';position:absolute;width:9px;height:9px;border-color:#5b4028}" +
     ".room-callout-box::before{top:3px;left:3px;border-top:1px solid;border-left:1px solid}" +
     ".room-callout-box::after{bottom:3px;right:3px;border-bottom:1px solid;border-right:1px solid}" +
-    ".room-callout-line{order:2;width:1.5px;height:16px;background:#5b4028}" +
     ".room-callout-title{font-size:14.5px;font-weight:600;color:#2e2013;margin-bottom:5px;letter-spacing:.02em}" +
     ".room-callout-desc{font-size:12.5px;line-height:1.6;color:#4a3826}" +
     "@media (min-width:721px){.room-panel{display:none}.room-panel-backdrop{display:none}.room-callout{display:flex}}";
@@ -69,86 +70,92 @@
   }
   closeBtn.addEventListener("click", closePanel);
   backdrop.addEventListener("click", closePanel);
-
-  /* Matches how long the hotspot outline takes to morph from the octagon
-     into the object's own silhouette in tearoom.js (S.amount eases toward
-     1 at rate .15/frame, settling ~0.65s) — the callout should only appear
-     once that outline has actually become the object's shape. */
-  var MORPH_DELAY = 650;
-  var showTimer = null;
-  function clearShowTimer() {
-    if (showTimer) {
-      clearTimeout(showTimer);
-      showTimer = null;
-    }
-  }
-  function hideAllCallouts() {
-    document.querySelectorAll(".room-callout.show").forEach(function (el) {
-      el.classList.remove("show");
-    });
-  }
-  function showCallout(btn) {
-    var el = btn.querySelector(".room-callout");
-    if (!el) return;
-    hideAllCallouts();
-    el.classList.add("show");
-  }
-  function scheduleCallout(btn) {
-    clearShowTimer();
-    showTimer = setTimeout(function () {
-      showTimer = null;
-      showCallout(btn);
-    }, MORPH_DELAY);
-  }
-
   window.addEventListener("majuon:select", function (e) {
     var id = e.detail && e.detail.id;
-    if (!id) return;
-    if (isDesktop()) {
-      var btn = document.querySelector('.room-hotspot[data-model="' + id + '"]');
-      if (btn) scheduleCallout(btn);
-    } else {
-      openPanel(id);
-    }
+    if (id && !isDesktop()) openPanel(id);
   });
 
-  function setupHotspots() {
+  /* --- desktop callout: follows tearoom.js's own hover/morph state --- */
+  var callout = document.createElement("div");
+  callout.className = "room-callout";
+  callout.innerHTML =
+    '<div class="room-callout-line"></div>' +
+    '<div class="room-callout-box">' +
+    '<div class="room-callout-title"></div>' +
+    '<div class="room-callout-desc"></div>' +
+    "</div>";
+  document.body.appendChild(callout);
+  var calloutTitleEl = callout.querySelector(".room-callout-title");
+  var calloutDescEl = callout.querySelector(".room-callout-desc");
+  var calloutKey = null;
+
+  function outlineBottomCenter(entry) {
+    var loop = entry.loops && entry.loops[0];
+    if (!loop || !loop.length) return null;
+    var minX = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (var i = 0; i < loop.length; i++) {
+      var p = loop[i];
+      if (p[0] < minX) minX = p[0];
+      if (p[0] > maxX) maxX = p[0];
+      if (p[1] > maxY) maxY = p[1];
+    }
+    return { x: (minX + maxX) / 2, y: maxY };
+  }
+
+  function tick() {
+    requestAnimationFrame(tick);
+    if (!isDesktop()) {
+      callout.classList.remove("show");
+      return;
+    }
+    var hs = window.roomHotspots;
+    var key = window.hotspotState;
+    var entry = null;
+    if (hs && hs.entries && key) {
+      for (var i = 0; i < hs.entries.length; i++) {
+        if (hs.entries[i].key === key) { entry = hs.entries[i]; break; }
+      }
+    }
+    /* only reveal once the outline has actually finished morphing into
+       the object's own silhouette (amount reaches 1) */
+    if (entry && entry.amount >= 0.98) {
+      var pt = outlineBottomCenter(entry);
+      if (pt) {
+        if (calloutKey !== key) {
+          var c = CONTENT[key];
+          if (!c) { callout.classList.remove("show"); calloutKey = null; return; }
+          calloutTitleEl.textContent = c.icon + " " + c.title;
+          calloutDescEl.textContent = c.desc;
+          calloutKey = key;
+        }
+        callout.style.left = pt.x + "px";
+        callout.style.top = pt.y + "px";
+        callout.classList.add("show");
+        return;
+      }
+    }
+    callout.classList.remove("show");
+    calloutKey = null;
+  }
+  requestAnimationFrame(tick);
+
+  function addLabels() {
     var buttons = document.querySelectorAll(".room-hotspot");
     if (!buttons.length) return false;
     buttons.forEach(function (btn) {
-      if (btn.dataset.uiReady) return;
+      if (btn.querySelector(".room-hotspot-label")) return;
       var c = CONTENT[btn.dataset.model];
       if (!c) return;
-      btn.dataset.uiReady = "1";
-
-      var label = document.createElement("span");
-      label.className = "room-hotspot-label";
-      label.textContent = c.label;
-      btn.appendChild(label);
-
-      var callout = document.createElement("div");
-      callout.className = "room-callout";
-      callout.innerHTML =
-        '<div class="room-callout-box">' +
-        '<div class="room-callout-title">' + c.icon + " " + c.title + "</div>" +
-        '<div class="room-callout-desc">' + c.desc + "</div>" +
-        "</div>" +
-        '<div class="room-callout-line"></div>';
-      btn.appendChild(callout);
-
-      btn.addEventListener("mouseenter", function () {
-        if (isDesktop()) scheduleCallout(btn);
-      });
-      btn.addEventListener("mouseleave", function () {
-        clearShowTimer();
-        callout.classList.remove("show");
-      });
+      var span = document.createElement("span");
+      span.className = "room-hotspot-label";
+      span.textContent = c.label;
+      btn.appendChild(span);
     });
     return true;
   }
   var tries = 0;
   var poll = setInterval(function () {
     tries++;
-    if (setupHotspots() || tries > 100) clearInterval(poll);
+    if (addLabels() || tries > 100) clearInterval(poll);
   }, 100);
 })();
