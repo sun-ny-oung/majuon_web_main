@@ -13,7 +13,7 @@
   /* 새 곡을 추가하려면 이 배열에 한 줄만 더하면 됩니다.
      thumb 이미지가 아직 없으면 자동으로 음표 아이콘으로 대체됩니다. */
   var PLAYLIST = [
-    { title: "Spring Reverie (Instrumental)", src: "assets/audio/tearoom/spring-reverie.mp3", thumb: "assets/audio/tearoom/thumbs/spring-reverie.jpg" },
+    { title: "Spring Reverie", src: "assets/audio/tearoom/spring-reverie.mp3", thumb: "assets/audio/tearoom/thumbs/spring-reverie.jpg" },
     { title: "매화의 계절", src: "assets/audio/tearoom/maehwa-season.mp3", thumb: "assets/audio/tearoom/thumbs/maehwa-season.jpg" }
   ];
   var currentTrack = 0;
@@ -194,11 +194,6 @@
       container.appendChild(note);
       container.appendChild(link);
     } else if (id === "audio") {
-      var approaching = document.createElement("p");
-      approaching.className = "room-note";
-      approaching.style.margin = "0";
-      approaching.textContent = "다가가는 중…";
-      container.appendChild(approaching);
       if (window.tearoomCamera) window.tearoomCamera.flyToAudio();
       window.addEventListener(
         "majuon:cam-arrived",
