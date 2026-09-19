@@ -24,10 +24,13 @@
     /* desktop callout bubble, anchored to each hotspot */
     ".room-callout{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);display:none;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .16s ease,margin-bottom .16s ease;margin-bottom:-4px;z-index:7}" +
     ".room-callout.show{opacity:1;margin-bottom:2px}" +
-    ".room-callout-box{order:1;width:206px;background:rgba(26,22,18,.94);border:1px solid rgba(255,247,235,.32);border-radius:10px;padding:12px 14px;box-shadow:0 10px 26px rgba(0,0,0,.45);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;text-align:left}" +
-    ".room-callout-line{order:2;width:1.5px;height:14px;background:rgba(255,247,235,.7)}" +
-    ".room-callout-title{font-size:13.5px;font-weight:600;color:#fff9f0;margin-bottom:4px;letter-spacing:.01em}" +
-    ".room-callout-desc{font-size:12.5px;line-height:1.55;color:#e6dfd1}" +
+    ".room-callout-box{order:1;position:relative;width:216px;background:linear-gradient(175deg,#f7f0dc,#eee2c3);border:1px solid #5b4028;border-radius:2px;padding:14px 16px;box-shadow:0 10px 26px rgba(0,0,0,.5);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;text-align:left}" +
+    ".room-callout-box::before,.room-callout-box::after{content:'';position:absolute;width:9px;height:9px;border-color:#5b4028}" +
+    ".room-callout-box::before{top:3px;left:3px;border-top:1px solid;border-left:1px solid}" +
+    ".room-callout-box::after{bottom:3px;right:3px;border-bottom:1px solid;border-right:1px solid}" +
+    ".room-callout-line{order:2;width:1.5px;height:16px;background:#5b4028}" +
+    ".room-callout-title{font-size:14.5px;font-weight:600;color:#2e2013;margin-bottom:5px;letter-spacing:.02em}" +
+    ".room-callout-desc{font-size:12.5px;line-height:1.6;color:#4a3826}" +
     "@media (min-width:721px){.room-panel{display:none}.room-panel-backdrop{display:none}.room-callout{display:flex}}";
   document.head.appendChild(style);
 
@@ -67,6 +70,18 @@
   closeBtn.addEventListener("click", closePanel);
   backdrop.addEventListener("click", closePanel);
 
+  /* Matches how long the hotspot outline takes to morph from the octagon
+     into the object's own silhouette in tearoom.js (S.amount eases toward
+     1 at rate .15/frame, settling ~0.65s) — the callout should only appear
+     once that outline has actually become the object's shape. */
+  var MORPH_DELAY = 650;
+  var showTimer = null;
+  function clearShowTimer() {
+    if (showTimer) {
+      clearTimeout(showTimer);
+      showTimer = null;
+    }
+  }
   function hideAllCallouts() {
     document.querySelectorAll(".room-callout.show").forEach(function (el) {
       el.classList.remove("show");
@@ -78,13 +93,20 @@
     hideAllCallouts();
     el.classList.add("show");
   }
+  function scheduleCallout(btn) {
+    clearShowTimer();
+    showTimer = setTimeout(function () {
+      showTimer = null;
+      showCallout(btn);
+    }, MORPH_DELAY);
+  }
 
   window.addEventListener("majuon:select", function (e) {
     var id = e.detail && e.detail.id;
     if (!id) return;
     if (isDesktop()) {
       var btn = document.querySelector('.room-hotspot[data-model="' + id + '"]');
-      if (btn) showCallout(btn);
+      if (btn) scheduleCallout(btn);
     } else {
       openPanel(id);
     }
@@ -115,9 +137,10 @@
       btn.appendChild(callout);
 
       btn.addEventListener("mouseenter", function () {
-        if (isDesktop()) showCallout(btn);
+        if (isDesktop()) scheduleCallout(btn);
       });
       btn.addEventListener("mouseleave", function () {
+        clearShowTimer();
         callout.classList.remove("show");
       });
     });
