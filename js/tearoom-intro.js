@@ -18,6 +18,7 @@
       enterBtn.remove();
       if (indicator) indicator.remove();
     }, 550);
+    window.dispatchEvent(new CustomEvent("majuon:enter"));
   }
   enterBtn.addEventListener("click", function () {
     if (!enterBtn.disabled) dismiss();

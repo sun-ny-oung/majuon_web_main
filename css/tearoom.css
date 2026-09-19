@@ -39,3 +39,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
   .intro-enter-btn{bottom:16vh}
   .intro-scroll-indicator{bottom:24vh}
 }
+.room-cam-hint{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:8;max-width:88vw;text-align:center;background:rgba(23,20,17,.55);color:#e9ded0;font:12.5px/1.4 -apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;letter-spacing:.02em;padding:10px 16px;border-radius:999px;border:1px solid rgba(233,222,208,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.room-cam-hint.show{opacity:1}
+.room-hotspot.pulse{animation:hotspot-pulse 1.6s ease-out 3}
+@keyframes hotspot-pulse{0%{box-shadow:0 0 0 0 rgba(255,247,235,.55)}70%{box-shadow:0 0 0 16px rgba(255,247,235,0)}100%{box-shadow:0 0 0 0 rgba(255,247,235,0)}}
