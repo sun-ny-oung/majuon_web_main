@@ -28,7 +28,12 @@
   function buildPlaylistEl() {
     var list = document.createElement("div");
     list.className = "room-playlist";
-    PLAYLIST.forEach(function (t, idx) {
+    /* now-playing track first, so the collapsed (peek) height always shows it */
+    var order = [currentTrack].concat(
+      PLAYLIST.map(function (_, i) { return i; }).filter(function (i) { return i !== currentTrack; })
+    );
+    order.forEach(function (idx) {
+      var t = PLAYLIST[idx];
       var row = document.createElement("div");
       row.className = "room-playlist-track" + (idx === currentTrack ? " playing" : "");
       row.setAttribute("role", "button");
@@ -87,7 +92,7 @@
     ".room-panel-backdrop.open{opacity:1;pointer-events:auto}" +
     ".room-panel{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(175deg,#f7f0dc,#eee2c3);color:#2e2013;border-radius:14px 14px 0 0;padding:14px 22px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.72,.16,1);box-shadow:0 -16px 40px rgba(0,0,0,.5);border:1px solid #5b4028;border-bottom:0;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif}" +
     ".room-panel.open{transform:translateY(0)}" +
-    ".room-panel-handle{width:36px;height:4px;border-radius:999px;background:rgba(91,64,40,.35);margin:0 auto 16px}" +
+    ".room-panel-handle{width:36px;height:4px;border-radius:999px;background:rgba(91,64,40,.35);margin:0 auto 16px;touch-action:none}" +
     ".room-panel-icon{font-size:28px;line-height:1}" +
     ".room-panel-title{font-size:18px;font-weight:600;margin:12px 0 7px;letter-spacing:.01em;color:#2e2013}" +
     ".room-panel-desc{font-size:14.5px;line-height:1.6;color:#4a3826;margin:0 0 16px}" +
@@ -96,9 +101,11 @@
     /* the audio/playlist panel is tied to a moving camera shot, not a fixed
        hotspot icon, so on desktop it gets its own screen-centered card
        instead of the (desktop-hidden) icon-anchored drawer */
-    ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;opacity:0;transition:transform .3s ease,opacity .3s ease}" +
+    ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;padding-top:34px;opacity:0;transition:transform .3s ease,opacity .3s ease,max-height .3s ease}" +
     ".room-panel.cinematic.open{transform:translateX(-50%) translateY(0);opacity:1}" +
-    ".room-panel-backdrop.cinematic{display:block}}" +
+    ".room-panel.cinematic .room-panel-handle{display:block;cursor:grab;margin-bottom:14px}" +
+    ".room-panel.cinematic .room-panel-close{top:32px}}" +
+    ".room-panel.expanded .room-playlist{max-height:280px;overflow-y:auto}" +
     /* shared: action button + the live feature states (timer / blend / note),
        reused inside both the mobile sheet and the desktop drawer */
     ".room-action-btn{display:block;width:100%;padding:13px 0;border-radius:999px;border:1px solid #5b4028;background:#2e2013;color:#f7f0dc;font:14px/1 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;letter-spacing:.04em;cursor:pointer;text-align:center;box-sizing:border-box}" +
@@ -109,7 +116,7 @@
     ".room-blend b{font-size:19px;color:#2e2013}" +
     ".room-blend span{font-size:12.5px;color:#7a6650}" +
     ".room-note{font-size:12.5px;color:#7a6650;margin:0 0 12px}" +
-    ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px}" +
+    ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px;max-height:46px;overflow:hidden;transition:max-height .3s ease}" +
     ".room-playlist-track{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #5b4028;border-radius:6px;background:rgba(91,64,40,.04);cursor:pointer}" +
     ".room-playlist-track.playing{background:rgba(91,64,40,.14)}" +
     ".room-playlist-track .track-name{font-size:12.5px;color:#2e2013;flex:1;min-width:0;text-align:left}" +
@@ -207,6 +214,7 @@
 
   function closePanel() {
     panel.classList.remove("open");
+    panel.classList.remove("expanded");
     backdrop.classList.remove("open");
     if (window.tearoomCamera && window.tearoomCamera.isAway()) window.tearoomCamera.flyBack();
   }
@@ -230,6 +238,31 @@
   });
   closeBtn.addEventListener("click", closePanel);
   backdrop.addEventListener("click", closePanel);
+  /* drag the handle up to reveal the full song list, down to collapse it
+     back to just the now-playing row */
+  var handleEl = panel.querySelector(".room-panel-handle");
+  var dragStartY = null;
+  handleEl.addEventListener("pointerdown", function (e) {
+    dragStartY = e.clientY;
+    handleEl.setPointerCapture(e.pointerId);
+  });
+  handleEl.addEventListener("pointermove", function (e) {
+    if (dragStartY === null) return;
+    var delta = dragStartY - e.clientY;
+    if (delta > 24) panel.classList.add("expanded");
+    else if (delta < -24) panel.classList.remove("expanded");
+  });
+  handleEl.addEventListener("pointerup", function () {
+    dragStartY = null;
+  });
+  /* escape hatch: if anything ever leaves the camera stuck away from the
+     normal view, Esc always gets it back */
+  window.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    closePanel();
+    closeDrawer();
+    if (window.tearoomCamera) window.tearoomCamera.reset();
+  });
 
   /* ---- desktop inline drawer: one per hotspot, lives under its label ---- */
   var openDrawer = null;
