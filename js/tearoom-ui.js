@@ -10,15 +10,9 @@
     { season: "가을", name: "풍연", href: "pungyeon.html" },
     { season: "겨울", name: "설한", href: "seolhan.html" }
   ];
-  var TIMER_SECONDS = 240;
-
   var isDesktop = function () {
     return window.matchMedia("(min-width:721px)").matches;
   };
-  function formatTime(s) {
-    var m = Math.floor(s / 60), r = s % 60;
-    return m + ":" + (r < 10 ? "0" : "") + r;
-  }
   function todaysBlend() {
     var days = Math.floor(Date.now() / 86400000);
     return BLENDS[days % BLENDS.length];
@@ -68,10 +62,6 @@
     ".room-action-btn:hover{opacity:.85}" +
     ".room-active{display:none}" +
     ".room-active.show{display:block}" +
-    ".room-active .room-timer{font-size:34px;font-weight:600;letter-spacing:.02em;text-align:center;margin:2px 0 12px;color:#2e2013;font-variant-numeric:tabular-nums}" +
-    ".room-active .room-row{display:flex;gap:8px}" +
-    ".room-active .room-row .room-mini-btn{flex:1;padding:10px 0;border-radius:999px;border:1px solid #5b4028;background:transparent;color:#2e2013;font:12.5px/1 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;letter-spacing:.02em;text-align:center;cursor:pointer}" +
-    ".room-active .room-row .room-mini-btn.primary{background:#2e2013;color:#f7f0dc}" +
     ".room-blend{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}" +
     ".room-blend b{font-size:19px;color:#2e2013}" +
     ".room-blend span{font-size:12.5px;color:#7a6650}" +
@@ -110,25 +100,9 @@
 
   /* ---- shared live-feature state, rendered into whichever container
      (mobile sheet or a desktop drawer) last activated it ---- */
-  var timer = { remaining: TIMER_SECONDS, running: false, intervalId: null, target: null };
-
   function renderInto(container, id) {
     container.innerHTML = "";
-    if (id === "table") {
-      var t = document.createElement("div");
-      t.className = "room-timer";
-      t.textContent = formatTime(timer.remaining);
-      var row = document.createElement("div");
-      row.className = "room-row";
-      var toggleBtn = fauxButton("room-mini-btn primary", timer.running ? "일시정지" : "시작");
-      var resetBtn = fauxButton("room-mini-btn", "초기화");
-      onActivate(toggleBtn, function () { toggleTimer(container); });
-      onActivate(resetBtn, function () { resetTimer(container); });
-      row.appendChild(toggleBtn);
-      row.appendChild(resetBtn);
-      container.appendChild(t);
-      container.appendChild(row);
-    } else if (id === "scroll") {
+    if (id === "scroll") {
       var b = todaysBlend();
       var blendRow = document.createElement("div");
       blendRow.className = "room-blend";
@@ -149,38 +123,14 @@
       container.appendChild(audioNote);
     }
   }
-  function toggleTimer(container) {
-    timer.target = container;
-    if (timer.running) pauseTimer();
-    else {
-      timer.running = true;
-      timer.intervalId = setInterval(tickTimer, 1000);
-    }
-    renderInto(container, "table");
-  }
-  function tickTimer() {
-    if (timer.remaining <= 0) {
-      pauseTimer();
-      if (timer.target) renderInto(timer.target, "table");
+  function runAction(id, defaultEl, activeEl) {
+    /* the real dripping timer lives on its own 3D page (own renderer/canvas) */
+    if (id === "table") {
+      location.href = "timer.html";
       return;
     }
-    timer.remaining--;
-    if (timer.target) renderInto(timer.target, "table");
-  }
-  function pauseTimer() {
-    timer.running = false;
-    if (timer.intervalId) clearInterval(timer.intervalId);
-    timer.intervalId = null;
-  }
-  function resetTimer(container) {
-    pauseTimer();
-    timer.remaining = TIMER_SECONDS;
-    renderInto(container, "table");
-  }
-  function runAction(id, defaultEl, activeEl) {
     defaultEl.style.display = "none";
     activeEl.classList.add("show");
-    if (id === "table") timer.target = activeEl;
     renderInto(activeEl, id);
   }
 
@@ -198,7 +148,6 @@
     actionBtn.textContent = c.action;
     activeView.classList.remove("show");
     defaultView.style.display = "";
-    if (id === "table" && (timer.running || timer.remaining !== TIMER_SECONDS)) runAction(id, defaultView, activeView);
     panel.classList.add("open");
     backdrop.classList.add("open");
   }
