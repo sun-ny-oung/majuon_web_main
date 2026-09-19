@@ -92,7 +92,13 @@
     ".room-panel-title{font-size:18px;font-weight:600;margin:12px 0 7px;letter-spacing:.01em;color:#2e2013}" +
     ".room-panel-desc{font-size:14.5px;line-height:1.6;color:#4a3826;margin:0 0 16px}" +
     ".room-panel-close{position:absolute;top:14px;right:16px;background:rgba(91,64,40,.12);border:0;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:#5b4028;font-size:19px;line-height:1;cursor:pointer;padding:0}" +
-    "@media (min-width:721px){.room-panel,.room-panel-backdrop{display:none}}" +
+    "@media (min-width:721px){.room-panel,.room-panel-backdrop{display:none}" +
+    /* the audio/playlist panel is tied to a moving camera shot, not a fixed
+       hotspot icon, so on desktop it gets its own screen-centered card
+       instead of the (desktop-hidden) icon-anchored drawer */
+    ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;opacity:0;transition:transform .3s ease,opacity .3s ease}" +
+    ".room-panel.cinematic.open{transform:translateX(-50%) translateY(0);opacity:1}" +
+    ".room-panel-backdrop.cinematic{display:block}}" +
     /* shared: action button + the live feature states (timer / blend / note),
        reused inside both the mobile sheet and the desktop drawer */
     ".room-action-btn{display:block;width:100%;padding:13px 0;border-radius:999px;border:1px solid #5b4028;background:#2e2013;color:#f7f0dc;font:14px/1 -apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;letter-spacing:.04em;cursor:pointer;text-align:center;box-sizing:border-box}" +
@@ -214,6 +220,8 @@
     actionBtn.textContent = c.action;
     activeView.classList.remove("show");
     defaultView.style.display = "";
+    panel.classList.toggle("cinematic", id === "audio");
+    backdrop.classList.toggle("cinematic", id === "audio");
     panel.classList.add("open");
     backdrop.classList.add("open");
   }
@@ -262,7 +270,10 @@
   window.addEventListener("majuon:select", function (e) {
     var id = e.detail && e.detail.id;
     if (!id) return;
-    if (isDesktop()) {
+    /* the audio hotspot's action moves the camera across the room, so its
+       panel can't be anchored to the (now stale-positioned) hotspot icon —
+       always use the screen-fixed panel for it, on desktop too */
+    if (id !== "audio" && isDesktop()) {
       var btn = document.querySelector('.room-hotspot[data-model="' + id + '"]');
       if (btn) openDrawerFor(btn);
     } else {
