@@ -17,11 +17,25 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 .intro-spacer-bottom{height:55vh}
 .intro-content{max-width:420px;margin:0 auto;padding:0 28px;text-align:center}
 .intro-eyebrow{margin:0 0 10px;font-size:13px;letter-spacing:.14em;color:#cdbfa8;text-transform:uppercase}
-.intro-title{margin:0 0 22px;font-size:24px;letter-spacing:.02em;color:#fff9f0;font-weight:600}
+.intro-title{margin:0 0 22px;font-size:24px;letter-spacing:.02em;color:#fff9f0;font-weight:600;font-family:'Noto Serif KR',serif}
 .intro-body{margin:0;font-size:15px;line-height:1.9;color:#e6dfd1}
-.intro-scroll-hint{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#cdbfa8;font-size:12px;letter-spacing:.05em;animation:intro-bob 1.6s ease-in-out infinite}
-@keyframes intro-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 .intro-enter-btn{position:fixed;left:50%;bottom:7vh;transform:translateX(-50%);z-index:21;padding:14px 40px;border-radius:999px;border:1px solid rgba(233,222,208,.3);background:rgba(23,20,17,.5);color:#8f8477;font:14px/1 -apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;letter-spacing:.06em;cursor:not-allowed;opacity:1;transition:background .35s ease,color .35s ease,border-color .35s ease,transform .2s ease,opacity .5s ease}
 .intro-enter-btn.active{cursor:pointer;color:#171411;background:#f3ece1;border-color:#f3ece1}
 .intro-enter-btn.active:hover{transform:translateX(-50%) scale(1.04)}
 .intro-enter-btn.hide{opacity:0;pointer-events:none}
+.intro-scroll-indicator{position:fixed;left:50%;bottom:15vh;transform:translateX(-50%);z-index:21;width:24px;height:24px;transition:opacity .4s ease}
+.intro-scroll-indicator.hide{opacity:0}
+.intro-scroll-indicator .chevron{position:absolute;left:0;top:0;width:100%;height:8px;opacity:0;animation:chevron-fade 1.8s ease infinite}
+.intro-scroll-indicator .chevron:before,.intro-scroll-indicator .chevron:after{content:"";position:absolute;top:0;height:100%;width:52%;background:#cdbfa8}
+.intro-scroll-indicator .chevron:before{left:0;transform:skewY(28deg)}
+.intro-scroll-indicator .chevron:after{right:0;transform:skewY(-28deg)}
+.intro-scroll-indicator .chevron:nth-child(1){top:0}
+.intro-scroll-indicator .chevron:nth-child(2){top:8px;animation-delay:.25s}
+.intro-scroll-indicator .chevron:nth-child(3){top:16px;animation-delay:.5s}
+@keyframes chevron-fade{0%{opacity:0;transform:translateY(-6px)}50%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(6px)}}
+@media (min-width:721px){
+  .intro-spacer-top{height:30vh}
+  .intro-spacer-bottom{height:26vh}
+  .intro-enter-btn{bottom:16vh}
+  .intro-scroll-indicator{bottom:24vh}
+}
