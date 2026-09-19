@@ -13,17 +13,35 @@
   /* 새 곡을 추가하려면 이 배열에 한 줄만 더하면 됩니다.
      thumb 이미지가 아직 없으면 자동으로 음표 아이콘으로 대체됩니다. */
   var PLAYLIST = [
-    { title: "Spring Reverie (Instrumental)", src: "assets/audio/tearoom/spring-reverie.mp3", thumb: "assets/audio/tearoom/thumbs/spring-reverie.jpg" }
+    { title: "Spring Reverie (Instrumental)", src: "assets/audio/tearoom/spring-reverie.mp3", thumb: "assets/audio/tearoom/thumbs/spring-reverie.jpg" },
+    { title: "매화의 계절", src: "assets/audio/tearoom/maehwa-season.mp3", thumb: "assets/audio/tearoom/thumbs/maehwa-season.jpg" }
   ];
   var currentTrack = 0;
+  function musicEl() {
+    return document.getElementById("roomMusic");
+  }
+  function isPlaying() {
+    var m = musicEl();
+    return !!m && !m.paused && !m.ended;
+  }
   function playTrack(idx) {
     var t = PLAYLIST[idx];
-    var music = document.getElementById("roomMusic");
+    var music = musicEl();
     if (!t || !music) return;
     currentTrack = idx;
     if (music.getAttribute("src") !== t.src) music.src = t.src;
     music.volume = 0.55;
     music.play().catch(function () {});
+  }
+  function togglePlayback() {
+    var music = musicEl();
+    if (!music) return;
+    if (music.paused) music.play().catch(function () {});
+    else music.pause();
+  }
+  function refreshPlaylistEl(list) {
+    var parent = list.parentNode;
+    if (parent) parent.replaceChild(buildPlaylistEl(), list);
   }
   function buildPlaylistEl() {
     var list = document.createElement("div");
@@ -38,15 +56,24 @@
       row.className = "room-playlist-track" + (idx === currentTrack ? " playing" : "");
       row.setAttribute("role", "button");
       row.setAttribute("tabindex", "0");
+      var eqOrPlay =
+        idx !== currentTrack
+          ? ""
+          : isPlaying()
+          ? '<span class="track-eq"><i></i><i></i><i></i></span>'
+          : '<span class="track-playicon">▶</span>';
       row.innerHTML =
         '<span class="track-thumb-wrap"><span class="track-thumb-fallback">🎵</span><img class="track-thumb" alt="" src="' + t.thumb + '" onerror="this.style.display=\'none\'"></span>' +
-        (idx === currentTrack ? '<span class="track-eq"><i></i><i></i><i></i></span>' : "") +
+        eqOrPlay +
         '<span class="track-name">' + t.title + "</span>";
       onActivate(row, function () {
-        if (idx === currentTrack) return;
+        if (idx === currentTrack) {
+          togglePlayback();
+          refreshPlaylistEl(list);
+          return;
+        }
         playTrack(idx);
-        var parent = list.parentNode;
-        if (parent) parent.replaceChild(buildPlaylistEl(), list);
+        refreshPlaylistEl(list);
       });
       list.appendChild(row);
     });
@@ -96,7 +123,7 @@
     ".room-panel-icon{font-size:28px;line-height:1}" +
     ".room-panel-title{font-size:18px;font-weight:600;margin:12px 0 7px;letter-spacing:.01em;color:#2e2013}" +
     ".room-panel-desc{font-size:14.5px;line-height:1.6;color:#4a3826;margin:0 0 16px}" +
-    ".room-panel-close{position:absolute;top:14px;right:16px;background:rgba(91,64,40,.12);border:0;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:#5b4028;font-size:19px;line-height:1;cursor:pointer;padding:0}" +
+    ".room-panel-close{position:absolute;top:12px;right:14px;background:rgba(91,64,40,.12);border:0;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#5b4028;font-size:14px;line-height:1;cursor:pointer;padding:0}" +
     "@media (min-width:721px){.room-panel,.room-panel-backdrop{display:none}" +
     /* the audio/playlist panel is tied to a moving camera shot, not a fixed
        hotspot icon, so on desktop it gets its own screen-centered card
@@ -104,7 +131,7 @@
     ".room-panel.cinematic{display:block;left:50%;right:auto;bottom:36px;transform:translateX(-50%) translateY(14px);width:320px;border-radius:14px;border-bottom:1px solid #5b4028;padding-top:34px;opacity:0;transition:transform .3s ease,opacity .3s ease,max-height .3s ease}" +
     ".room-panel.cinematic.open{transform:translateX(-50%) translateY(0);opacity:1}" +
     ".room-panel.cinematic .room-panel-handle{display:block;cursor:grab;margin-bottom:14px}" +
-    ".room-panel.cinematic .room-panel-close{top:32px}}" +
+    ".room-panel.cinematic .room-panel-close{top:8px;right:10px}}" +
     ".room-panel.expanded .room-playlist{max-height:280px;overflow-y:auto}" +
     /* shared: action button + the live feature states (timer / blend / note),
        reused inside both the mobile sheet and the desktop drawer */
@@ -116,7 +143,7 @@
     ".room-blend b{font-size:19px;color:#2e2013}" +
     ".room-blend span{font-size:12.5px;color:#7a6650}" +
     ".room-note{font-size:12.5px;color:#7a6650;margin:0 0 12px}" +
-    ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px;max-height:46px;overflow:hidden;transition:max-height .3s ease}" +
+    ".room-playlist{margin-bottom:12px;display:flex;flex-direction:column;gap:6px;max-height:52px;overflow:hidden;transition:max-height .3s ease}" +
     ".room-playlist-track{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #5b4028;border-radius:6px;background:rgba(91,64,40,.04);cursor:pointer}" +
     ".room-playlist-track.playing{background:rgba(91,64,40,.14)}" +
     ".room-playlist-track .track-name{font-size:12.5px;color:#2e2013;flex:1;min-width:0;text-align:left}" +
@@ -128,6 +155,7 @@
     ".track-eq i:nth-child(2){animation-delay:.2s}" +
     ".track-eq i:nth-child(3){animation-delay:.4s}" +
     "@keyframes eq-bounce{0%,100%{height:4px}50%{height:14px}}" +
+    ".track-playicon{flex:none;font-size:11px;color:#5b4028;line-height:1}" +
     "@media (max-width:720px){.room-hotspot-drawer{display:none}}";
   document.head.appendChild(style);
 
@@ -249,8 +277,8 @@
   handleEl.addEventListener("pointermove", function (e) {
     if (dragStartY === null) return;
     var delta = dragStartY - e.clientY;
-    if (delta > 24) panel.classList.add("expanded");
-    else if (delta < -24) panel.classList.remove("expanded");
+    if (delta > 14) panel.classList.add("expanded");
+    else if (delta < -14) panel.classList.remove("expanded");
   });
   handleEl.addEventListener("pointerup", function () {
     dragStartY = null;
